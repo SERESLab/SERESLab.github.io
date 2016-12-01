@@ -11,7 +11,7 @@ title                    : "YSU Software Engineering Research and Empirical Stud
 title_separator          : "-"
 name                     : "Youngstown State University"
 description              : "The Software Engineering Research and Empirical Studies Lab at Youngstown State University"
-url                      : "http://ysuseresl.github.io"
+url                      : "https://ysuseresl.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : "ysuseresl/ysuseresl.github.io"
 teaser                   : # filename of teaser fallback teaser image placed in /images/, .e.g. "500x300.png"

@@ -1,0 +1,33 @@
+body{
+	margin: 0;
+	padding: 0;
+}
+#imagelist {
+	font-size: 0;
+	width: 261px;
+	margin: 0 auto;
+}
+
+#imagelist a{
+	margin: 2px;
+	border: 4px solid transparent;
+	display: inline-block;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+	opacity: .5;
+	-webkit-transition: all .3s ease-in;
+	-moz-transition: all .3s ease-in;
+	-ms-transition: all .3s ease-in;
+	-o-transition: all .3s ease-in;
+	transition: all .3s ease-in;
+}
+
+#imagelist a:hover {
+	border-color: white;
+	opacity: 1;
+}
+
+#imagelist img{
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+}	

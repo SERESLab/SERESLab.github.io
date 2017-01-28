@@ -132,3 +132,23 @@
 <p><i class = 'fa fa-globe fa-fw' style ="font-size: 2em;"></i><a href = "https://#">Website</a></p>
 
 
+
+
+
+
+
+<div id="imagelist">
+<a href =""><img src="http://sereslweb.csis.ysu.edu/img/sharif.png" alt = "test" /></a>				
+<a href =""><img src="http://sereslweb.csis.ysu.edu/img/nick.jpg" alt = "test" /></a>
+<a href =""><img src="http://sereslweb.csis.ysu.edu/img/ashwin.jpg" alt = "test" /></a>
+<a href =""><img src="http://sereslweb.csis.ysu.edu/img/jack.jpg" alt = "test" /></a>
+<a href =""><img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt = "test" /></a>
+<a href =""><img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt = "test" /></a>
+<a href =""><img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt = "test" /></a>
+<a href =""><img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt = "test" /></a>
+<a href =""><img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt = "test" /></a>
+<a href =""><img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt = "test" /></a>
+<a href =""><img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt = "test" /></a>
+<a href =""><img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt = "test" /></a>
+
+	</div>

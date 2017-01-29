@@ -152,3 +152,168 @@
 <a href =""><img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt = "test" /></a>
 
 	</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------
+
+<style>
+div.img {
+    margin: 5px;
+    border: 1px solid transparent;
+    float: left;
+    width: 180px;
+-webkit-border-radius: 6px;
+border-radius: 6px;
+}
+
+div.img:hover {
+    border: 1px solid #777;
+-webkit-border-radius: 6px;
+border-radius: 6px;
+}
+
+div.img img {
+    width: 100%;
+    height: auto;
+}
+
+div.desc {
+    padding: 15px;
+    text-align: center;
+}
+</style>
+
+
+
+
+
+
+<p><h2>People working on SERESL projects currently</h2></p>
+<p><strong>Principle Investigator</strong></p>
+<div class="img">
+  <a target="_blank" href="">
+    <img src="http://sereslweb.csis.ysu.edu/img/sharif.png" alt="Fjords" width="300" height="200">
+  </a>
+  <div class="desc"> Dr. Bonita Sharif <br><a href = "https://github.com/shbonita">github</a> <a href=" ">Website </a>
+</div>
+<p><strong>Undergraduate Research Associates</strong></p>
+<div class="img">
+  <a target="_blank" href="">
+    <img src="http://sereslweb.csis.ysu.edu/img/nick.jpg" alt="Forest" width="300" height="200">
+  </a>
+  <div class="desc">Nick Iovino <br><a href = "https://github.com/nickiovino">Github</a></div>
+</div>
+
+<div class="img">
+  <a target="_blank" href="">
+    <img src="http://sereslweb.csis.ysu.edu/img/ashwin.jpg" alt="Northern Lights" width="300" height="200">
+  </a>
+  <div class="desc">Ashwin Mishra <br><a href = "https://github.com/ashwin9999">Github</a><a href=" ">Website </a></div>
+</div>
+
+<div class="img">
+  <a target="_blank" href="">
+    <img src="http://sereslweb.csis.ysu.edu/img/jack.jpg" alt="Mountains" width="300" height="200">
+  </a>
+  <div class="desc">Zackary Harnett <br><a href = "https://github.com/Zeeker117">Github</a></div>
+</div>
+
+<div class="img">
+                                             <a target="_blank" href="">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Mountains" width="300" height="200">
+  </a>
+  <div class="desc">Ben Clark <br><a href = "https://github.com/onebenclark">Github</a></div>
+</div>
+
+<div class="img">
+  <a target="_blank" href="">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Mountains" width="300" height="200">
+  </a>
+  <div class="desc">Jenna Wise <br><a href = "https://github.com/jennalwise">Github</a></div>
+</div>
+
+<div class="img">
+  <a target="_blank" href="">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Mountains" width="300" height="200">
+  </a>
+  <div class="desc">Mark Degenova <br><a href = "https://github.com/#">Github</a></div>
+</div>
+
+<div class="img">
+  <a target="_blank" href="">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Mountains" width="300" height="200">
+  </a>
+  <div class="desc">Candace Hicks <br><a href = "https://github.com/candace579">Github</a></div>
+</div>
+
+<div class="img">
+  <a target="_blank" href="">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Mountains" width="300" height="200">
+  </a>
+  <div class="desc">Lou Vitullo <br><a href = "https://github.com/lmvitullo">Github</a></div>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<p><strong>Graduate Research Associates</strong></p>
+<div class="img">
+  <a target="_blank" href="">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Forest" width="300" height="200">
+  </a>
+  <div class="desc">Nishitha Yedla <br><a href = "https://github.com/#">Github</a></div>
+</div>
+
+<div class="img">
+  <a target="_blank" href="">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Northern Lights" width="300" height="200">
+  </a>
+  <div class="desc">Sanjana Sama <br><a href = "https://github.com/sanjanasama">Github</a></div>
+</div>

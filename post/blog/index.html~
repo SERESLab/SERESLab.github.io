@@ -7,7 +7,7 @@
   <meta name="googlebot" content="index,follow,snippet,archive">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Tools</title>
+  <title>Blog</title>
 
   <meta name="author" content="" />
   <meta name="keywords" content="">
@@ -48,7 +48,7 @@
   <link rel="alternate" href="https://YsuSERESL.github.io/index.xml" type="application/rss+xml" title="YSU SERESL">
 
   
-  <meta property="og:title" content="Photo Gallery" />
+  <meta property="og:title" content="Blog" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/" />
   <meta property="og:image" content="img/" />
@@ -68,10 +68,10 @@
 
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand home" href="https://ysuseresl.github.io/">
-                    <img src="https://ysuseresl.github.io/img/logo.png" alt="Photo Gallery logo" class="hidden-xs hidden-sm">
-                    <img src="https://ysuseresl.github.io/img/logo-small.png" alt="Photo Gallery logo" class="visible-xs visible-sm">
-                    <span class="sr-only">Photo Gallery - go to homepage</span>
+                <a class="navbar-brand home" href="http://ysuseresl.github.io/">
+                    <img src="https://ysuseresl.github.io/img/logo.png" alt="Blog logo" class="hidden-xs hidden-sm">
+                    <img src="https://ysuseresl.github.io/img/logo-small.png" alt="Blog logo" class="visible-xs visible-sm">
+                    <span class="sr-only">Blog - go to homepage</span>
                 </a>
                 <div class="navbar-buttons">
                     <button type="button" class="navbar-toggle btn-template-main" data-toggle="collapse" data-target="#navigation">
@@ -100,12 +100,6 @@
                     
                     <li class="dropdown">
                         <a href="/post/project/">Projects</a>
-		    
-		    </li>
-
-		    
-		    <li class="dropdown">
-                        <a href="/post/nsf-grant/">NSF Grant</a>
 		    
 		    </li>
 
@@ -160,7 +154,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h1>Tools</h1>
+                <h1>Blog</h1>
             </div>
         </div>
     </div>
@@ -176,28 +170,10 @@
 
                     <div class="col-md-9" id="blog-post">
 
-                        <p class="text-muted text-uppercase mb-small text-right">January 5, 2017</p>
+                        <p class="text-muted text-uppercase mb-small text-right">January 6, 2017</p>
 
                         <div id="post-content">
-
-<h4 id="i-trace:c5a0c2312834bfc6cc602e78c776e73b">iTrace</h4>
-
-Check out the <a href ="https://github.com/YsuSERESL/iTrace">Repository</a>
-                  
-<h4 id="i-trace:c5a0c2312834bfc6cc602e78c776e73b">Onion UML Visualization</h4>
-
-Check out the <a href ="https://github.com/YsuSERESL/OnionUmlVisualization">Repository</a> 
-
-<h4 id="i-trace:c5a0c2312834bfc6cc602e78c776e73b">Fixation Correcton VizManip</h4>
-
-Check out the <a href ="https://github.com/YsuSERESL/fixation-correction-vizmanip">Repository</a>
-
-<h4 id="i-trace:c5a0c2312834bfc6cc602e78c776e73b">Fixation Correction Source code</h4>
-
-Check out the <a href ="https://github.com/YsuSERESL/fixation-correction-sourcecode">Repository</a>
-
-
-        
+                          
                         </div>
                         
                         
@@ -205,9 +181,9 @@ Check out the <a href ="https://github.com/YsuSERESL/fixation-correction-sourcec
                             <div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_shortname = 'ysuseresl';
-    var disqus_identifier = 'https:\/\/ysuseresl.github.io\/post\/tools\/';
-    var disqus_title = 'Tools';
-    var disqus_url = 'https:\/\/ysuseresl.github.io\/post\/tools\/';
+    var disqus_identifier = 'https:\/\/ysuseresl.github.io\/post\/blog\/';
+    var disqus_title = 'Blog';
+    var disqus_url = 'https:\/\/ysuseresl.github.io\/post\/blog\/';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

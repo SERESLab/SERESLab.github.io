@@ -7,7 +7,7 @@
   <meta name="googlebot" content="index,follow,snippet,archive">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Tools</title>
+  <title>People</title>
 
   <meta name="author" content="" />
   <meta name="keywords" content="">
@@ -21,6 +21,8 @@
   
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+
 
   
   <link href="https://ysuseresl.github.io/css/animate.css" rel="stylesheet">
@@ -48,10 +50,34 @@
   <link rel="alternate" href="https://YsuSERESL.github.io/index.xml" type="application/rss+xml" title="YSU SERESL">
 
   
-  <meta property="og:title" content="Photo Gallery" />
+  <meta property="og:title" content="People" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/" />
   <meta property="og:image" content="img/" />
+<style>
+div.img {
+    margin: 5px;
+    border: 1px solid transparent;
+    float: left;
+    width: 180px;
+
+}
+
+div.img:hover {
+    border: 1px solid #777;
+
+}
+
+div.img img {
+    width: 100%;
+    height: auto;
+}
+
+div.desc {
+    padding: 15px;
+    text-align: center;
+}
+</style>
 
 </head>
 
@@ -69,9 +95,9 @@
         <div class="container">
             <div class="navbar-header">
                 <a class="navbar-brand home" href="https://ysuseresl.github.io/">
-                    <img src="https://ysuseresl.github.io/img/logo.png" alt="Photo Gallery logo" class="hidden-xs hidden-sm">
-                    <img src="https://ysuseresl.github.io/img/logo-small.png" alt="Photo Gallery logo" class="visible-xs visible-sm">
-                    <span class="sr-only">Photo Gallery - go to homepage</span>
+                    <img src="https://ysuseresl.github.io/img/logo.png" alt="People logo" class="hidden-xs hidden-sm">
+                    <img src="https://ysuseresl.github.io/img/logo-small.png" alt="People logo" class="visible-xs visible-sm">
+                    <span class="sr-only">People - go to homepage</span>
                 </a>
                 <div class="navbar-buttons">
                     <button type="button" class="navbar-toggle btn-template-main" data-toggle="collapse" data-target="#navigation">
@@ -85,7 +111,7 @@
             <div class="navbar-collapse collapse" id="navigation">
                 <ul class="nav navbar-nav navbar-right">
                     
-                    <li class="dropdown">
+                  <li class="dropdown">
                         <a href="/">Home</a>
                     </li>
 	
@@ -100,12 +126,6 @@
                     
                     <li class="dropdown">
                         <a href="/post/project/">Projects</a>
-		    
-		    </li>
-
-		    
-		    <li class="dropdown">
-                        <a href="/post/nsf-grant/">NSF Grant</a>
 		    
 		    </li>
 
@@ -124,6 +144,7 @@
                     <li class="dropdown">
                         <a href="/post/photo/">Photo Gallery</a>
                     </li>
+                    
                     
                 </ul>
             </div>
@@ -160,7 +181,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h1>Tools</h1>
+                <h1>People</h1>
             </div>
         </div>
     </div>
@@ -179,35 +200,204 @@
                         <p class="text-muted text-uppercase mb-small text-right">January 5, 2017</p>
 
                         <div id="post-content">
+<p><h2>People working on SERESL projects currently</h2></p>
+<p><strong>Principle Investigator</strong></p>
+                          <div class="img">
+  <a target="_blank" href="https://github.com/shbonita">
+    <img src="http://sereslweb.csis.ysu.edu/img/sharif.png" alt="Fjords" width="300" height="200">
+  </a>
+  <div class="desc">Dr. Bonita Sharif<br><a href = "https://github.com/shbonita">github</a></div>
+</div>
+<br><br><br><br><br><br><br><br><br><br><br><br><br>
+<p><strong>Undergraduate Research Associates</strong></p>
+<div class="img">
+  <a target="_blank" href="https://github.com/onebenclark">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Forest" width="300" height="200">
+  </a>
+  <div class="desc">Ben Clark<br><a href = "https://github.com/onebenclark">github</a></div>
+</div>
 
-<h4 id="i-trace:c5a0c2312834bfc6cc602e78c776e73b">iTrace</h4>
+<div class="img">
+  <a target="_blank" href="https://github.com/">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Northern Lights" width="300" height="200">
+  </a>
+  <div class="desc">Mark Degenova<br><a href = "https://github.com/#">github</a></div>
+</div>
 
-Check out the <a href ="https://github.com/YsuSERESL/iTrace">Repository</a>
-                  
-<h4 id="i-trace:c5a0c2312834bfc6cc602e78c776e73b">Onion UML Visualization</h4>
+<div class="img">
+  <a target="_blank" href="https://github.com/Zeeker117">
+    <img src="http://sereslweb.csis.ysu.edu/img/jack.jpg" alt="Mountains" width="300" height="200">
+  </a>
+  <div class="desc">Zackary Harnett<br><a href = "https://github.com/Zeeker117">github</a></div>
+</div>
 
-Check out the <a href ="https://github.com/YsuSERESL/OnionUmlVisualization">Repository</a> 
+<div class="img">
+  <a target="_blank" href="https://github.com/candace579">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Mountains" width="300" height="200">
+  </a>
+  <div class="desc">Candace Hicks<br><a href = "https://github.com/candace579">github</a></div>
+</div>
+<div class="img">
+  <a target="_blank" href="https://github.com/nickiovino">
+    <img src="http://sereslweb.csis.ysu.edu/img/nick.jpg" alt="Mountains" width="300" height="200">
+  </a>
+  <div class="desc">Nick Iovino<br><a href = "https://github.com/nickiovino">github</a></div>
+</div>
+<div class="img">
+  <a target="_blank" href="https://github.com/ashwin9999">
+    <img src="http://sereslweb.csis.ysu.edu/img/ashwin.jpg" alt="Mountains" width="300" height="200">
+  </a>
+  <div class="desc">Ashwin Mishra<br><a href = "https://github.com/ashwin9999">github</a></div>
+</div>
+<div class="img">
+  <a target="_blank" href="https://github.com/lmvitullo">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Mountains" width="300" height="200">
+  </a>
+  
+  <div class="desc">Jenna Wise<br><a href = "https://github.com/jennalwise">github</a></div>
+</div>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<p><strong>Graduate Research Associates</strong></p>
+<div class="img">
+  <a target="_blank" href="https://github.com/">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Forest" width="300" height="200">
+  </a>
+  <div class="desc">Nishitha Yedla <br><a href = "https://github.com/#">github</a></div>
+</div>
 
-<h4 id="i-trace:c5a0c2312834bfc6cc602e78c776e73b">Fixation Correcton VizManip</h4>
+<div class="img">
+  <a target="_blank" href="https://github.com/sanjanasama">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Northern Lights" width="300" height="200">
+  </a>
+  <div class="desc">Sanjana Sama <br><a href = "https://github.com/sanjanasama">github</a></div>
+</div>
 
-Check out the <a href ="https://github.com/YsuSERESL/fixation-correction-vizmanip">Repository</a>
+<br>
+<br>
+<br>
+<br><br>
+<br><br>
+<br><br>
+<br><br>
+<br>
+<p><h2>Alumni</h2></p>
+<p><strong>Undergraduate Research Associates</strong></p>
 
-<h4 id="i-trace:c5a0c2312834bfc6cc602e78c776e73b">Fixation Correction Source code</h4>
-
-Check out the <a href ="https://github.com/YsuSERESL/fixation-correction-sourcecode">Repository</a>
-
-
-        
-                        </div>
-                        
-                        
+<div class="img">
+  <a target="_blank" href="">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Northern Lights" width="300" height="200">
+  </a>
+  <div class="desc">Christopher Palmer <br><a href = "https://github.com/#"></a></div>
+</div>
+<div class="img">
+  <a target="_blank" href="">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Northern Lights" width="300" height="200">
+  </a>
+  <div class="desc">Michael Falcone <br><a href = "https://github.com/#"></a></div>
+</div>
+<div class="img">
+  <a target="_blank" href="">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Northern Lights" width="300" height="200">
+  </a>
+  <div class="desc">Dominic Pascarella <br><a href = "https://github.com/#"></a></div>
+</div>
+<div class="img">
+  <a target="_blank" href="">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Northern Lights" width="300" height="200">
+  </a>
+  <div class="desc">Rachel Turner <br><a href = "https://github.com/#"></a></div>
+</div>
+<div class="img">
+  <a target="_blank" href="">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Northern Lights" width="300" height="200">
+  </a>
+  <div class="desc">Braden Walters <br><a href = "https://github.com/#"></a></div>
+</div>
+<div class="img">
+  <a target="_blank" href="">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Northern Lights" width="300" height="200">
+  </a>
+  <div class="desc">Sarah Ritchey <br><a href = "https://github.com/#"></a></div>
+</div>
+<div class="img">
+  <a target="_blank" href="">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Northern Lights" width="300" height="200">
+  </a>
+  <div class="desc">Kevin Krpicak <br><a href = "https://github.com/#"></a></div>
+</div>
+<div class="img">
+  <a target="_blank" href="">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Northern Lights" width="300" height="200">
+  </a>
+  <div class="desc">Jessica Whitely <br><a href = "https://github.com/#"></a></div>
+</div>
+<br>
+<br>
+<br>
+<br><br>
+<br><br>
+<br><br>
+<br><br>
+<br>
+<br><br>
+<br><br>
+<br><br>
+<br><br>
+<br>
+<br><br>
+<br>
+<br><br>
+<p><strong>Graduate Research Associates</strong></p>
+   <div class="img">
+  <a target="_blank" href="">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Northern Lights" width="300" height="200">
+  </a>
+  <div class="desc">Leela Krishna Yenigalla <br><a href = "https://github.com/#"></a></div>
+</div>  
+<div class="img">
+  <a target="_blank" href="">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Northern Lights" width="300" height="200">
+  </a>
+  <div class="desc">Patrick Peachock <br><a href = "https://github.com/#"></a></div>
+</div>   
+<div class="img">
+  <a target="_blank" href="">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Northern Lights" width="300" height="200">
+  </a>
+  <div class="desc">John Meinken <br><a href = "https://github.com/#"></a></div>
+</div>     
+<div class="img">
+  <a target="_blank" href="">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Northern Lights" width="300" height="200">
+  </a>
+  <div class="desc">Grace Jetty <br><a href = "https://github.com/#"></a></div>
+</div>    
+<div class="img">
+  <a target="_blank" href="">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Northern Lights" width="300" height="200">
+  </a>
+  <div class="desc">Abhilash Rao Mesala <br><a href = "https://github.com/#"></a></div>
+</div>    
+<div class="img">
+  <a target="_blank" href="">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Northern Lights" width="300" height="200">
+  </a>
+  <div class="desc">Shalini Gadapa <br><a href = "https://github.com/#"></a></div>
+</div>   
+<div class="img">
+  <a target="_blank" href="">
+    <img src="http://sereslweb.csis.ysu.edu/img/placeholder.jpg" alt="Northern Lights" width="300" height="200">
+  </a>
+  <div class="desc">Casey Robinson <br><a href = "https://github.com/#"></a></div>
+</div>
+  </div>                      
                         <div id="comments">
                             <div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_shortname = 'ysuseresl';
-    var disqus_identifier = 'https:\/\/ysuseresl.github.io\/post\/tools\/';
-    var disqus_title = 'Tools';
-    var disqus_url = 'https:\/\/ysuseresl.github.io\/post\/tools\/';
+    var disqus_identifier = 'https:\/\/ysuseresl.github.io\/post\/people\/';
+    var disqus_title = 'People';
+    var disqus_url = 'https:\/\/ysuseresl.github.io\/post\/people\/';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -243,7 +433,7 @@ Check out the <a href ="https://github.com/YsuSERESL/fixation-correction-sourcec
         <form action="//google.com/search" method="get" accept-charset="UTF-8" role="search">
             <div class="input-group">
                 <input type="search" name="q" results="0" class="form-control" placeholder="Search">
-                <input type="hidden" name="q" value="site:https://ysuseresl.github.io/">
+                <input type="hidden" name="q" value="site:http://ysuseresl.github.io/">
                 <span class="input-group-btn">
                     <button type="submit" class="btn btn-template-main"><i class="fa fa-search"></i></button>
                 </span>

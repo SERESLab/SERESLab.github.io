@@ -7,7 +7,7 @@
   <meta name="googlebot" content="index,follow,snippet,archive">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Tools</title>
+  <title>Photo Gallery</title>
 
   <meta name="author" content="" />
   <meta name="keywords" content="">
@@ -103,12 +103,6 @@
 		    
 		    </li>
 
-		    
-		    <li class="dropdown">
-                        <a href="/post/nsf-grant/">NSF Grant</a>
-		    
-		    </li>
-
                     <li class="dropdown">
                         <a href="/post/tools/">Tools</a>
                     </li>
@@ -160,7 +154,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h1>Tools</h1>
+                <h1>Photo Gallery</h1>
             </div>
         </div>
     </div>
@@ -179,25 +173,7 @@
                         <p class="text-muted text-uppercase mb-small text-right">January 5, 2017</p>
 
                         <div id="post-content">
-
-<h4 id="i-trace:c5a0c2312834bfc6cc602e78c776e73b">iTrace</h4>
-
-Check out the <a href ="https://github.com/YsuSERESL/iTrace">Repository</a>
-                  
-<h4 id="i-trace:c5a0c2312834bfc6cc602e78c776e73b">Onion UML Visualization</h4>
-
-Check out the <a href ="https://github.com/YsuSERESL/OnionUmlVisualization">Repository</a> 
-
-<h4 id="i-trace:c5a0c2312834bfc6cc602e78c776e73b">Fixation Correcton VizManip</h4>
-
-Check out the <a href ="https://github.com/YsuSERESL/fixation-correction-vizmanip">Repository</a>
-
-<h4 id="i-trace:c5a0c2312834bfc6cc602e78c776e73b">Fixation Correction Source code</h4>
-
-Check out the <a href ="https://github.com/YsuSERESL/fixation-correction-sourcecode">Repository</a>
-
-
-        
+                          
                         </div>
                         
                         
@@ -205,9 +181,9 @@ Check out the <a href ="https://github.com/YsuSERESL/fixation-correction-sourcec
                             <div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_shortname = 'ysuseresl';
-    var disqus_identifier = 'https:\/\/ysuseresl.github.io\/post\/tools\/';
-    var disqus_title = 'Tools';
-    var disqus_url = 'https:\/\/ysuseresl.github.io\/post\/tools\/';
+    var disqus_identifier = 'https:\/\/ysuseresl.github.io\/post\/photo\/';
+    var disqus_title = 'Photo Gallery';
+    var disqus_url = 'https:\/\/ysuseresl.github.io\/post\/photo\/';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -293,7 +269,7 @@ Check out the <a href ="https://github.com/YsuSERESL/fixation-correction-sourcec
             <h4>About us</h4>
 
             <p>The current research program involves the construction of techniques, tools, and environments to assist in program comprehension, software visualization, software evolution, and software traceability.  Empirical evaluations are also conducted in each of the above areas.</p>
-
+</p>
 
             <hr class="hidden-md hidden-lg hidden-sm">
 

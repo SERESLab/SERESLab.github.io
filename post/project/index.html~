@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -180,7 +181,32 @@
                         <p class="text-muted text-uppercase mb-small text-right">January 6, 2017</p>
 
                         <div id="post-content">
-                         
+                          <strong><h4>Project 1</h4></strong>
+			  <img src = "http://sereslweb.csis.ysu.edu/img/texture-bw.png"><img>
+			  Small description
+			  <a href = "http://sereslweb.csis.ysu.edu/post/project/project1">View more >></a>
+
+			  <strong><h4>Project 2</h4></strong>
+			  <img src = "http://sereslweb.csis.ysu.edu/img/texture-bw.png"><img>
+			  Small description
+			  <a href = "http://sereslweb.csis.ysu.edu/post/project/project2">View more >></a>
+
+			  <strong><h4>Project 3</h4></strong>
+			  <img src = "http://sereslweb.csis.ysu.edu/img/texture-bw.png"><img>
+			  Small description
+			  <a href = "http://sereslweb.csis.ysu.edu/post/project/project3">View more >></a>
+
+
+			  <strong><h4>Project 4</h4></strong>
+			  <img src = "http://sereslweb.csis.ysu.edu/img/texture-bw.png"><img>
+			  Small description
+			  <a href = "http://sereslweb.csis.ysu.edu/post/project/project4">View more >></a>
+
+			  <strong><h4>Project 5</h4></strong>
+			  <img src = "http://sereslweb.csis.ysu.edu/img/texture-bw.png"><img>
+			  Small description
+			  <a href = "http://sereslweb.csis.ysu.edu/post/project/project5">View more >></a>
+
                         </div>
                         
                         

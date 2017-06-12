@@ -1,5 +1,4 @@
-# YsuSERESL.github.io
-SERESL Website
+#SERESL Website
 
-This is the source for the YSU SERESL (Software Engineering Resarch and Empirical Studies) website. 
+This is the source for the SERESL (Software Engineering Resarch and Empirical Studies Lab) website. 
 

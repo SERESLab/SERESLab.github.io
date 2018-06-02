@@ -12,4 +12,3 @@ share: true
 <!--
 {% bibliography %}
 -->
-

@@ -8,7 +8,3 @@ share: true
 ---
 
 ### Refereed Publications
-
-<!--
-{% bibliography %}
--->

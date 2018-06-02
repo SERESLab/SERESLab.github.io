@@ -1,0 +1,183 @@
+title:            
+description:      Software Engineering Research and Empirical Studies Lab Portal
+
+# put your disqus here
+disqus_shortname: sereslab
+reading_time:     true # if true, shows the estimated reading time for a post
+words_per_minute: 200
+logo:             images/logo.png # logo visible in the topbar
+excerpt_separator: <!--more-->
+# Your site's domain goes here (eg: //mmistakes.github.io, http://mademistakes.com, etc)
+# When testing locally leave blank or use http://localhost:4000
+
+url: https://sereslab.github.io
+#url: http://localhost:4000
+
+# draw your top menu here
+# each item must have a title and a url.
+#   To list post categories. use type: 'categories'
+#   To create sub categories. add a submenu item
+# See the example
+
+menu:
+  # - title: 'Home'
+    # url: '/'
+  # - title: 'Fork'
+    # url: 'http://github.com/aron-bordin/neo-hpstr-jekyll-theme'
+  # - title: 'Install'
+    # url: 'http://github.com/aron-bordin/neo-hpstr-jekyll-theme#installation'
+  # - title: 'Tags'
+    # url: '/tags'
+  # - title: 'Categories'
+    # url: '/categories'
+    # type: 'categories'
+  # - title: 'Favorites'
+    # url: '#'
+    # submenu:
+      # - title: 'Code Highlighter'
+        # url: '/intro/code-highlighting-post/'
+      # - title: 'Sample Post'
+        # url: '/intro/sample-post/'
+
+
+   - title: 'Home'
+     url: '/'
+     type: 'home'
+   - title: 'Research'
+     url: '/research'
+     type: 'research'  
+     submenu:
+       - title: 'Projects'
+         url: '/projects'     
+         type: 'projects' 
+       - title: 'Tools'
+         url: '/tools'     
+         type: 'tools' 
+       - title: 'Blog Posts by Category'
+         url: '/categories'     
+       - title: 'Blog Posts by Tag'
+         url: '/tags'     
+   - title: 'Publications'
+     url: '/publications'
+     type: 'publications'  
+   - title: 'Funding'
+     url: '/funding'    
+     type: 'funding'      
+   - title: 'People'
+     url: '/people'    
+     type: 'people'  
+     submenu:
+       - title: 'Contact Us'
+         url: '/contactus'     
+         type: 'contactus' 
+   - title: 'Media Gallery'
+     url: '/mediagallery'    
+     type: 'media'  
+
+        
+
+# Owner/author information
+owner:
+  name:           Bonita Sharif
+  site:           http://www.csis.ysu.edu/~bsharif
+  avatar:         images/bsharif.jpg
+  bio:            "Software Engineering and Eye Tracking Researcher"
+  email:          shbonita@outlook.com
+  # Twitter nick for use in Twitter cards and follow button.
+  twitter: shbonita # if no twitter in this config, the twitter follow button will be removed
+  # GitHub nick for use in follow button in author block.
+  github: shbonita
+
+# Twitter account associated with the site if different from owner/author twitter account.
+# Used in Twitter cards.
+twitter:
+
+# Social networking links used in author block underneath posts. Update and remove as you like.
+social:
+  - title: "github"
+    url: "https://github.com/sereslab"
+  - title: "linkedin"
+    url: "https://www.linkedin.com/in/bonita-sharif/"
+  - title: "youtube"
+    url: "https://www.youtube.com/channel/UCdy7A5BIz71tptSujkPpwjQ"
+
+# Background image to be tiled on all pages
+background:
+
+# Analytics and webmaster tools stuff goes here
+google_analytics:
+google_verify:
+# https://ssl.bing.com/webmaster/configure/verify/ownership Option 2 content= goes here
+bing_verify:
+
+# http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+timezone:    America/New_York
+locale:      en_US
+future:      true
+highlighter: rouge
+markdown:    kramdown
+sass:
+  sass_dir: _sass
+  style: compressed
+
+# https://github.com/mojombo/jekyll/wiki/Permalinks
+permalink:   /:categories/:title/
+
+# Amount of post to show on home page
+paginate: 5
+
+# if true, shows the floatting share buttons
+float_share: true
+
+# Octopress
+# Default extensions
+post_ext: md
+page_ext: md
+# Found in _templates/
+post_layout: post
+page_layout: page
+# Format titles with titlecase?
+titlecase: true
+
+# scholar:
+  # style: ieee
+  # source: ./_bibliography
+  # bibliography: publications.bib
+  # group_by: year,month
+  # order: descending
+  
+  
+scholar:
+  style: apa
+  locale: en
+
+  group_by: year
+  group_order: descending
+
+  source: ./_bibliography
+  bibliography: publications.bib
+  bibliography_template: "{{reference}}"
+  #bibliography_template: <abbr>[{{key}}]</abbr>{{reference}}
+
+  replace_strings: true
+
+  details_dir:    bibliography
+  details_layout: bibtex.html
+  details_link:   Details
+
+  query: "@*"
+  
+# BibTex Citation plugin
+citation:
+    citation_style: apa
+    citation_locale: en
+  
+include: [".htaccess"]
+exclude: ["demo/*", "lib", "config.rb", "Capfile", "config", "Gemfile", "Gemfile.lock", "README.md", "LICENSE", "log", "Rakefile", "Rakefile.rb", "tmp", "less", "*.sublime-project", "*.sublime-workspace", "test", "spec", "Gruntfile.js", "package.json", "node_modules"]
+plugins: ['jekyll-paginate', 'jekyll/scholar']
+theme: neo-hpstr-jekyll-theme
+
+
+  
+  
+  

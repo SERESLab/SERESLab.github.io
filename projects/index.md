@@ -41,12 +41,12 @@ This implies that a lot of source code involves pieces of natural text.  Do line
 
 ### Eye Movements in Software Traceability
 The iTrace environment, which is an eye tracking enabled Eclipse plugin, was used to collect eye gaze data. During the data collection phase, an eye tracker was used to gather the source code entities (SCE’s), developers looked at while solving these tasks. We present an algorithm that uses the collected gaze dataset to produce candidate traceability links related to the tasks. In the evaluation phase, we compared the results of our algorithm with the results of an IR technique, in two different contexts.
-![Gaze Link Diagram]({{ site.url }}/images/gazelink.png)
+![Gaze Link Diagram]({{ site.url }}/images/gazelink.PNG)
 {: .image-left}
 
 ### Eye Tracking Study Using Gaze and Interaction Logs
 What are software developers doing during a change task? We hypothesize that if we know more about how software developers read, write, search and navigate code, that it enables us to build tools to support developers more efficiently. First study that simultaneously collects eye-tracking and interaction data while developers worked on realistic change tasks. Gathered new insights about fine-granular navigation behavior of developers. Gaze data captures more and in fact a different aspect of a developer’s navigation behavior. 
-![Fixation Graph]({{ site.url }}/images/fse15graph.png)
+![Fixation Graph]({{ site.url }}/images/fse15graph.PNG)
 {: .image-left}
 
 

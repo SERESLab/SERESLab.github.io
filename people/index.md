@@ -11,17 +11,30 @@ share: true
 Bonita Sharif, Ph.D.
 
 
+### Ph.D. Students - Current (UNL)
+* Jonathan Saddler
+* Niloofar Mansoor
 
+### Masters Students - Current (UNL)
+* Kang-il Park
+* Sumeet Maan
+* Cole Peterson
 
-### Masters Students - Current
+### Undergraduate Students in Research Projects (UNL)
+* Jasmine Boyer
+* Adam Gray
+* Adrian Pilkington
+* Collin Hallett
+* Sarah Oran
+* Jada Loro
+* Abbey Schneff
+
+### Masters Students - Former (at YSU)
 * Faraz Anwer
 * Sahaj Bhattarai
 * Jessica Sapp
 
-### Undergraduate Students - Current
-* Ashwin Mishra
-
-### Masters Students - Graduated
+### Masters Students - Graduated (YSU)
 * Sanjana Sama
 * Nishitha Yedla
 * Vinayak Sinha
@@ -33,6 +46,7 @@ Bonita Sharif, Ph.D.
 * Casey Robinson
 
 ### Undergraduate Students - Graduated
+* Ashwin Mishra
 * Jenna Wise
 * Joseph Miller
 * Nicholas Iovino

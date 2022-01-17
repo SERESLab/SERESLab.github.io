@@ -1,0 +1,20 @@
+1. What sections should we have on the landing page?
+2. Do we want to keep the search function (in the top right the magnifying
+   glass icon)?
+3. Do we want geolocation do be displayed on the website?
+
+
+Notes:
+1. I've put all the HTML files that I believe we don't need to use in a folder called 'outdated',
+   we may need to refer to them later if we want to use some structuring/formatting from those files.
+2. Though it may seem messy, I've temporarily commented out code that we aren't using in the landing page (index.html)
+   in case we want to add another section, we have a formatting foundating if we choose to add another section.
+3. Right now the naming conventions/variables are a bit wonky, once the website gets further established
+   I will then change them to make them fitting for their purpose and remove the unused.
+
+ToDo:
+- contact.html
+- Fix video thumbnail size on index.html
+- Hook up socials on footer of every page
+- hook up contact
+- work on the JavaScript POST/PHP

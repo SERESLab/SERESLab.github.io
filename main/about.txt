@@ -1,0 +1,42 @@
+We need to completely redsign the website using modern technology but also something that will be easy to keep updated by me.
+
+I would like to have a statically generated website if possible. I am happy to hear other alternatives.
+I would like to have the following sections
+
+    Research
+    -Active Topics (short blurb of each topic, contributors, funding, and then list of publications for each. each paper should have picture near it. two line description, space for best paper mention (if available) should also be listed.)each pub should have a cite, doi, pdf link, slides, replication package if available.
+    -InActive Topics
+    Publications (list of all publications but be able to tag such that we can list them related to topic on topics page). each pub should have a cite, doi, pdf link. Filter by pub type (abstract, book chapter, journal article, conference paper, workshop paper, magazine article, technical report) + venue (ETRA, ICPC, VISSOFT, SEMotion, HCII, CHI, ESEC/FSE, ICSME, MSR, EMSE, ICSE, JSS, IEEE Access, EMIP, ETRA, IEEE Access, IEEE Software, SCP, TEFSE, APSEC, CSEE&T, ICER, WWW) + award (best paper, honorable mention) + topic (eye tracking, program comprehension, software traceability, mining software repositories, emotional awareness, uml layout, SE expertise). For topic you should be able to choose multiple labels to filter. In order to do this the main input will be a bib file but then we need some sort of json to store tags to help with filtering. there are many ways to do this. I would suggest brainstorm the best way.
+    Tools
+    Funding
+    People
+    News
+    Media
+    Book Lab for Study (time range, date, which ET, purpose)
+
+What technologies should we use? React and JS with json for making some sort of schema?
+
+Follow standard directory structure
+/topicname
+/papers
+/slides
+/images
+
+site should look good on mobile as well.
+
+Let's talk about options here before implementing them.
+
+
+SECTIONS:
+Research
+    Active Topics
+    Inactive Topics
+Publications
+Tools
+Funding
+People
+News
+Media
+Book Lab for Study
+
+https://citation.js.org/

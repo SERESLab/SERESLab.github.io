@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radio Test</title>
+</head>
+<style>
+    .container {
+        display: flex;
+    }
+
+    .filterable {
+        display: block;
+        margin: 5px;
+        float: left;
+        display: none;
+    }
+
+    .show {
+        display: block;
+    }
+
+    .active {
+        background-color: lightblue;
+    }
+</style>
+<!-- Tag section 1 -->
+<!-- <button id="one">One</button>
+    <button id="two">Two</button> -->
+
+<!-- Tag section 2 -->
+<!-- <button id="three">Three</button>
+    <button id="four">Four</button> -->
+
+<!-- Tag section 3 -->
+<!-- <button id="five">Five</button>
+    <button id="six">Six</button> -->
+
+
+<div id="fillable" class="elements">
+</div>
+
+<div class="container">
+    <div class="filterable cars show">Challenger</div>
+    <div class="filterable cars show">Mustang</div>
+    <div class="filterable cars show">Camaro</div>
+    <div class="filterable fruit show">Pear</div>
+    <div class="filterable fruit show">Apple</div>
+    <div class="filterable fruit show">Orange</div>
+    <div class="filterable pets show">Cat</div>
+    <div class="filterable pets show">Dog</div>
+    <div class="filterable pets show">Bird</div>
+</div>
+
+<body>
+
+</body>
+<script>
+// there have been troubles reading local JSON files through client-side
+// opted towards creating a JSON variable
+var tags = [
+    { 'id': 1, 'name': 'cars' },
+    { 'id': 2, 'name': 'fruit' },
+    { 'id': 3, 'name': 'pets' },
+];
+let elementsContainer = document.getElementById("fillable");
+createClickables();
+
+function createClickables() {
+    for (let i = 0; i < tags.length; i++) {
+        let button = document.createElement("button");
+        button.innerText = tags[i].name;
+        button.id = tags[i].name;
+        button.onclick = function () { onClick(button.id) }
+        elementsContainer.appendChild(button);
+    }
+}
+
+function onClick(className) {
+    // retrieve all the filterable objects, the active button, and
+    // the button clicked
+    let filterables = document.getElementsByClassName('filterable'); // this is an array
+    let currentActive = document.getElementsByClassName('active'); // this is an array
+    let button = document.getElementById(className); // this is NOT an array
+
+    // case 1: no other filters are active
+    // add the clicked button to active and show just that class
+    if (currentActive.length == 0) {
+        button.classList.add('active');
+        for (let i = 0; i < filterables.length; i++) {
+            if (filterables[i].classList.contains(className)) {
+                filterables[i].classList.add('show');
+            } else {
+                filterables[i].classList.remove('show');
+            }
+        }
+
+        // case 2: clicking an active button
+        // remove that button from active, show everything
+    } else if (button.classList.contains('active')) {
+        button.classList.remove('active');
+        for (let i = 0; i < filterables.length; i++) {
+            filterables[i].classList.add('show');
+        }
+
+        // case 3: there is another filter active
+        // remove that button from active, hide the other class, show the
+        // respective class
+    } else {
+        currentActive[0].classList.remove('active');
+        button.classList.add('active');
+        for (let i = 0; i < filterables.length; i++) {
+            if (filterables[i].classList.contains(className)) {
+                filterables[i].classList.add('show');
+            } else {
+                filterables[i].classList.remove('show');
+            }
+        }
+    }
+
+}
+
+</script>
+
+</html>

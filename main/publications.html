@@ -11,7 +11,6 @@
 
 	<!-- title -->
 	<title>SERSEL - Publications</title>
-
 	<!-- favicon -->
 	<link rel="shortcut icon" type="image/png" href="assets/img/favicon.png">
 	<!-- google font -->
@@ -33,11 +32,18 @@
 	<link rel="stylesheet" href="assets/css/main.css">
 	<!-- responsive -->
 	<link rel="stylesheet" href="assets/css/responsive.css">
+	<!-- <script type="text/javascript" src="data/test-tags.js"></script> -->
+	<!-- <script type="module" src="data/tags.json"></script> -->
 
-</head>
+	<script src="assets/js/publications-filter.js"></script>
+	<!-- <script data-main="assets/js/publications-filter" src="assets/js/require.js"></script> -->
+	<style>
+	.filterActive {
+		font-weight: bold;
+	}
+</style>
 
 <body>
-
 	<!--PreLoader-->
 	<div class="loader">
 		<div class="loader-inner">
@@ -151,12 +157,40 @@
 
 			<div class="row">
 				<div class="col-lg-8 offset-lg-2 text-center">
-					<!-- This has to be a radio group -->
-					<a href="#">Tag</a>
+					<!-- This has to be a radio group, three categories -->
+
+					<!-- category one -->
+					<div class="row">
+						<button class="firstCategory">test1-one</button>
+						<button class="firstCategory">test1-two</button>
+						<button class="firstCategory">test1-three</button>
+					</div>
+
+					<!-- category two -->
+					<div class="row">
+						<button class="test">test2-one</button>
+						<button class="test">test2-two</button>
+						<button class="test">test2-three</button>
+					</div>
+
+					<!-- category three -->
+					<div class="row">
+						<button class="test">test3-one</button>
+						<button class="test">test3-two</button>
+						<button class="test">test3-three</button>
+					</div>
+
 				</div>
 
-				<!-- Maybe we can use card-like stuff to implement little blurbs of active topics? -->
 				<div class="row">
+					<ul>
+						<li class="filterable uno">uno</li>
+						<li class="filterable dos">dos</li>
+						<li class="filterable tres">tres</li>
+					</ul>
+				</div>
+				<!-- Maybe we can use card-like stuff to implement little blurbs of active topics? -->
+				<!-- <div class="row" style="overflow-y: scroll;">
 					<div class="col-lg-4 col-md-6 text-center">
 						<div class="single-product-item">
 							<div class="product-image">
@@ -191,20 +225,16 @@
 						</div>
 					</div>
 				</div>
-
-				<div class="row">
-					<div class="col-lg-4 col-md-6 text-center">
-						<div class="single-product-item">
-							<div class="product-image">
-								<a href="single-product.html"><img src="assets/img/products/product-img-1.jpg"
-										alt=""></a>
-							</div>
-							<h3>Strawberry</h3>
-							<p class="product-price"><span>Per Kg</span> 85$ </p>
-							<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+				<div class="col-lg-4 col-md-6 text-center">
+					<div class="single-product-item">
+						<div class="product-image">
+							<a href="single-product.html"><img src="assets/img/products/product-img-1.jpg" alt=""></a>
 						</div>
+						<h3>Strawberry</h3>
+						<p class="product-price"><span>Per Kg</span> 85$ </p>
+						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
 					</div>
-				</div>
+				</div> -->
 
 			</div>
 		</div>

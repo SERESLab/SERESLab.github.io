@@ -1,60 +1,56 @@
-{
-    "data": {
-      "topics": [
-     {
-       "id": 1,
-       "name": "eye tracking",
-       "text": "Papers related to eye tracking",
-	   "active": "yes"
-     },
-     {
-       "id": 2,
-       "name": "program comprehension",
-       "text": "Program comprehension related research",
-	   "active": "yes"
-     },
-     {
-       "id": 3,
-       "name": "mining software repositories",
-       "text": "MSR papers",
-	   "active": "yes"
-     },
-     {
-       "id": 4,
-       "name": "empirical studies",
-       "text": "Empirical studies",
-	   "active": "yes"
-     },
-     {
-       "id": 5,
-       "name": "uml and layout",
-       "text": "UML layout papers",
-	   "active": "yes"
-     },
-     {
-       "id": 6,
-       "name": "emotional awareness",
-       "text": "Papers on Emotional Awareness",
-	   "active": "yes"
-     },
-     {
-       "id": 7,
-       "name": "software traceability",
-       "text": "Traceability Papers",
-	   "active": "yes"
-     },
-     {
-       "id": 8,
-       "name": "software visualization",
-       "text": "Visualization papers",
-	   "active": "yes"
-     },
-     {
-       "id": 9,
-       "name": "iTrace",
-       "text": "Papers related to iTrace infrastructure",
-	   "active": "yes"
-     }	 
-   ]
-   }
-}
+[
+  {
+    "id": 1,
+    "name": "eye tracking",
+    "text": "Papers related to eye tracking",
+    "active": "yes"
+  },
+  {
+    "id": 2,
+    "name": "program comprehension",
+    "text": "Program comprehension related research",
+    "active": "yes"
+  },
+  {
+    "id": 3,
+    "name": "mining software repositories",
+    "text": "MSR papers",
+    "active": "yes"
+  },
+  {
+    "id": 4,
+    "name": "empirical studies",
+    "text": "Empirical studies",
+    "active": "yes"
+  },
+  {
+    "id": 5,
+    "name": "uml and layout",
+    "text": "UML layout papers",
+    "active": "yes"
+  },
+  {
+    "id": 6,
+    "name": "emotional awareness",
+    "text": "Papers on Emotional Awareness",
+    "active": "yes"
+  },
+  {
+    "id": 7,
+    "name": "software traceability",
+    "text": "Traceability Papers",
+    "active": "yes"
+  },
+  {
+    "id": 8,
+    "name": "software visualization",
+    "text": "Visualization papers",
+    "active": "yes"
+  },
+  {
+    "id": 9,
+    "name": "iTrace",
+    "text": "Papers related to iTrace infrastructure",
+    "active": "yes"
+  }
+]

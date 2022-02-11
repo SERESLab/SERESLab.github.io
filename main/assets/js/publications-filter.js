@@ -19,34 +19,69 @@
 // import data from '../../data/tags.json';
 // console.log((data.length));
 
-let data = [
-      {
-        "id": 1,
-        "name": "susan smith",
-      },
-      {
-        "id": 2,
-        "name": "anna johnson",
-      },
-      {
-        "id": 3,
-        "name": "peter jones",
-      },
-      {
-        "id": 4,
-        "name": "bill anderson",
-      }
-    ];
+var tags = [
+  { 'id': 1, 'name': 'cars' },
+  { 'id': 2, 'name': 'fruit' },
+  { 'id': 3, 'name': 'pets' },
+];
+const elementsContainer = document.getElementById("fillable");
+createClickables();
 
-  console.log(data.length)
-for (let i = 0; i < data.length; i++) {
-    console.log(`${i} id:${data[i].id}, name:${data[i].name}`)
+function createClickables() {
+  for (let i = 0; i < tags.length; i++) {
+    let button = document.createElement("button");
+    button.innerText = tags[i].name;
+    button.id = tags[i].name;
+    button.onclick = function () { filterOnClick(button.id) }
+    elementsContainer.appendChild(button);
   }
-  
+}
 
-// code from https://www.w3schools.com/howto/howto_js_filter_elements.asp
-// code from https://www.w3schools.com/js/js_json_html.as
+// this function filters publications by the tags after clicking
+function filterOnClick(className) {
 
+  // retrieve all the filterable objects, the active button, and
+  // the button clicked
+  let filterables = document.getElementsByClassName('filterable'); // this is an array
+  let currentActive = document.getElementsByClassName('active'); // this is an array
+  let button = document.getElementById(className); // this is NOT an array
+
+  // case 1: no other filters are active
+  // add the clicked button to active and show just that class
+  if (currentActive.length == 0) {
+    button.classList.add('active');
+    for (let i = 0; i < filterables.length; i++) {
+      if (filterables[i].classList.contains(className)) {
+        filterables[i].classList.add('show');
+      } else {
+        filterables[i].classList.remove('show');
+      }
+    }
+    
+    // case 2: clicking an active button
+    // remove that button from active, show everything
+  } else if (button.classList.contains('active')) {
+    button.classList.remove('active');
+    for (let i = 0; i < filterables.length; i++) {
+      filterables[i].classList.add('show');
+    }
+
+    // case 3: there is another filter active
+    // remove that button from active, hide the other class, show the
+    // respective class
+  } else {
+    currentActive[0].classList.remove('active');
+    button.classList.add('active');
+    for (let i = 0; i < filterables.length; i++) {
+      if (filterables[i].classList.contains(className)) {
+        filterables[i].classList.add('show');
+      } else {
+        filterables[i].classList.remove('show');
+      }
+    }
+  }
+
+}
 // each publication has x amount of tags,
 // need to figure out how to assign those tags if they're going
 // to be generated from a JSON file

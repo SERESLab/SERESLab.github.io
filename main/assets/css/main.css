@@ -2771,3 +2771,16 @@ table.order-details tbody td {
   vertical-align: middle;
   width: 100%;
 }
+
+/* TITLE STYlES */
+.title-bold {
+  font-weight: bold;
+}
+
+.title-italics {
+  font-style: italic;
+}
+
+.title-underline {
+  text-decoration: underline;
+}

@@ -6,12 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Radio Test</title>
 </head>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/citation-js/0.5.5/citation.min.js"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/citation-js"></script>
 <script src="require.js" type="script"></script>
 <script>
     const Cite = require("citation-js");
 </script>
+
+<div id="fillable" class="elements">
+</div>
+
+<!-- <div class="container">
+    <div class="filterable cars show">Challenger</div>
+    <div class="filterable fruit show">Pear</div>
+    <div class="filterable pets show id-7">Cat</div>
+    <div class="filterable fruit show">Apple</div>
+    <div class="filterable pets show">Dog</div>
+    <div class="filterable cars show">Camaro</div>
+    <div class="filterable cars show">Mustang</div>
+    <div class="filterable pets show">Bird</div>
+    <div class="filterable fruit cars show">Orange</div>
+</div> -->
+
+<div data-citations class="publications">
+</div>
+
+<body>
+</body>
 <style>
     .container {
         display: flex;
@@ -31,29 +51,11 @@
         background-color: lightblue;
     }
 </style>
-
-
-<div id="fillable" class="elements">
-</div>
-
-<div class="container">
-    <div class="filterable cars show">Challenger</div>
-    <div class="filterable fruit show">Pear</div>
-    <div class="filterable pets show id-7">Cat</div>
-    <div class="filterable fruit show">Apple</div>
-    <div class="filterable pets show">Dog</div>
-    <div class="filterable cars show">Camaro</div>
-    <div class="filterable cars show">Mustang</div>
-    <div class="filterable pets show">Bird</div>
-    <div class="filterable fruit cars show">Orange</div>
-</div>
-
-<body>
-</body>
 <script>
 
-    const CITATIONS = "";
+    var CITATIONS = "";
     getTags();
+    getCitations();
 
     const elementsContainer = document.getElementById("fillable");
 
@@ -81,7 +83,7 @@
     Return: outputs the citations to the DOM with their respective publications
     */
     async function getCitations() {
-        await fetch('./data/citationtest.bib')
+        await fetch('./data/citations.bib')
             .then(response => {
                 if (!response.ok) {
                     throw new Error("HTTP error " + response.status);
@@ -89,54 +91,55 @@
                 return response.text();
             })
             .then(data => {
-                // do something here with the JSON
                 generateCitations(data);
             })
             .catch(function () {
                 this.dataError = true;
             })
-            
+
     }
 
     /*
+    NOTE: THIS FUNCTION IS STILL WIP
     Return: puts the formatted citations on the DOM
     String data: this is the parsed BibTeX file
     */
     function generateCitations(data) {
-        let citations = new Cite(data);
-        let output = citations.format('bibliography', {
+        CITATIONS = new Cite(data); // use citations.data to access array of the Cite object
+
+        output = CITATIONS.format('bibliography', {
             format: 'html',
-            template: 'APA',
-            lang: 'en-US',
+            template: 'ieee',
         });
-        elementsContainer.innerHTML(output);
+
+        document.querySelector('[data-citations]').innerHTML = output;
     }
 
-    // THIS FUNCTION NEEDS TO BE USED AS ASYNC FOR AN AWAIT CALL
-    // This function creates a citation
-    async function getCitationsObject(json) {
+    /*
+    NOTE: THIS FUNCTION IS STILL WIP
+    This function adds CSS classes associated with the tags to be able to be
+    filtered
+    */
+    function associateTags() {
 
-        let cite = new Cite(await getCitationsString());
+        // use Cite object to grab topics then use those topics to associate
+        // the filterable classes
+        let data = CITATIONS.data;
+        let allPublications = document.getElementsByClassName("csl-entry");
+    
+        for (let i = 0; i < data.length; i++) {
+            let currPublication = document.querySelector("[data-csl-entry-id=" + CSS.escape(data[i].id) + "]");
+            currPublication.classList.add("filterable");
 
-        let output = citations.format('', {
-            format: 'html',
-            template: 'apa',
-            lang: 'en-US',
-        })
+            if(data[i].keyword === undefined) {
+                continue;
+            }
 
-        // need authors' name in alphabetical order
-        // 
-        let authors = citation.data[0].author; // this is an array of objects
-        var authorStrings = new Array();
-        var authorNames = new Array();
-
-
-
-        // for (let i = 0; i < authors.length; i++) {
-        //     authorStrings.push(authors[i].given[0] + ". " + authors[i].family + " ");
-        // }
-        // console.log(authorStrings.toString());
-
+            let keywords = data[i].keyword.split(",");
+            for(let j = 0; j < keywords.length; j++) {
+                currPublication.classList.add(keywords[j]);
+            }
+        }
     }
 
     /*
@@ -148,7 +151,7 @@
             let button = document.createElement("button");
             button.innerText = tags[i].name;
             button.id = tags[i].name;
-            button.onclick = function () { onClickFilter(button.id, "id-" + tags[i].id,) }
+            button.onclick = function () { onClickFilter(tags[i].name, tags[i].name) }
 
             // adding attributes for future use
             if (tags[i].active === "yes") {
@@ -167,9 +170,10 @@
     String className: this is the className added to the publications to filter what's hidden and shown
     */
     function onClickFilter(buttonId, className) {
-        let filterables = document.getElementsByClassName('filterable');
-        let currentActive = document.getElementsByClassName('active');
-        let button = document.getElementById(buttonId);
+        let filterables = document.getElementsByClassName('filterable'); // these are the div elements
+        let currentActive = document.getElementsByClassName('active'); // allowing us to deactivate other active button
+        let button = document.getElementById(buttonId); // allowing us to set the button clicked to active
+        console.log(buttonId + " class: " + className);
         // case 1: no other filters are active
         // add the clicked button to active and show just that class
         if (currentActive.length == 0) {

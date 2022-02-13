@@ -32,19 +32,11 @@
 	<link rel="stylesheet" href="assets/css/main.css">
 	<!-- responsive -->
 	<link rel="stylesheet" href="assets/css/responsive.css">
-
-	<style>
-		.active {
-			font-weight: bold;
-		}
-		.show {
-			display: block;
-		}
-		.filterable {
-			margin: 5px;
-			float: left;
-		}
-	</style>
+	<script src="https://cdn.jsdelivr.net/npm/citation-js"></script>
+	<script src="./assets/js/require.js" type="script"></script>
+	<script>
+		const Cite = require("citation-js");
+	</script>
 
 <body>
 	<!--PreLoader-->
@@ -144,8 +136,8 @@
 	</div>
 	<!-- end hero area -->
 
-	<!-- tags section -->
-	<div class="product-section mt-100 mb-100">
+	<!-- title section -->
+	<div class="product-section mt-100">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-8 offset-lg-2 text-center">
@@ -157,90 +149,71 @@
 					</div>
 				</div>
 			</div>
+		</div>
+	</div>
+	<!-- end title section -->
 
+	<!-- tags section -->
+	<div data-tags class="tags px-5"></div>
+
+	<!-- Going to need a section for the publications -->
+	<div data-publications class="publications mb-5 px-5">
+
+	</div>
+
+	<!-- footer -->
+	<div class="footer-area">
+		<div class="container">
 			<div class="row">
-				<div class="col-lg-8 offset-lg-2 text-center">
-					<!-- This has to be a radio group, three categories -->
-
-					<!-- category one -->
-					<div id="catFirst" class="row">
+				<div class="col-lg-3 col-md-6">
+					<div class="footer-box about-widget">
+						<h2 class="widget-title">About us</h2>
+						<p>SERESL</p>
 					</div>
-
 				</div>
-
-				<!-- Maybe we can use card-like stuff to implement little blurbs of active topics? -->
-
-			</div>
-
-			<div class="filterable">
-				<div class="filterable cars show">Challenger</div>
-				<div class="filterable cars show">Mustang</div>
-				<div class="filterable cars show">Camaro</div>
-				<div class="filterable fruit show">Pear</div>
-				<div class="filterable fruit show">Apple</div>
-				<div class="filterable fruit show">Orange</div>
-				<div class="filterable pets show">Cat</div>
-				<div class="filterable pets show">Dog</div>
-				<div class="filterable pets show">Bird</div>
-			</div>
-		</div>
-		<!-- end tags section -->
-
-		<!-- Going to need a section for the publications -->
-
-		<!-- footer -->
-		<div class="footer-area">
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-3 col-md-6">
-						<div class="footer-box about-widget">
-							<h2 class="widget-title">About us</h2>
-							<p>Software Engei</p>
-						</div>
+				<div class="col-lg-3 col-md-6">
+					<div class="footer-box get-in-touch">
+						<h2 class="widget-title">Get in Touch</h2>
+						<ul>
+							<li>34/8, East Hukupara, Gifirtok, Sadan.</li>
+							<li>support@fruitkha.com</li>
+							<li>+00 111 222 3333</li>
+						</ul>
 					</div>
-					<div class="col-lg-3 col-md-6">
-						<div class="footer-box get-in-touch">
-							<h2 class="widget-title">Get in Touch</h2>
-							<ul>
-								<li>34/8, East Hukupara, Gifirtok, Sadan.</li>
-								<li>support@fruitkha.com</li>
-								<li>+00 111 222 3333</li>
-							</ul>
-						</div>
+				</div>
+				<div class="col-lg-3 col-md-6">
+					<div class="footer-box pages">
+						<h2 class="widget-title">Pages</h2>
+						<ul>
+							<li><a href="index.html">Home</a></li>
+							<li><a href="research.html">Research</a></li>
+							<li><a href="publications.html">Publications</a></li>
+							<li><a href="tools.html">Tools</a></li>
+							<li><a href="funding.html">Funding</a></li>
+							<li><a href="people.html">People</a></li>
+							<li><a href="news.html">News</a></li>
+							<li><a href="media.html">Media</a></li>
+							<li><a href="book_lab.html">Book Lab</a></li>
+						</ul>
 					</div>
-					<div class="col-lg-3 col-md-6">
-						<div class="footer-box pages">
-							<h2 class="widget-title">Pages</h2>
-							<ul>
-								<li><a href="index.html">Home</a></li>
-								<li><a href="research.html">Research</a></li>
-								<li><a href="publications.html">Publications</a></li>
-								<li><a href="tools.html">Tools</a></li>
-								<li><a href="funding.html">Funding</a></li>
-								<li><a href="people.html">People</a></li>
-								<li><a href="news.html">News</a></li>
-								<li><a href="media.html">Media</a></li>
-								<li><a href="book_lab.html">Book Lab</a></li>
-							</ul>
-						</div>
-					</div>
-					<div class="col-lg-3 col-md-6">
-						<div class="footer-box subscribe">
-							<h2 class="widget-title">Subscribe</h2>
-							<p>Subscribe to our mailing list to get the latest updates.</p>
-							<form action="index.html">
-								<input type="email" placeholder="Email">
-								<button type="submit"><i class="fas fa-paper-plane"></i></button>
-							</form>
-						</div>
+				</div>
+				<div class="col-lg-3 col-md-6">
+					<div class="footer-box subscribe">
+						<h2 class="widget-title">Subscribe</h2>
+						<p>Subscribe to our mailing list to get the latest updates.</p>
+						<form action="index.html">
+							<input type="email" placeholder="Email">
+							<button type="submit"><i class="fas fa-paper-plane"></i></button>
+						</form>
 					</div>
 				</div>
 			</div>
 		</div>
-		<!-- end footer -->
+	</div>
+	<!-- end footer -->
 
-		<!-- copyright -->
-		<div class="copyright">
+	<!-- copyright -->
+	<div class="copyright">
 			<div class="container">
 				<div class="row">
 					<div class="col-lg-6 col-md-12">
@@ -262,30 +235,32 @@
 				</div>
 			</div>
 		</div>
-		<!-- end copyright -->
+	<!-- end copyright -->
 
-		<!-- jquery -->
-		<script src="assets/js/jquery-1.11.3.min.js"></script>
-		<!-- bootstrap -->
-		<script src="assets/bootstrap/js/bootstrap.min.js"></script>
-		<!-- count down -->
-		<script src="assets/js/jquery.countdown.js"></script>
-		<!-- isotope -->
-		<script src="assets/js/jquery.isotope-3.0.6.min.js"></script>
-		<!-- waypoints -->
-		<script src="assets/js/waypoints.js"></script>
-		<!-- owl carousel -->
-		<script src="assets/js/owl.carousel.min.js"></script>
-		<!-- magnific popup -->
-		<script src="assets/js/jquery.magnific-popup.min.js"></script>
-		<!-- mean menu -->
-		<script src="assets/js/jquery.meanmenu.min.js"></script>
-		<!-- sticker js -->
-		<script src="assets/js/sticker.js"></script>
-		<!-- main js -->
-		<script src="assets/js/main.js"></script>
-		<!-- publications-filter.js -->
-		<script src="assets/js/publications-filter.js"></script>
+	<!-- jquery -->
+	<script src="assets/js/jquery-1.11.3.min.js"></script>
+	<!-- bootstrap -->
+	<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+	<!-- count down -->
+	<script src="assets/js/jquery.countdown.js"></script>
+	<!-- isotope -->
+	<script src="assets/js/jquery.isotope-3.0.6.min.js"></script>
+	<!-- waypoints -->
+	<script src="assets/js/waypoints.js"></script>
+	<!-- owl carousel -->
+	<script src="assets/js/owl.carousel.min.js"></script>
+	<!-- magnific popup -->
+	<script src="assets/js/jquery.magnific-popup.min.js"></script>
+	<!-- mean menu -->
+	<script src="assets/js/jquery.meanmenu.min.js"></script>
+	<!-- sticker js -->
+	<script src="assets/js/sticker.js"></script>
+	<!-- main js -->
+	<script src="assets/js/main.js"></script>
 
+	<!-- publications-filter.js -->
+	<!-- <script src="assets/js/publications-filter.js"></script> -->
 </body>
+<script src="./assets/js/publications-filter.js"></script>
+
 </html>

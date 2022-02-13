@@ -12,10 +12,12 @@
     const Cite = require("citation-js");
 </script>
 
-<div id="fillable" class="elements">
-</div>
+<body>
 
-<!-- <div class="container">
+    <div id="fillable" class="elements">
+    </div>
+
+    <!-- <div class="container">
     <div class="filterable cars show">Challenger</div>
     <div class="filterable fruit show">Pear</div>
     <div class="filterable pets show id-7">Cat</div>
@@ -27,10 +29,9 @@
     <div class="filterable fruit cars show">Orange</div>
 </div> -->
 
-<div data-citations class="publications">
-</div>
+    <div data-publications class="publications">
+    </div>
 
-<body>
 </body>
 <style>
     .container {
@@ -112,7 +113,7 @@
             template: 'ieee',
         });
 
-        document.querySelector('[data-citations]').innerHTML = output;
+        document.querySelector('[data-publications]').innerHTML = output;
     }
 
     /*
@@ -126,17 +127,17 @@
         // the filterable classes
         let data = CITATIONS.data;
         let allPublications = document.getElementsByClassName("csl-entry");
-    
+
         for (let i = 0; i < data.length; i++) {
             let currPublication = document.querySelector("[data-csl-entry-id=" + CSS.escape(data[i].id) + "]");
             currPublication.classList.add("filterable");
 
-            if(data[i].keyword === undefined) {
+            if (data[i].keyword === undefined) {
                 continue;
             }
 
             let keywords = data[i].keyword.split(",");
-            for(let j = 0; j < keywords.length; j++) {
+            for (let j = 0; j < keywords.length; j++) {
                 currPublication.classList.add(keywords[j]);
             }
         }

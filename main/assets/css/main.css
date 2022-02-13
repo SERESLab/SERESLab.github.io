@@ -238,6 +238,7 @@ p:last-child {
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   to {
     -webkit-transform: rotate(720deg);
     transform: rotate(720deg);
@@ -249,6 +250,7 @@ p:last-child {
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   to {
     -webkit-transform: rotate(720deg);
     transform: rotate(720deg);
@@ -260,6 +262,7 @@ p:last-child {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
+
   to {
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
@@ -271,6 +274,7 @@ p:last-child {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
+
   to {
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
@@ -562,7 +566,7 @@ nav.main-menu ul li a {
   padding: 15px;
 }
 
-nav.main-menu ul > li {
+nav.main-menu ul>li {
   position: relative;
 }
 
@@ -596,7 +600,7 @@ nav.main-menu ul ul.sub-menu li a {
   font-size: 13px;
 }
 
-nav.main-menu ul > li:hover ul {
+nav.main-menu ul>li:hover ul {
   opacity: 1;
   visibility: visible;
 }
@@ -605,7 +609,7 @@ nav.main-menu ul li:last-child a {
   display: inline-block;
 }
 
-nav.main-menu > ul li:last-child {
+nav.main-menu>ul li:last-child {
   float: right;
 }
 
@@ -672,7 +676,7 @@ ul.sub-menu li:last-child {
   padding: 8px 8px 6px;
 }
 
-nav.mean-nav > ul > li:first-child > a {
+nav.mean-nav>ul>li:first-child>a {
   border-top: none;
 }
 
@@ -686,7 +690,7 @@ nav.mean-nav > ul > li:first-child > a {
   padding: 6px 0;
 }
 
-.top-header-area.sepherate-header ul li > a, .top-header-area.sepherate-header .header-icons a {
+.top-header-area.sepherate-header ul li>a, .top-header-area.sepherate-header .header-icons a {
   color: #232323;
 }
 
@@ -701,11 +705,11 @@ nav.main-menu ul ul.sub-menu li a {
   font-weight: 600;
 }
 
-nav.main-menu ul li.current-list-item > a {
+nav.main-menu ul li.current-list-item>a {
   color: #e71a1a;
 }
 
-nav.main-menu li:hover > a {
+nav.main-menu li:hover>a {
   color: #e71a1a;
 }
 
@@ -1810,7 +1814,7 @@ span.comment-date {
   margin-bottom: 10px;
 }
 
-.comment-template > p {
+.comment-template>p {
   opacity: 0.7;
   margin-bottom: 30px;
 }
@@ -1870,11 +1874,11 @@ span.comment-date {
   font-size: 15px;
 }
 
-.sidebar-section > div {
+.sidebar-section>div {
   margin-bottom: 60px;
 }
 
-.sidebar-section > div:last-child {
+.sidebar-section>div:last-child {
   margin-bottom: 0;
 }
 
@@ -2724,7 +2728,7 @@ table.order-details tbody td {
   padding: 15px;
 }
 
-.order-details-wrap > a {
+.order-details-wrap>a {
   margin-top: 30px;
 }
 
@@ -2783,4 +2787,40 @@ table.order-details tbody td {
 
 .title-underline {
   text-decoration: underline;
+}
+/* -----------------------------------------------------------------------------
+
+# Publiations Page Styles
+
+----------------------------------------------------------------------------- */
+
+.publications {
+  height: 40vh;
+  overflow-y: scroll;
+}
+
+.tags {
+  display: block;
+}
+
+.tags button {
+  align-items: stretch;
+  background: none;
+  box-shadow: none;
+  border: none;
+  font-size: 14px;
+}
+
+.active {
+  font-weight: bold;
+}
+
+.filter-show {
+  display: block !important;
+}
+
+.filterable {
+  margin: 5px;
+  float: left;
+  display: none;
 }

@@ -1610,31 +1610,9 @@ div.owl-controls, .owl-controls div {
 # News Styles
 
 ----------------------------------------------------------------------------- */
-.news-bg-1 {
-  background-image: url(../img/latest-news/news-bg-1.jpg);
-}
-
-.news-bg-2 {
-  background-image: url(../img/latest-news/news-bg-2.jpg);
-}
-
-.news-bg-3 {
-  background-image: url(../img/latest-news/news-bg-3.jpg);
-}
-
-.news-bg-4 {
-  background-image: url(../img/latest-news/news-bg-4.jpg);
-}
-
-.news-bg-5 {
-  background-image: url(../img/latest-news/news-bg-5.jpg);
-}
-
-.news-bg-6 {
-  background-image: url(../img/latest-news/news-bg-6.jpg);
-}
-
 .latest-news-bg {
+  display: flex;
+  justify-content: center;
   height: 200px;
   background-size: cover;
   background-position: center;
@@ -2811,7 +2789,15 @@ table.order-details tbody td {
   font-size: 14px;
 }
 
-.active {
+.articleTypes button {
+  align-items: stretch;
+  background: none;
+  box-shadow: none;
+  border: none;
+  font-size: 14px;
+}
+
+.tag-active, .type-active {
   font-weight: bold;
 }
 

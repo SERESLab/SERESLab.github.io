@@ -1,0 +1,20 @@
+[
+    {
+      "id": 1,
+      "name": "article-journal",
+      "active": "yes",
+      "color": "#32a852"
+    },
+    {
+      "id": 2,
+      "name": "book",
+      "active": "yes",
+      "color": "#3285a8"
+    },
+    {
+      "id": 3,
+      "name": "paper-conference",
+      "active": "yes",
+      "color": "#626094"
+    }
+  ]

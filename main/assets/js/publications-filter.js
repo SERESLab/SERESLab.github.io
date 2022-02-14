@@ -1,13 +1,35 @@
 var CITATIONS = "";
-const ELEMENTSCONTAINER = document.querySelector("[data-tags]");
+const TAG = "tag";
+const TYPE = "type";
+const TAGSCONTAINER = document.querySelector("[data-tags]");
+const TYPESCONTAINER = document.querySelector("[data-types]");
 
 render();
 
 async function render() {
   await getTags();
   await getCitations();
+  await getTypes();
   associateTags();
 }
+
+async function getTypes() {
+  await fetch('./data/articleTypes.json')
+    .then(response => {
+      if (!response.ok) {
+        console.log(Error("HTTP error " + response.status));
+        throw new Error("HTTP error " + response.status);
+      }
+      return response.json();
+    })
+    .then(json => {
+      createClickables(json, "type");
+    })
+    .catch(function () {
+      this.dataError = true;
+    })
+}
+
 
 /*
 Return: fetches and parses the tags.json file, then calls createsClickables
@@ -23,7 +45,7 @@ async function getTags() {
       return response.json();
     })
     .then(json => {
-      createClickables(json);
+      createClickables(json, "tag");
     })
     .catch(function () {
       this.dataError = true;
@@ -72,17 +94,17 @@ filtered
 */
 function associateTags() {
   let data = CITATIONS.data;
-  // data[0].URL <-- this is how you retrieve the URL
   for (let i = 0; i < data.length; i++) {
     let currPublication = document.querySelector("[data-csl-entry-id=" + CSS.escape(data[i].id) + "]");
     currPublication.classList.add("filterable");
     currPublication.classList.add("filter-show");
     currPublication.classList.add("py-2");
+    currPublication.classList.add(data[i].type);
 
+    // this portion adds the link to the article of the publication
     let publicationLink = document.createElement("a");
     publicationLink.href = data[i].URL;
     publicationLink.target = "_blank";
-    console.log(currPublication.firstElementChild)
     publicationLink.appendChild(document.createTextNode(currPublication.firstChild.nodeValue));
     currPublication.replaceChild(publicationLink, currPublication.firstChild);
 
@@ -94,7 +116,10 @@ function associateTags() {
     for (let j = 0; j < keywords.length; j++) {
       currPublication.classList.add(keywords[j]);
     }
+
+
   }
+
 
 }
 
@@ -102,12 +127,12 @@ function associateTags() {
 Return: adds buttons to the DOM
 Object Tags: This is the JSON file that was parsed
 */
-function createClickables(tags) {
+function createClickables(tags, type) {
   for (let i = 0; i < tags.length; i++) {
     let button = document.createElement("button");
     button.innerText = tags[i].name;
     button.id = tags[i].name;
-    button.onclick = function () { onClickFilter(tags[i].name, tags[i].name) }
+    button.onclick = function () { onClickFilter(tags[i].name, tags[i].name, type) }
 
     // adding attributes for future use
     if (tags[i].active === "yes") {
@@ -122,7 +147,11 @@ function createClickables(tags) {
     // adding spacing styles to each button
     button.classList.add("mx-1");
 
-    ELEMENTSCONTAINER.appendChild(button);
+    if (type === "tag") {
+      TAGSCONTAINER.appendChild(button);
+    } else if (type === "type") {
+      TYPESCONTAINER.appendChild(button);
+    }
   }
 }
 
@@ -131,45 +160,79 @@ Return: a function that filters based off the button that was clicked
 String buttonId: this is the ID of the button, it should be the same as the inner text
 String className: this is the className added to the publications to filter what's hidden and shown
 */
-function onClickFilter(buttonId, className) {
+function onClickFilter(buttonId, className, type) {
   let filterables = document.getElementsByClassName("filterable"); // these are the div elements
-  console.log(filterables);
-  let currentActive = document.getElementsByClassName("active"); // allowing us to deactivate other active button
+  let currentTagsActive = document.getElementsByClassName("tag-active"); // allowing us to deactivate other active button
+  let currentTypesActive = document.getElementsByClassName("type-active"); // allowing us to deactivate other active button
   let button = document.getElementById(buttonId); // allowing us to set the button clicked to active
 
-  // case 1: no other filters are active
-  // add the clicked button to active and show just that class
-  if (currentActive.length == 0) {
-    button.classList.add("active");
-    for (let i = 0; i < filterables.length; i++) {
-      if (filterables[i].classList.contains(className)) {
+  if (type === "tag") {
+    // case 1: no other filters are active
+    // add the clicked button to active and show just that class
+    if (currentTagsActive.length == 0) {
+      button.classList.add("tag-active");
+      for (let i = 0; i < filterables.length; i++) {
+        if (filterables[i].classList.contains(className)) {
+          filterables[i].classList.add("filter-show");
+        } else {
+          filterables[i].classList.remove("filter-show");
+        }
+      }
+
+      // case 2: clicking an active button
+      // remove that button from active, show everything
+    } else if (button.classList.contains("tag-active")) {
+      button.classList.remove("tag-active");
+      for (let i = 0; i < filterables.length; i++) {
         filterables[i].classList.add("filter-show");
-      } else {
-        filterables[i].classList.remove("filter-show");
+      }
+
+      // case 3: there is another filter active
+      // remove that button from active, hide the other class, show the
+      // respective class
+    } else {
+      currentTagsActive[0].classList.remove("tag-active");
+      button.classList.add("tag-active");
+      for (let i = 0; i < filterables.length; i++) {
+        if (filterables[i].classList.contains(className)) {
+          filterables[i].classList.add("filter-show");
+        } else {
+          filterables[i].classList.remove("filter-show");
+        }
       }
     }
+  } else if (type === "type") {
+    if (currentTypesActive.length == 0) {
+      button.classList.add("type-active");
+      for (let i = 0; i < filterables.length; i++) {
+        if (filterables[i].classList.contains(className)) {
+          filterables[i].classList.add("filter-show");
+        } else {
+          filterables[i].classList.remove("filter-show");
+        }
+      }
 
-    // case 2: clicking an active button
-    // remove that button from active, show everything
-  } else if (button.classList.contains("active")) {
-    button.classList.remove("active");
-    for (let i = 0; i < filterables.length; i++) {
-      filterables[i].classList.add("filter-show");
-    }
-
-    // case 3: there is another filter active
-    // remove that button from active, hide the other class, show the
-    // respective class
-  } else {
-    currentActive[0].classList.remove("active");
-    button.classList.add("active");
-    for (let i = 0; i < filterables.length; i++) {
-      if (filterables[i].classList.contains(className)) {
+      // case 2: clicking an active button
+      // remove that button from active, show everything
+    } else if (button.classList.contains("type-active")) {
+      button.classList.remove("type-active");
+      for (let i = 0; i < filterables.length; i++) {
         filterables[i].classList.add("filter-show");
-      } else {
-        filterables[i].classList.remove("filter-show");
+      }
+
+      // case 3: there is another filter active
+      // remove that button from active, hide the other class, show the
+      // respective class
+    } else {
+      currentTypesActive[0].classList.remove("type-active");
+      button.classList.add("type-active");
+      for (let i = 0; i < filterables.length; i++) {
+        if (filterables[i].classList.contains(className)) {
+          filterables[i].classList.add("filter-show");
+        } else {
+          filterables[i].classList.remove("filter-show");
+        }
       }
     }
   }
-
 }

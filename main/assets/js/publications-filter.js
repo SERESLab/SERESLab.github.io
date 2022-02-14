@@ -52,7 +52,6 @@ async function getCitations() {
 }
 
 /*
-NOTE: THIS FUNCTION IS STILL WIP
 Return: puts the formatted citations on the DOM
 String data: this is the parsed BibTeX file
 */
@@ -68,19 +67,24 @@ function generateCitations(data) {
 }
 
 /*
-NOTE: THIS FUNCTION IS STILL WIP
 This function adds CSS classes associated with the tags to be able to be
 filtered
 */
 function associateTags() {
-  // use Cite object to grab topics then use those topics to associate
-  // the filterable classes
   let data = CITATIONS.data;
-
+  // data[0].URL <-- this is how you retrieve the URL
   for (let i = 0; i < data.length; i++) {
     let currPublication = document.querySelector("[data-csl-entry-id=" + CSS.escape(data[i].id) + "]");
     currPublication.classList.add("filterable");
+    currPublication.classList.add("filter-show");
     currPublication.classList.add("py-2");
+
+    let publicationLink = document.createElement("a");
+    publicationLink.href = data[i].URL;
+    publicationLink.target = "_blank";
+    console.log(currPublication.firstElementChild)
+    publicationLink.appendChild(document.createTextNode(currPublication.firstChild.nodeValue));
+    currPublication.replaceChild(publicationLink, currPublication.firstChild);
 
     if (data[i].keyword === undefined) {
       continue;
@@ -91,6 +95,7 @@ function associateTags() {
       currPublication.classList.add(keywords[j]);
     }
   }
+
 }
 
 /*
@@ -127,8 +132,9 @@ String buttonId: this is the ID of the button, it should be the same as the inne
 String className: this is the className added to the publications to filter what's hidden and shown
 */
 function onClickFilter(buttonId, className) {
-  let filterables = document.getElementsByClassName('filterable'); // these are the div elements
-  let currentActive = document.getElementsByClassName('active'); // allowing us to deactivate other active button
+  let filterables = document.getElementsByClassName("filterable"); // these are the div elements
+  console.log(filterables);
+  let currentActive = document.getElementsByClassName("active"); // allowing us to deactivate other active button
   let button = document.getElementById(buttonId); // allowing us to set the button clicked to active
 
   // case 1: no other filters are active
@@ -146,7 +152,7 @@ function onClickFilter(buttonId, className) {
     // case 2: clicking an active button
     // remove that button from active, show everything
   } else if (button.classList.contains("active")) {
-    button.classList.remove('active');
+    button.classList.remove("active");
     for (let i = 0; i < filterables.length; i++) {
       filterables[i].classList.add("filter-show");
     }
@@ -159,9 +165,9 @@ function onClickFilter(buttonId, className) {
     button.classList.add("active");
     for (let i = 0; i < filterables.length; i++) {
       if (filterables[i].classList.contains(className)) {
-        filterables[i].classList.add("show");
+        filterables[i].classList.add("filter-show");
       } else {
-        filterables[i].classList.remove("show");
+        filterables[i].classList.remove("filter-show");
       }
     }
   }

@@ -9,7 +9,7 @@
 		content="Responsive Bootstrap4 Shop Template, Created by Imran Hossain from https://imransdesign.com/">
 
 	<!-- title -->
-	<title>SERSEL - People</title>
+	<title>SERSEL - News</title>
 
 	<!-- favicon -->
 	<link rel="shortcut icon" type="image/png" href="assets/img/favicon.png">
@@ -54,7 +54,7 @@
 						<!-- logo -->
 						<div class="site-logo">
 							<a href="index.html">
-								<img src="assets/img/logo.png" alt="">
+								<img class="w-100" src="assets/img/logo.svg" alt="">
 							</a>
 						</div>
 						<!-- logo -->
@@ -67,7 +67,7 @@
 								<li><a href="research.html">Research</a>
 									<ul class="sub-menu">
 										<li><a href="active_topics.html">Active Topics</a></li>
-										<li><a href="inactive_topics.html">Inactive Topics</a></li>
+										<li><a class="inactive-topics">Inactive Topics</a></li>
 									</ul>
 								</li>
 								<li><a href="publications.html">Publications</a></li>
@@ -81,15 +81,8 @@
 								<li class="current-list-item"><a href="news.html">News</a></li>
 								<li><a href="media.html">Media</a></li>
 								<li><a href="book_lab.html">Book Lab</a></li>
-								<li>
-									<div class="header-icons">
-										<a class="mobile-hide search-bar-icon" href="#"><i
-												class="fas fa-search"></i></a>
-									</div>
-								</li>
 							</ul>
 						</nav>
-						<a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
 						<div class="mobile-menu"></div>
 						<!-- menu end -->
 					</div>
@@ -133,109 +126,111 @@
 		</div>
 	</div>
 	<!-- end hero area -->
-
-	<!-- Maybe have a card-like item for each person? -->
+	
 	<!-- news section -->
-	<div class="latest-news pt-100 pb-150">
+	<div class="latest-news pt-100 pb-100">
 		<div class="container">
-
 			<div class="row">
 				<div class="col-lg-8 offset-lg-2 text-center">
 					<div class="section-title">
-						<h3><span class="orange-text">Our</span> News</h3>
+						<h3><span class="orange-text">News</span> Articles</h3>
 						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, fuga quas itaque eveniet
 							beatae optio.</p>
 					</div>
 				</div>
 			</div>
+			<div class="news-container" style="height: 70vh; overflow-y: scroll; overflow-x: hidden;">
 
-			<div class="row">
-				<div class="col-lg-4 col-md-6">
-					<div class="single-latest-news">
-						<a href="single-news.html">
-							<div class="latest-news-bg news-bg-1"></div>
-						</a>
-						<div class="news-text-box">
-							<h3><a href="single-news.html">You will vainly look for fruit on it in autumn.</a></h3>
-							<p class="blog-meta">
-								<span class="author"><i class="fas fa-user"></i> Admin</span>
-								<span class="date"><i class="fas fa-calendar"></i> 27 December, 2019</span>
-							</p>
-							<p class="excerpt">Vivamus lacus enim, pulvinar vel nulla sed, scelerisque rhoncus nisi.
-								Praesent vitae mattis nunc, egestas viverra eros.</p>
-							<a href="single-news.html" class="read-more-btn">read more <i
-									class="fas fa-angle-right"></i></a>
+				<!-- This chunk represents one article for news, start the copy here -->
+				<div class="row">
+					<div class="col-lg-8 offset-lg-2 col-lg-4 col-md-6">
+						<div class="single-latest-news">
+							<a href="#"> <!-- "#" - This is where the link to the article goes -->
+								<div class="latest-news-bg news-bg-1"></div>
+							</a>
+							<div class="news-text-box">
+								<h3><a href="single-news.html">News Article 1</a></h3> <!-- This is where the title of the article goes-->
+								<p class="blog-meta">
+									<span class="author"><i class="fas fa-user"></i> Author</span> <!-- Author goes here -->
+									<span class="date"><i class="fas fa-calendar"></i> 27 December, 2019</span> <!-- Date goes here-->
+								</p>
+								<p class="excerpt">Vivamus lacus enim, pulvinar vel nulla sed, scelerisque rhoncus nisi.
+									Praesent vitae mattis nunc, egestas viverra eros.</p> <!-- Short excerpt of article goes here-->
+								<a href="#" class="read-more-btn">read more <i
+										class="fas fa-angle-right"></i></a> <!-- link again goes here -->
+							</div>
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-4 col-md-6">
-					<div class="single-latest-news">
-						<a href="single-news.html">
-							<div class="latest-news-bg news-bg-2"></div>
-						</a>
-						<div class="news-text-box">
-							<h3><a href="single-news.html">A man's worth has its season, like tomato.</a></h3>
-							<p class="blog-meta">
-								<span class="author"><i class="fas fa-user"></i> Admin</span>
-								<span class="date"><i class="fas fa-calendar"></i> 27 December, 2019</span>
-							</p>
-							<p class="excerpt">Vivamus lacus enim, pulvinar vel nulla sed, scelerisque rhoncus nisi.
-								Praesent vitae mattis nunc, egestas viverra eros.</p>
-							<a href="single-news.html" class="read-more-btn">read more <i
-									class="fas fa-angle-right"></i></a>
+				<!-- end the copy here-->
+
+
+				<div class="row">
+					<div class="col-lg-8 offset-lg-2 col-lg-4 col-md-6">
+						<div class="single-latest-news">
+							<a href="single-news.html">
+								<div class="latest-news-bg news-bg-1"></div>
+							</a>
+							<div class="news-text-box">
+								<h3><a href="single-news.html">News Article 2</a></h3>
+								<p class="blog-meta">
+									<span class="author"><i class="fas fa-user"></i> Admin</span>
+									<span class="date"><i class="fas fa-calendar"></i> 27 December, 2019</span>
+								</p>
+								<p class="excerpt">Vivamus lacus enim, pulvinar vel nulla sed, scelerisque rhoncus nisi.
+									Praesent vitae mattis nunc, egestas viverra eros.</p>
+								<a href="single-news.html" class="read-more-btn">read more <i
+										class="fas fa-angle-right"></i></a>
+							</div>
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-4 col-md-6 offset-md-3 offset-lg-0">
-					<div class="single-latest-news">
-						<a href="single-news.html">
-							<div class="latest-news-bg news-bg-3"></div>
-						</a>
-						<div class="news-text-box">
-							<h3><a href="single-news.html">Good thoughts bear good fresh juicy fruit.</a></h3>
-							<p class="blog-meta">
-								<span class="author"><i class="fas fa-user"></i> Admin</span>
-								<span class="date"><i class="fas fa-calendar"></i> 27 December, 2019</span>
-							</p>
-							<p class="excerpt">Vivamus lacus enim, pulvinar vel nulla sed, scelerisque rhoncus nisi.
-								Praesent vitae mattis nunc, egestas viverra eros.</p>
-							<a href="single-news.html" class="read-more-btn">read more <i
-									class="fas fa-angle-right"></i></a>
+				<div class="row">
+					<div class="col-lg-8 offset-lg-2 col-lg-4 col-md-6">
+						<div class="single-latest-news">
+							<a href="single-news.html">
+								<div class="latest-news-bg news-bg-1"></div>
+							</a>
+							<div class="news-text-box">
+								<h3><a href="single-news.html">News Article 3</a></h3>
+								<p class="blog-meta">
+									<span class="author"><i class="fas fa-user"></i> Admin</span>
+									<span class="date"><i class="fas fa-calendar"></i> 27 December, 2019</span>
+								</p>
+								<p class="excerpt">Vivamus lacus enim, pulvinar vel nulla sed, scelerisque rhoncus nisi.
+									Praesent vitae mattis nunc, egestas viverra eros.</p>
+								<a href="single-news.html" class="read-more-btn">read more <i
+										class="fas fa-angle-right"></i></a>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-
-			<!-- <div class="row">
-				<div class="col-lg-12 text-center">
-					<a href="news.html" class="boxed-btn">More News</a>
-				</div>
-			</div> -->
 		</div>
 	</div>
 	<!-- end news section -->
 
-	<!-- footer -->
 	<div class="footer-area">
 		<div class="container">
-			<div class="row">
+			<div class="row" style="justify-content: space-between;">
 				<div class="col-lg-3 col-md-6">
 					<div class="footer-box about-widget">
 						<h2 class="widget-title">About us</h2>
-						<p>Software Engei</p>
+						<ul>
+							<li><a href="index.html">Software Engineering Research and Empirical Studies Lab</a></li>
+						</ul>
 					</div>
 				</div>
 				<div class="col-lg-3 col-md-6">
 					<div class="footer-box get-in-touch">
 						<h2 class="widget-title">Get in Touch</h2>
 						<ul>
-							<li>34/8, East Hukupara, Gifirtok, Sadan.</li>
-							<li>support@fruitkha.com</li>
-							<li>+00 111 222 3333</li>
+							<li>Have any questions? Send an email!</li>
+							<li><a href="mailto:shbonita@gmail.com">shbonita@gmail.com</a></li>
 						</ul>
 					</div>
 				</div>
-				<div class="col-lg-3 col-md-6">
+				<div class="col-lg-3 pb-4 col-md-6">
 					<div class="footer-box pages">
 						<h2 class="widget-title">Pages</h2>
 						<ul>
@@ -251,44 +246,22 @@
 						</ul>
 					</div>
 				</div>
-				<div class="col-lg-3 col-md-6">
-					<div class="footer-box subscribe">
-						<h2 class="widget-title">Subscribe</h2>
-						<p>Subscribe to our mailing list to get the latest updates.</p>
-						<form action="index.html">
-							<input type="email" placeholder="Email">
-							<button type="submit"><i class="fas fa-paper-plane"></i></button>
-						</form>
-					</div>
-				</div>
 			</div>
 		</div>
-	</div>
-	<!-- end footer -->
+		<!-- end footer -->
 
-	<!-- copyright -->
-	<div class="copyright">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-6 col-md-12">
-					<p>Copyrights &copy; 2022 - <a href="https://computing.unl.edu/">University of Nebraska-Lincoln</a>,
+		<!-- copyright -->
+		<div class="copyright">
+			<div class="container">
+				<div class="row">
+
+					<p>Copyrights &copy; 2022 - <a href="https://computing.unl.edu/">University of
+							Nebraska-Lincoln</a>,
 						All Rights Reserved.</p>
 				</div>
-				<div class="col-lg-6 text-right col-md-12">
-					<div class="social-icons">
-						<ul>
-							<li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-linkedin"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-dribbble"></i></a></li>
-						</ul>
-					</div>
-				</div>
 			</div>
 		</div>
-	</div>
-	<!-- end copyright -->
+		<!-- end copyright -->
 
 	<!-- jquery -->
 	<script src="assets/js/jquery-1.11.3.min.js"></script>

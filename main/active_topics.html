@@ -54,7 +54,7 @@
 						<!-- logo -->
 						<div class="site-logo">
 							<a href="index.html">
-								<img src="assets/img/logo.png" alt="">
+								<img class="w-100" src="assets/img/logo.svg" alt="">
 							</a>
 						</div>
 						<!-- logo -->
@@ -67,7 +67,7 @@
 								<li class="current-list-item"><a href="research.html">Research</a>
 									<ul class="sub-menu">
 										<li><a href="active_topics.html">Active Topics</a></li>
-										<li><a href="inactive_topics.html">Inactive Topics</a></li>
+										<li><a class="inactive-topics">Inactive Topics</a></li>
 									</ul>
 								</li>
 								<li><a href="publications.html">Publications</a></li>
@@ -81,15 +81,8 @@
 								<li><a href="news.html">News</a></li>
 								<li><a href="media.html">Media</a></li>
 								<li><a href="book_lab.html">Book Lab</a></li>
-								<li>
-									<div class="header-icons">
-										<a class="mobile-hide search-bar-icon" href="#"><i
-												class="fas fa-search"></i></a>
-									</div>
-								</li>
 							</ul>
 						</nav>
-						<a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
 						<div class="mobile-menu"></div>
 						<!-- menu end -->
 					</div>
@@ -125,7 +118,7 @@
 				<div class="col-lg-8 offset-lg-2 text-center">
 					<div class="hero-text pt-5">
 						<div class="hero-text-tablecell">
-							<h1>Active Topics</h1>
+							<h1>Active Topics & Projects</h1>
 						</div>
 					</div>
 				</div>
@@ -134,96 +127,66 @@
 	</div>
 	<!-- end hero area -->
 
-	<!-- **NOT SURE IF WE CAN KEEP THIS SECTION** -->
-	<!-- features list section -->
-	<!-- <div class="list-section pt-80 pb-80">
-		<div class="container">
-
-			<div class="row">
-				<div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
-					<div class="list-box d-flex align-items-center">
-						<div class="list-icon">
-							<i class="fas fa-shipping-fast"></i>
-						</div>
-						<div class="content">
-							<h3>Free Shipping</h3>
-							<p>When order over $75</p>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
-					<div class="list-box d-flex align-items-center">
-						<div class="list-icon">
-							<i class="fas fa-phone-volume"></i>
-						</div>
-						<div class="content">
-							<h3>24/7 Support</h3>
-							<p>Get support all day</p>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-6">
-					<div class="list-box d-flex justify-content-start align-items-center">
-						<div class="list-icon">
-							<i class="fas fa-sync"></i>
-						</div>
-						<div class="content">
-							<h3>Refund</h3>
-							<p>Get refund within 3 days!</p>
-						</div>
-					</div>
-				</div>
-			</div>
-
-		</div>
-	</div> -->
-	<!-- end features list section -->
-
-	<!-- product section -->
+	<!-- topics section -->
 	<div class="product-section mt-100 mb-100">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-8 offset-lg-2 text-center">
 					<div class="section-title">
-						<h3>Our <span class="orange-text">Research</span></h3>
-						<p>The current research program involves the construction of techniques, tools, and environments
-							to assist in program comprehension, software evolution, software visualization, and software
-							traceability. Empirical evaluations to support evidence based methods are conducted in each
-							of the above areas.</p>
+						<h4>iTrace Infrastructure - Enabling Eye Tracking in Developer Environments</h4>
+						<p style="font-size: 18px; text-align: justify;">Software developers work with many source code
+							files but each of these files typically is comprised of thousands of lines of code. They
+							constantly flip through multiple files while reading and debugging code. Current
+							state-of-the-art eye tracking software works well on fixed stimuli such as images but does
+							not support tracking of developer gazes on these semantically and syntactically rich source
+							code artifacts. Since source code files are really large, we cannot feasibly draw AOIs
+							around each element to map gaze data to those regions. iTrace, our eye tracking
+							infrastructure solves these problems making it easier for one to get started on conducting
+							eye tracking studies in software engineering and related fields.</p>
+						<p class="section-title-link">Web: <a href="http://www.i-trace.org/">http://www.i-trace.org/</a>
+						</p>
 					</div>
-				</div>
-			</div>
-
-			<!-- Maybe we can use card-like stuff to implement little blurbs of active topics? -->
-			<div class="row">
-				<div class="col-lg-4 col-md-6 text-center">
-					<div class="single-product-item">
-						<div class="product-image">
-							<a href="single-product.html"><img src="assets/img/products/product-img-1.jpg" alt=""></a>
-						</div>
-						<h3>Strawberry</h3>
-						<p class="product-price"><span>Per Kg</span> 85$ </p>
-						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+					<div class="section-title">
+						<h4>Visualizing Eye Tracking Data in Eclipse</h4>
+						<p style="font-size: 18px; text-align: justify;">Due to the enormous size and richness of data
+							collected from the eye tracker, visualizations help both the researcher and the developer to
+							comprehend what transpired during an eye tracking session. iTraceVis currently supports four
+							visualization views - heat map, gaze skyline, static gaze map, and dynamic gaze map. </p>
+						<img src="./assets/img/active-topics/visualizing.png" alt="">
 					</div>
-				</div>
-				<div class="col-lg-4 col-md-6 text-center">
-					<div class="single-product-item">
-						<div class="product-image">
-							<a href="single-product.html"><img src="assets/img/products/product-img-2.jpg" alt=""></a>
-						</div>
-						<h3>Berry</h3>
-						<p class="product-price"><span>Per Kg</span> 70$ </p>
-						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+					<div class="section-title">
+						<h4>Emotional Awareness in Software Development</h4>
+						<p style="font-size: 18px; text-align: justify;">Emotional awareness, which falls under the
+							popular subject of emotional intelligence, is the ability for people to understand and
+							identify their emotions. It is, essentially, the ability to understand when you are “sad” or
+							“happy” and then act appropriately. While there is much research being done on the effects
+							of how emotions affect software development, there is little research on how the precise
+							construct of emotional awareness affects developers while they are programming. The more we
+							know about developers’ emotions, the better we can support them by providing better tool
+							help during development.</p>
+						<img src="./assets/img/active-topics/emotionalAwareness.png" alt="">
 					</div>
-				</div>
-				<div class="col-lg-4 col-md-6 offset-md-3 offset-lg-0 text-center">
-					<div class="single-product-item">
-						<div class="product-image">
-							<a href="single-product.html"><img src="assets/img/products/product-img-3.jpg" alt=""></a>
-						</div>
-						<h3>Lemon</h3>
-						<p class="product-price"><span>Per Kg</span> 35$ </p>
-						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+					<div class="section-title">
+						<h4>Eye Tracking on Natural Language Text and Source Code</h4>
+						<p style="font-size: 18px; text-align: justify;">About 70% of source code consists of
+							identifiers with the rest being keywords or specific semantic structures such as an if or
+							while statement. This implies that a lot of source code involves pieces of natural text. Do
+							linear trends observed in natural language reading hold for novices reading source code?
+							With respect to reading linearity, how to novices reading source code differ from experts?
+							Novices read code less linearly than natural language whereas experts read code less
+							linearly than novices.</p>
+						<img src="./assets/img/active-topics/naturalLanguage.png" alt="">
+					</div>
+					<div class="section-title">
+						<h4>Eye Movements in Software Traceability</h4>
+						<p style="font-size: 18px; text-align: justify;">What are software developers doing during a
+							change task? We hypothesize that if we know more about how software developers read, write,
+							search and navigate code, that it enables us to build tools to support developers more
+							efficiently. First study that simultaneously collects eye-tracking and interaction data
+							while developers worked on realistic change tasks. Gathered new insights about fine-granular
+							navigation behavior of developers. Gaze data captures more and in fact a different aspect of
+							a developer’s navigation behavior.</p>
+						<img src="./assets/img/active-topics/eyeMovements.PNG" alt="">
 					</div>
 				</div>
 			</div>
@@ -231,27 +194,27 @@
 	</div>
 	<!-- end product section -->
 
-	<!-- footer -->
 	<div class="footer-area">
 		<div class="container">
-			<div class="row">
+			<div class="row" style="justify-content: space-between;">
 				<div class="col-lg-3 col-md-6">
 					<div class="footer-box about-widget">
 						<h2 class="widget-title">About us</h2>
-						<p>Software Engei</p>
+						<ul>
+							<li><a href="index.html">Software Engineering Research and Empirical Studies Lab</a></li>
+						</ul>
 					</div>
 				</div>
 				<div class="col-lg-3 col-md-6">
 					<div class="footer-box get-in-touch">
 						<h2 class="widget-title">Get in Touch</h2>
 						<ul>
-							<li>34/8, East Hukupara, Gifirtok, Sadan.</li>
-							<li>support@fruitkha.com</li>
-							<li>+00 111 222 3333</li>
+							<li>Have any questions? Send an email!</li>
+							<li><a href="mailto:shbonita@gmail.com">shbonita@gmail.com</a></li>
 						</ul>
 					</div>
 				</div>
-				<div class="col-lg-3 col-md-6">
+				<div class="col-lg-3 pb-4 col-md-6">
 					<div class="footer-box pages">
 						<h2 class="widget-title">Pages</h2>
 						<ul>
@@ -267,44 +230,22 @@
 						</ul>
 					</div>
 				</div>
-				<div class="col-lg-3 col-md-6">
-					<div class="footer-box subscribe">
-						<h2 class="widget-title">Subscribe</h2>
-						<p>Subscribe to our mailing list to get the latest updates.</p>
-						<form action="index.html">
-							<input type="email" placeholder="Email">
-							<button type="submit"><i class="fas fa-paper-plane"></i></button>
-						</form>
-					</div>
-				</div>
 			</div>
 		</div>
-	</div>
-	<!-- end footer -->
+		<!-- end footer -->
 
-	<!-- copyright -->
-	<div class="copyright">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-6 col-md-12">
-					<p>Copyrights &copy; 2021 - <a href="https://computing.unl.edu/">University of Nebraska-Lincoln</a>,
+		<!-- copyright -->
+		<div class="copyright">
+			<div class="container">
+				<div class="row">
+
+					<p>Copyrights &copy; 2022 - <a href="https://computing.unl.edu/">University of
+							Nebraska-Lincoln</a>,
 						All Rights Reserved.</p>
 				</div>
-				<div class="col-lg-6 text-right col-md-12">
-					<div class="social-icons">
-						<ul>
-							<li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-linkedin"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-dribbble"></i></a></li>
-						</ul>
-					</div>
-				</div>
 			</div>
 		</div>
-	</div>
-	<!-- end copyright -->
+		<!-- end copyright -->
 
 	<!-- jquery -->
 	<script src="assets/js/jquery-1.11.3.min.js"></script>

@@ -3,18 +3,18 @@
       "id": 1,
       "name": "article-journal",
       "active": "yes",
-      "color": "#32a852"
+      "color": "#adf5ad"
     },
     {
       "id": 2,
       "name": "book",
       "active": "yes",
-      "color": "#3285a8"
+      "color": "#b9adf5"
     },
     {
       "id": 3,
       "name": "paper-conference",
       "active": "yes",
-      "color": "#626094"
+      "color": "#f5e7ad"
     }
   ]

@@ -56,7 +56,7 @@
 						<!-- logo -->
 						<div class="site-logo">
 							<a href="index.html">
-								<img src="assets/img/logo.png" alt="">
+								<img class="w-100" src="assets/img/logo.svg" alt="">
 							</a>
 						</div>
 						<!-- logo -->
@@ -69,7 +69,7 @@
 								<li><a href="research.html">Research</a>
 									<ul class="sub-menu">
 										<li><a href="active_topics.html">Active Topics</a></li>
-										<li><a href="inactive_topics.html">Inactive Topics</a></li>
+										<li><a class="inactive-topics">Inactive Topics</a></li>
 									</ul>
 								</li>
 								<li class="current-list-item"><a href="publications.html">Publications</a></li>
@@ -83,15 +83,8 @@
 								<li><a href="news.html">News</a></li>
 								<li><a href="media.html">Media</a></li>
 								<li><a href="book_lab.html">Book Lab</a></li>
-								<li>
-									<div class="header-icons">
-										<a class="mobile-hide search-bar-icon" href="#"><i
-												class="fas fa-search"></i></a>
-									</div>
-								</li>
 							</ul>
 						</nav>
-						<a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
 						<div class="mobile-menu"></div>
 						<!-- menu end -->
 					</div>
@@ -143,9 +136,6 @@
 				<div class="col-lg-8 offset-lg-2 text-center">
 					<div class="section-title">
 						<h3>Our <span class="orange-text">Publications</span></h3>
-						<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea, ab! Ea ratione ut voluptatibus
-							debitis eos. Accusantium, vero. Nihil aliquam aperiam et numquam ab! Voluptates facilis
-							officiis saepe eligendi dolorem!</p>
 					</div>
 				</div>
 			</div>
@@ -154,36 +144,40 @@
 	<!-- end title section -->
 
 	<!-- tags section -->
-	<div data-tags class="tags px-5"></div>
+	<div data-tags class="tags px-5">
+		<!-- add note: topics -->
+	</div>
 
-	<div data-types class="articleTypes px-5 py-5"></div>
+	<div data-types class="publicationTypes px-5 py-5">
+		<!-- add note: publication types -->
+	</div>
 
 	<!-- Going to need a section for the publications -->
 	<div data-publications class="publications mb-5 px-5">
 
 	</div>
 
-	<!-- footer -->
 	<div class="footer-area">
 		<div class="container">
-			<div class="row">
+			<div class="row" style="justify-content: space-between;">
 				<div class="col-lg-3 col-md-6">
 					<div class="footer-box about-widget">
 						<h2 class="widget-title">About us</h2>
-						<p>SERESL</p>
+						<ul>
+							<li><a href="index.html">Software Engineering Research and Empirical Studies Lab</a></li>
+						</ul>
 					</div>
 				</div>
 				<div class="col-lg-3 col-md-6">
 					<div class="footer-box get-in-touch">
 						<h2 class="widget-title">Get in Touch</h2>
 						<ul>
-							<li>34/8, East Hukupara, Gifirtok, Sadan.</li>
-							<li>support@fruitkha.com</li>
-							<li>+00 111 222 3333</li>
+							<li>Have any questions? Send an email!</li>
+							<li><a href="mailto:shbonita@gmail.com">shbonita@gmail.com</a></li>
 						</ul>
 					</div>
 				</div>
-				<div class="col-lg-3 col-md-6">
+				<div class="col-lg-3 pb-4 col-md-6">
 					<div class="footer-box pages">
 						<h2 class="widget-title">Pages</h2>
 						<ul>
@@ -199,69 +193,46 @@
 						</ul>
 					</div>
 				</div>
-				<div class="col-lg-3 col-md-6">
-					<div class="footer-box subscribe">
-						<h2 class="widget-title">Subscribe</h2>
-						<p>Subscribe to our mailing list to get the latest updates.</p>
-						<form action="index.html">
-							<input type="email" placeholder="Email">
-							<button type="submit"><i class="fas fa-paper-plane"></i></button>
-						</form>
-					</div>
-				</div>
 			</div>
 		</div>
-	</div>
-	<!-- end footer -->
+		<!-- end footer -->
 
-	<!-- copyright -->
-	<div class="copyright">
+		<!-- copyright -->
+		<div class="copyright">
 			<div class="container">
 				<div class="row">
-					<div class="col-lg-6 col-md-12">
-						<p>Copyrights &copy; 2022 - <a href="https://computing.unl.edu/">University of
-								Nebraska-Lincoln</a>,
-							All Rights Reserved.</p>
-					</div>
-					<div class="col-lg-6 text-right col-md-12">
-						<div class="social-icons">
-							<ul>
-								<li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
-								<li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
-								<li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
-								<li><a href="#" target="_blank"><i class="fab fa-linkedin"></i></a></li>
-								<li><a href="#" target="_blank"><i class="fab fa-dribbble"></i></a></li>
-							</ul>
-						</div>
-					</div>
+
+					<p>Copyrights &copy; 2022 - <a href="https://computing.unl.edu/">University of
+							Nebraska-Lincoln</a>,
+						All Rights Reserved.</p>
 				</div>
 			</div>
 		</div>
-	<!-- end copyright -->
+		<!-- end copyright -->
 
-	<!-- jquery -->
-	<script src="assets/js/jquery-1.11.3.min.js"></script>
-	<!-- bootstrap -->
-	<script src="assets/bootstrap/js/bootstrap.min.js"></script>
-	<!-- count down -->
-	<script src="assets/js/jquery.countdown.js"></script>
-	<!-- isotope -->
-	<script src="assets/js/jquery.isotope-3.0.6.min.js"></script>
-	<!-- waypoints -->
-	<script src="assets/js/waypoints.js"></script>
-	<!-- owl carousel -->
-	<script src="assets/js/owl.carousel.min.js"></script>
-	<!-- magnific popup -->
-	<script src="assets/js/jquery.magnific-popup.min.js"></script>
-	<!-- mean menu -->
-	<script src="assets/js/jquery.meanmenu.min.js"></script>
-	<!-- sticker js -->
-	<script src="assets/js/sticker.js"></script>
-	<!-- main js -->
-	<script src="assets/js/main.js"></script>
+		<!-- jquery -->
+		<script src="assets/js/jquery-1.11.3.min.js"></script>
+		<!-- bootstrap -->
+		<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+		<!-- count down -->
+		<script src="assets/js/jquery.countdown.js"></script>
+		<!-- isotope -->
+		<script src="assets/js/jquery.isotope-3.0.6.min.js"></script>
+		<!-- waypoints -->
+		<script src="assets/js/waypoints.js"></script>
+		<!-- owl carousel -->
+		<script src="assets/js/owl.carousel.min.js"></script>
+		<!-- magnific popup -->
+		<script src="assets/js/jquery.magnific-popup.min.js"></script>
+		<!-- mean menu -->
+		<script src="assets/js/jquery.meanmenu.min.js"></script>
+		<!-- sticker js -->
+		<script src="assets/js/sticker.js"></script>
+		<!-- main js -->
+		<script src="assets/js/main.js"></script>
 
-	<!-- publications-filter.js -->
-	<!-- <script src="assets/js/publications-filter.js"></script> -->
+		<!-- publications-filter.js -->
+		<!-- <script src="assets/js/publications-filter.js"></script> -->
 </body>
 <script src="./assets/js/publications-filter.js"></script>
 

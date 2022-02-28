@@ -21,7 +21,6 @@
 	
 	ob_start();
 	?>
-		Hi imransdesign!<br /><br />
 		<?php echo ucfirst( $name ); ?>  has sent you a message via contact form on your website!
 		<br /><br />
 		
@@ -39,7 +38,7 @@
 	ob_end_clean();
 	
 	// Change this email to the proper support/contact email
-	$to = 'treyniturner@gmail.com';
+	$to = 'shbonita@gmail.com';
 
 	$s = mail($to,$subject,$body,$headers,"-t -i -f $from");
 

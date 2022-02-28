@@ -7,14 +7,14 @@ const TYPESCONTAINER = document.querySelector("[data-types]");
 render();
 
 async function render() {
-  await getTags();
   await getCitations();
+  await getTags();
   await getTypes();
-  associateTags();
+  associateFilters();
 }
 
 async function getTypes() {
-  await fetch('./data/articleTypes.json')
+  await fetch('./data/publicationTypes.json')
     .then(response => {
       if (!response.ok) {
         console.log(Error("HTTP error " + response.status));
@@ -92,39 +92,97 @@ function generateCitations(data) {
 This function adds CSS classes associated with the tags to be able to be
 filtered
 */
-function associateTags() {
+function associateFilters() {
   let data = CITATIONS.data;
   for (let i = 0; i < data.length; i++) {
+    // once all the keywords get updated this bit of code can be
+    // uncommented (as well as delete this comment)
+    // if (data[i].keyword === undefined) {
+    //   continue;
+    // }
+
     let currPublication = document.querySelector("[data-csl-entry-id=" + CSS.escape(data[i].id) + "]");
     currPublication.classList.add("filterable");
     currPublication.classList.add("filter-show");
     currPublication.classList.add("py-2");
     currPublication.classList.add(data[i].type);
 
-    // this portion adds the link to the article of the publication
-    let publicationLink = document.createElement("a");
-    publicationLink.href = data[i].URL;
-    publicationLink.target = "_blank";
-    publicationLink.appendChild(document.createTextNode(currPublication.firstChild.nodeValue));
-    currPublication.replaceChild(publicationLink, currPublication.firstChild);
+    currPublication.replaceChild(replaceTitleWithLink(currPublication, data[i].URL), currPublication.firstChild);
+    // currPublication.append(addPublicationTypeSymbol(data[i].type));
+
 
     if (data[i].keyword === undefined) {
       continue;
     }
-
     let keywords = data[i].keyword.split(",");
+
+    currPublication.append(addPublicationTags(keywords));
+    currPublication.append(appendLink(data[i].DOI));
+
     for (let j = 0; j < keywords.length; j++) {
       currPublication.classList.add(keywords[j]);
     }
-
-
   }
-
-
 }
 
 /*
-Return: adds buttons to the DOM
+Div element: this is the div that the title is being retrieved from
+string href: the link to the publication (URL in the bib file)
+*/
+function replaceTitleWithLink(element, href) {
+  let publicationTitleLink = document.createElement("a");
+  publicationTitleLink.href = href;
+  publicationTitleLink.target = "_blank";
+  publicationTitleLink.appendChild(document.createTextNode(element.firstChild.nodeValue));
+  return publicationTitleLink;
+}
+
+/*
+Return: A new "span" element to show the publication type
+string type: the type of the publication used to associate color with the type
+// */
+// function addPublicationTypeSymbol(type) {
+//   let symbol = document.createElement("span");
+//   symbol.innerText = " ◼ ";
+//   symbol.style.cssText += "font-size: 1.5rem;";
+//   symbol.classList.add(type);
+//   return symbol;
+// }
+
+/*
+Return: A new "span" element to show all the tags associated with the publication
+string Array tags: the tags that are to be listed after the publication citation
+*/
+function addPublicationTags(tags) {
+  let output = document.createElement("span");
+  // output.style.cssText += "font-size: 0.85rem !important;";
+  // spanOutput.classList.add("span-tags");
+  for (let i = 0; i < tags.length; i++) {
+    let individualTag = document.createElement("span");
+    individualTag.classList.add("publication-tag");
+    individualTag.innerText = tags[i];
+    output.append(individualTag);
+  }
+  return output;
+}
+
+/*
+This function is to add a [link] to all the 
+Return: A new "a" element
+string href: the DOI link to the publication (from the bib file)
+*/
+function appendLink(href) {
+  let link = document.createElement("a");
+  link.href = href;
+  link.target = "_bank";
+  link.innerText = " [link]";
+  link.style.cssText += "font-size:0.85rem";
+  return link;
+}
+
+
+/*
+Return: adds filtering buttons to the DOM
 Object Tags: This is the JSON file that was parsed
 */
 function createClickables(tags, type) {
@@ -148,8 +206,10 @@ function createClickables(tags, type) {
     button.classList.add("mx-1");
 
     if (type === "tag") {
+      button.classList.add("filter-tag");
       TAGSCONTAINER.appendChild(button);
     } else if (type === "type") {
+      button.classList.add("filter-type");
       TYPESCONTAINER.appendChild(button);
     }
   }

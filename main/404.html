@@ -54,7 +54,7 @@
 						<!-- logo -->
 						<div class="site-logo">
 							<a href="index.html">
-								<img src="assets/img/logo.png" alt="">
+								<img class="w-100" src="assets/img/logo.svg" alt="">
 							</a>
 						</div>
 						<!-- logo -->
@@ -62,12 +62,12 @@
 						<!-- menu start -->
 						<nav class="main-menu">
 							<ul>
-								<li><a href="index.html">Home</a>
+								<li class="current-list-item"><a href="#">Home</a>
 								</li>
 								<li><a href="research.html">Research</a>
 									<ul class="sub-menu">
 										<li><a href="active_topics.html">Active Topics</a></li>
-										<li><a href="inactive_topics.html">Inactive Topics</a></li>
+										<li><a class="inactive-topics">Inactive Topics</a></li>
 									</ul>
 								</li>
 								<li><a href="publications.html">Publications</a></li>
@@ -81,15 +81,8 @@
 								<li><a href="news.html">News</a></li>
 								<li><a href="media.html">Media</a></li>
 								<li><a href="book_lab.html">Book Lab</a></li>
-								<li>
-									<div class="header-icons">
-										<a class="mobile-hide search-bar-icon" href="#"><i
-												class="fas fa-search"></i></a>
-									</div>
-								</li>
 							</ul>
 						</nav>
-						<a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
 						<div class="mobile-menu"></div>
 						<!-- menu end -->
 					</div>
@@ -116,7 +109,7 @@
 			</div>
 		</div>
 	</div>
-	<!-- end search arewa -->
+	<!-- end search area -->
 	<!-- hero-section -->
 	<div class="hero-area hero-bg" style="background-image: url('assets/img/code.png');">
 		<div class="container">
@@ -133,25 +126,6 @@
 		</div>
 	</div>
 	<!-- end hero section -->
-
-	<!-- error section -->
-	<!-- <div class="full-height-section error-section">
-			<div class="full-height-tablecell">
-				<div class="container">
-					<div class="row">
-						<div class="col-lg-8 offset-lg-2 text-center">
-							<div class="error-text">
-								<i class="far fa-sad-cry"></i>
-								<h1>Oops! Not Found.</h1>
-								<p>The page you requested for is not found.</p>
-								<a href="index.html" class="boxed-btn">Back to Home</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div> -->
-	<!-- end error section -->
 
 	<!-- footer -->
 	<div class="footer-area">
@@ -204,29 +178,59 @@
 	</div>
 	<!-- end footer -->
 
-	<!-- copyright -->
-	<div class="copyright">
+	<!-- footer -->
+	<div class="footer-area">
 		<div class="container">
-			<div class="row">
-				<div class="col-lg-6 col-md-12">
-					<p>Copyrights &copy; 2019 - <a href="https://imransdesign.com/">Imran Hossain</a>, All Rights
-						Reserved.</p>
-				</div>
-				<div class="col-lg-6 text-right col-md-12">
-					<div class="social-icons">
+			<div class="row" style="justify-content: space-between;">
+				<div class="col-lg-3 col-md-6">
+					<div class="footer-box about-widget">
+						<h2 class="widget-title">About us</h2>
 						<ul>
-							<li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-linkedin"></i></a></li>
-							<li><a href="#" target="_blank"><i class="fab fa-dribbble"></i></a></li>
+							<li><a href="index.html">Software Engineering Research and Empirical Studies Lab</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-6">
+					<div class="footer-box get-in-touch">
+						<h2 class="widget-title">Get in Touch</h2>
+						<ul>
+							<li>Have any questions? Send an email!</li>
+							<li><a href="mailto:shbonita@gmail.com">shbonita@gmail.com</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-lg-3 pb-4 col-md-6">
+					<div class="footer-box pages">
+						<h2 class="widget-title">Pages</h2>
+						<ul>
+							<li><a href="index.html">Home</a></li>
+							<li><a href="research.html">Research</a></li>
+							<li><a href="publications.html">Publications</a></li>
+							<li><a href="tools.html">Tools</a></li>
+							<li><a href="funding.html">Funding</a></li>
+							<li><a href="people.html">People</a></li>
+							<li><a href="news.html">News</a></li>
+							<li><a href="media.html">Media</a></li>
+							<li><a href="book_lab.html">Book Lab</a></li>
 						</ul>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<!-- end copyright -->
+		<!-- end footer -->
+
+		<!-- copyright -->
+		<div class="copyright">
+			<div class="container">
+				<div class="row">
+
+					<p>Copyrights &copy; 2022 - <a href="https://computing.unl.edu/">University of
+							Nebraska-Lincoln</a>,
+						All Rights Reserved.</p>
+				</div>
+			</div>
+		</div>
+		<!-- end copyright -->
 
 	<!-- jquery -->
 	<script src="assets/js/jquery-1.11.3.min.js"></script>

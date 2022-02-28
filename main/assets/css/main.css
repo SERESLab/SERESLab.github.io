@@ -453,6 +453,12 @@ a.boxed-btn, a.bordered-btn, a.cart-btn {
   padding-bottom: 15px;
 }
 
+.section-title h4 {
+  font-size: 24px;
+  position: relative;
+  padding-bottom: 12px;
+}
+
 .section-title h3:after {
   position: absolute;
   content: '';
@@ -474,8 +480,12 @@ a.boxed-btn, a.bordered-btn, a.cart-btn {
   line-height: 1.8;
 }
 
+.section-title-link {
+  font-size: 15px;
+}
+
 .section-title {
-  margin-bottom: 80px;
+  margin-bottom: 60px;
 }
 
 .breadcrumb-bg {
@@ -609,13 +619,9 @@ nav.main-menu ul li:last-child a {
   display: inline-block;
 }
 
-nav.main-menu>ul li:last-child {
-  float: right;
-}
-
 .site-logo {
   float: left;
-  max-width: 40px;
+  max-width: 50px;
 }
 
 ul.sub-menu li:last-child {
@@ -2781,15 +2787,7 @@ table.order-details tbody td {
   display: block;
 }
 
-.tags button {
-  align-items: stretch;
-  background: none;
-  box-shadow: none;
-  border: none;
-  font-size: 14px;
-}
-
-.articleTypes button {
+.publicationTypes button {
   align-items: stretch;
   background: none;
   box-shadow: none;
@@ -2809,4 +2807,81 @@ table.order-details tbody td {
   margin: 5px;
   float: left;
   display: none;
+}
+
+.funding-content p {
+  font-size: 18px;
+  padding: 10px 0 10px;
+}
+
+.filter-tag {
+  background: none;
+  border: 1px solid #333;
+  box-shadow: none;
+  font-size: 1rem;
+}
+
+.publication-tag {
+  background: none;
+  border: 1px solid #333;
+  box-shadow: none;
+  font-size: 0.85rem;
+  margin: 0.15rem;
+  padding: 1.5px;
+  color: #000 !important;
+}
+
+.filter-type {
+  transition: 0.1s ease-in;
+}
+
+.filter-tag:hover, .filter-type:hover {
+  transform: scale(110%);
+  transition: 0.1s ease-in;
+}
+
+.tag-active {
+  background-color: #333;
+  color: #fff;
+  transform: scale(105%);
+  transition: 0.1s ease-in;
+}
+
+.type-active {
+  border: #000 2px solid !important;
+  transition: 0.1s ease-in;
+  transform: scale(105%);
+}
+
+.article-journal button {
+  background-color: #adf5ad;
+}
+
+.book button {
+  background-color: #b9adf5;
+}
+
+.paper-conference button {
+  background-color: #f5e7ad;
+}
+
+.article-journal span {
+  color: #60f560;
+}
+
+.book span {
+  color: #8f7bf1;
+}
+
+.paper-conference span {
+  color: #fadf73;
+}
+
+.span-tags {
+  color: #000 !important;
+}
+
+.inactive-topics {
+  color: #ccc !important;
+  text-decoration: line-through !important;
 }

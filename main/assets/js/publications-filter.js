@@ -14,7 +14,7 @@ async function render() {
 }
 
 async function getTypes() {
-  await fetch('./data/publicationTypes.json')
+  await fetch('../data/publicationTypes.json')
     .then(response => {
       if (!response.ok) {
         console.log(Error("HTTP error " + response.status));
@@ -36,7 +36,7 @@ Return: fetches and parses the tags.json file, then calls createsClickables
         which then puts it on the DOM
 */
 async function getTags() {
-  await fetch('./data/tags.json')
+  await fetch('../data/tags.json')
     .then(response => {
       if (!response.ok) {
         console.log(Error("HTTP error " + response.status));
@@ -56,7 +56,7 @@ async function getTags() {
 Return: outputs the citations to the DOM with their respective publications
 */
 async function getCitations() {
-  await fetch('./data/citations.bib')
+  await fetch('../data/citations.bib')
     .then(response => {
       if (!response.ok) {
         console.log(Error("HTTP error " + response.status));

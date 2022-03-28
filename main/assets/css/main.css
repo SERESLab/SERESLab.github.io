@@ -2885,3 +2885,11 @@ table.order-details tbody td {
   color: #ccc !important;
   text-decoration: line-through !important;
 }
+
+.media-container {
+  height: 40vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  flex-direction: column;
+}

@@ -2816,14 +2816,13 @@ table.order-details tbody td {
 
 .filter-tag {
   background: none;
-  border: 1px solid #333;
+  border: 2px solid transparent;
   box-shadow: none;
   font-size: 1rem;
 }
 
 .publication-tag {
   background: none;
-  border: 1px solid #333;
   box-shadow: none;
   font-size: 0.85rem;
   margin: 0.15rem;
@@ -2833,6 +2832,7 @@ table.order-details tbody td {
 
 .filter-type {
   transition: 0.1s ease-in;
+  border: 2px solid transparent;
 }
 
 .filter-tag:hover, .filter-type:hover {
@@ -2841,14 +2841,13 @@ table.order-details tbody td {
 }
 
 .tag-active {
-  background-color: #333;
-  color: #fff;
   transform: scale(105%);
   transition: 0.1s ease-in;
+  border: 2px solid #333;
 }
 
 .type-active {
-  border: #000 2px solid !important;
+  border: 2px solid #333 !important;
   transition: 0.1s ease-in;
   transform: scale(105%);
 }

@@ -3,6 +3,7 @@ const TAG = "tag";
 const TYPE = "type";
 const TAGSCONTAINER = document.querySelector("[data-tags]");
 const TYPESCONTAINER = document.querySelector("[data-types]");
+const BUTTONS = [];
 
 render();
 
@@ -29,7 +30,6 @@ async function getTypes() {
       this.dataError = true;
     })
 }
-
 
 /*
 Return: fetches and parses the tags.json file, then calls createsClickables
@@ -95,12 +95,6 @@ filtered
 function associateFilters() {
   let data = CITATIONS.data;
   for (let i = 0; i < data.length; i++) {
-    // once all the keywords get updated this bit of code can be
-    // uncommented (as well as delete this comment)
-    // if (data[i].keyword === undefined) {
-    //   continue;
-    // }
-
     let currPublication = document.querySelector("[data-csl-entry-id=" + CSS.escape(data[i].id) + "]");
     currPublication.classList.add("filterable");
     currPublication.classList.add("filter-show");
@@ -108,7 +102,6 @@ function associateFilters() {
     currPublication.classList.add(data[i].type);
 
     currPublication.replaceChild(replaceTitleWithLink(currPublication, data[i].URL), currPublication.firstChild);
-    // currPublication.append(addPublicationTypeSymbol(data[i].type));
 
 
     if (data[i].keyword === undefined) {
@@ -138,18 +131,6 @@ function replaceTitleWithLink(element, href) {
 }
 
 /*
-Return: A new "span" element to show the publication type
-string type: the type of the publication used to associate color with the type
-// */
-// function addPublicationTypeSymbol(type) {
-//   let symbol = document.createElement("span");
-//   symbol.innerText = " ◼ ";
-//   symbol.style.cssText += "font-size: 1.5rem;";
-//   symbol.classList.add(type);
-//   return symbol;
-// }
-
-/*
 Return: A new "span" element to show all the tags associated with the publication
 string Array tags: the tags that are to be listed after the publication citation
 */
@@ -160,10 +141,25 @@ function addPublicationTags(tags) {
   for (let i = 0; i < tags.length; i++) {
     let individualTag = document.createElement("span");
     individualTag.classList.add("publication-tag");
+    individualTag.style.backgroundColor = getButtonColor(tags[i]);
     individualTag.innerText = tags[i];
     output.append(individualTag);
   }
   return output;
+}
+
+/*
+Return: color of button
+string key: the ID of the button
+*/
+function getButtonColor(key) {
+  var color;
+  for(let i = 0; i < BUTTONS.length; i++) {
+    if(key === BUTTONS[i].id) {
+      color = BUTTONS[i].style.backgroundColor;
+    }
+  }
+  return color;
 }
 
 /*
@@ -179,7 +175,6 @@ function appendLink(href) {
   link.style.cssText += "font-size:0.85rem";
   return link;
 }
-
 
 /*
 Return: adds filtering buttons to the DOM
@@ -207,6 +202,7 @@ function createClickables(tags, type) {
 
     if (type === "tag") {
       button.classList.add("filter-tag");
+      BUTTONS.push(button);
       TAGSCONTAINER.appendChild(button);
     } else if (type === "type") {
       button.classList.add("filter-type");
@@ -294,5 +290,6 @@ function onClickFilter(buttonId, className, type) {
         }
       }
     }
+
   }
 }

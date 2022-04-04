@@ -3,54 +3,63 @@
     "id": 1,
     "name": "eye-tracking",
     "text": "Papers related to eye tracking",
-    "active": "yes"
+    "active": "yes",
+    "color": "#9cd8f1"
   },
   {
     "id": 2,
     "name": "program-comprehension",
     "text": "Program comprehension related research",
-    "active": "yes"
+    "active": "yes",
+    "color": "#6b9cf5"
   },
   {
     "id": 3,
     "name": "mining-software-repositories",
     "text": "MSR papers",
-    "active": "yes"
+    "active": "yes",
+    "color": "#ee854a"
   },
   {
     "id": 4,
     "name": "empirical-studies",
     "text": "Empirical studies",
-    "active": "yes"
+    "active": "yes",
+    "color": "#85de7f"
   },
   {
     "id": 5,
     "name": "uml-and-layout",
     "text": "UML layout papers",
-    "active": "yes"
+    "active": "yes",
+    "color": "#db7979"
   },
   {
     "id": 6,
     "name": "emotional-awareness",
     "text": "Papers on Emotional Awareness",
-    "active": "yes"
+    "active": "yes",
+    "color": "#ae8bc8"
   },
   {
     "id": 7,
     "name": "software-traceability",
     "text": "Traceability Papers",
-    "active": "yes"
+    "active": "yes",
+    "color": "#c19c7d"
   },
   {
     "id": 8,
     "name": "software-visualization",
     "text": "Visualization papers",
-    "active": "yes"
+    "active": "yes",
+    "color": "#eea3d8"
   },
   {
     "id": 9,
     "name": "iTrace",
     "text": "Papers related to iTrace infrastructure",
-    "active": "yes"
+    "active": "yes",
+    "color": "#ead48d"
   }
 ]

@@ -1,0 +1,17 @@
+## This is how you make a new page for a single news article ##
+
+-- IN THE NEWS.HTML FILE --
+1. On lines 197-215 in news.html, there is a commented out template of what you need to
+   copy and paste
+
+
+-- MAKING THE NEW PAGE (SINGLE-NEWS.HTML) --
+1. Copy and paste the single-news-template file in the news folder in the pages directory
+2. Add the href to the article in the news.html
+3. Change line 12 to be whatever the news article is in the new duplicated file
+4. On line 117 there is the article's title
+   on line 119 is the article's subheader
+   on lines 121-125 are the dates and authors' names
+   on line 127 is the start of the article's content
+   on line 136 is a website should you need to link one
+   on line 138 is an image should you need to show one

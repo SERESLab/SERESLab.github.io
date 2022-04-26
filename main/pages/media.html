@@ -2,6 +2,16 @@
 <html lang="en">
 
 <head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-128736048-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+
+		gtag('config', 'UA-128736048-1');
+	</script>
+
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,7 +19,7 @@
 		content="Responsive Bootstrap4 Shop Template, Created by Imran Hossain from https://imransdesign.com/">
 
 	<!-- title -->
-	<title>SERSEL - Media</title>
+	<title>SERESL - Media</title>
 
 	<!-- favicon -->
 	<link rel="shortcut icon" type="image/png" href="../assets/img/favico.png">
@@ -54,7 +64,7 @@
 						<!-- logo -->
 						<div class="site-logo">
 							<a href="../../index.html">
-								<img class="w-100" src="../assets/img/logo.svg" alt="">
+								<img class="w-100" src="../assets/img/logo.png" alt="">
 							</a>
 						</div>
 						<!-- logo -->
@@ -62,25 +72,15 @@
 						<!-- menu start -->
 						<nav class="main-menu">
 							<ul>
-								<li><a href="../../index">Home</a>
-								</li>
-								<li><a href="./research.html">Research</a>
-									<ul class="sub-menu">
-										<li><a href="./active_topics.html">Active Topics</a></li>
-										<li><a class="inactive-topics">Inactive Topics</a></li>
-									</ul>
-								</li>
-								<li><a href="./publications.html">Publications</a></li>
-								<li><a href="./tools.html">Tools</a></li>
-								<li><a href="./funding.html">Funding</a></li>
-								<li><a href="./people.html">People</a>
-									<ul class="sub-menu">
-										<li><a href="./contact.html">Contact us</a></li>
-									</ul>
-								</li>
+								<li><a href="../../index.html">Home</a></li>
+								<li><a href="./about.html">About</a></li>
 								<li><a href="./news.html">News</a></li>
+								<li><a href="./features.html">Features</a></li>
+								<li><a href="./downloads.html">Downloads</a></li>
+								<li><a href="./contributors.html">Contributors</a></li>
 								<li class="current-list-item"><a href="./media.html">Media</a></li>
-								<li><a href="./book_lab.html">Book Lab</a></li>
+								<li><a href="./publications.html">Publications</a></li>
+								<li><a href="./contact.html">Contact</a></li>
 							</ul>
 						</nav>
 						<div class="mobile-menu"></div>
@@ -119,106 +119,94 @@
 				</div>
 			</div>
 
-
 			<!-- START EVENT COPY HERE -->
-			<h3 class="py-3 pt-5 text-center">Event Name
-				<hr>
-			</h3>
-			<div class="row py-5 justify-content-center">
-				
+			<div class="row flex-column align-items-center justify-content-center">
+				<!-- Event title -->
+				<h3 data-toggle="collapse" href="#event1" role="button" aria-expanded="false" aria-controls="event1"
+					class="media-event-title py-3 pt-5 text-center">Event Name #1
+					<!-- make sure to change the href and aria controls to a respective variable name!-->
+				</h3>
+				<hr style="width: 50%;">
+
 				<!-- start single photo/video here -->
-				<div class="media-container p-3">
-					<div class="single-latest-news" style="height: 75%">
+				<div id="event1" style="width: 65%;" class="collapse media-container p-3">
+					<!-- make sure to change 'event1' to the respective variable name! -->
+					<div class="single-latest-news">
 						<div class="latest-news-bg news-bg-1"></div>
 						<div class="news-text-box">
-							<h3>Title Title Title</h3>
-							<p class="blog-meta">
-								<span class="date"><i class="fas fa-calendar"></i> 27 December, 2019</span>
-							</p>
+							<h3>Title Title Title</h3> <!-- title of photo -->
 							<p class="excerpt">Short excerpt regarding what the picture entails.</p>
 						</div>
 					</div> <!-- end copy here-->
 
-					<div class="single-latest-news" style="height: 75%">
+					<div class="single-latest-news">
 						<div class="latest-news-bg news-bg-1"></div>
 						<div class="news-text-box">
 							<h3>Title Title Title</h3>
-							<p class="blog-meta">
-								<span class="date"><i class="fas fa-calendar"></i> 27 December, 2019</span>
-							</p>
 							<p class="excerpt">Short excerpt regarding what the picture entails.</p>
 						</div>
 					</div>
 
-					<div class="single-latest-news" style="height: 75%">
+					<div class="single-latest-news">
 						<div class="latest-news-bg news-bg-1"></div>
 						<div class="news-text-box">
 							<h3>Title Title Title</h3>
-							<p class="blog-meta">
-								<span class="date"><i class="fas fa-calendar"></i> 27 December, 2019</span>
-							</p>
 							<p class="excerpt">Short excerpt regarding what the picture entails.</p>
 						</div>
 					</div>
 
 					<!-- START SINGLE PASTE HERE -->
-					<!-- <div class="single-latest-news" style="height: 75%">
+					<!-- <div class="single-latest-news">
 						<div class="latest-news-bg news-bg-1"></div>
 						<div class="news-text-box">
 							<h3>Title Title Title</h3>
-							<p class="blog-meta">
-								<span class="date"><i class="fas fa-calendar"></i> 27 December, 2019</span>
-							</p>
 							<p class="excerpt">Short excerpt regarding what the picture entails.</p>
 						</div>
 					</div> -->
 					<!-- SINGLE END PASTE HERE -->
 
 				</div>
-			</div> <!-- END EVENT PASTE HERE -->
-			
+			</div> <!-- END EVENT COPY HERE -->
 
-			<!-- EVENT 2 EXAMPLE PASTE -->
-			<!-- <h3 class="py-3 pt-5 text-center">Event Name
-				<hr>
-			</h3>
-			<div class="row py-5 justify-content-center">
-				
-				<div class="media-container p-3">
-					<div class="single-latest-news" style="height: 75%">
+
+			<!-- START EVENT PASTE HERE -->
+			<div class="row flex-column align-items-center justify-content-center">
+				<!-- Event title -->
+				<h3 data-toggle="collapse" href="#event2" role="button" aria-expanded="false" aria-controls="event2"
+					class="media-event-title py-3 pt-5 text-center">Event Name #2
+					<!-- make sure to change the href and aria controls to a respective variable name!-->
+				</h3>
+				<hr style="width: 50%;">
+
+				<!-- start single photo/video here -->
+				<div id="event2" style="width: 65%;" class="collapse media-container p-3">
+					<!-- make sure to change 'event1' to the respective variable name! -->
+					<div class="single-latest-news">
+						<div class="latest-news-bg news-bg-1"></div>
+						<div class="news-text-box">
+							<h3>Title Title Title</h3> <!-- title of photo -->
+							<p class="excerpt">Short excerpt regarding what the picture entails.</p>
+						</div>
+					</div> <!-- end copy here-->
+
+					<div class="single-latest-news">
 						<div class="latest-news-bg news-bg-1"></div>
 						<div class="news-text-box">
 							<h3>Title Title Title</h3>
-							<p class="blog-meta">
-								<span class="date"><i class="fas fa-calendar"></i> 27 December, 2019</span>
-							</p>
 							<p class="excerpt">Short excerpt regarding what the picture entails.</p>
 						</div>
 					</div>
 
-					<div class="single-latest-news" style="height: 75%">
+					<div class="single-latest-news">
 						<div class="latest-news-bg news-bg-1"></div>
 						<div class="news-text-box">
 							<h3>Title Title Title</h3>
-							<p class="blog-meta">
-								<span class="date"><i class="fas fa-calendar"></i> 27 December, 2019</span>
-							</p>
 							<p class="excerpt">Short excerpt regarding what the picture entails.</p>
 						</div>
 					</div>
 
-					<div class="single-latest-news" style="height: 75%">
-						<div class="latest-news-bg news-bg-1"></div>
-						<div class="news-text-box">
-							<h3>Title Title Title</h3>
-							<p class="blog-meta">
-								<span class="date"><i class="fas fa-calendar"></i> 27 December, 2019</span>
-							</p>
-							<p class="excerpt">Short excerpt regarding what the picture entails.</p>
-						</div>
-					</div>
 				</div>
-			</div> -->
+			</div> <!-- END EVENT PASTE HERE -->
 
 		</div>
 	</div>

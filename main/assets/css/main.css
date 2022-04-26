@@ -2886,9 +2886,23 @@ table.order-details tbody td {
 }
 
 .media-container {
-  height: 40vh;
   overflow-y: scroll;
   overflow-x: hidden;
+  height: 80vh;
   scrollbar-width: thin;
-  flex-direction: column;
+}
+
+.media-event-title {
+  transition: 0.3s ease-in-out;
+  display: inline-block;
+  align-self: center;
+  justify-self: center;
+  padding-bottom: 0 !important;
+}
+
+.media-event-title:hover {
+  color: #e71a1a;
+  transition: 0.3s ease-in-out;
+  cursor: pointer;
+  transform: scale(105%);
 }

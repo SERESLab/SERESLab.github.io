@@ -1,0 +1,116 @@
+<div id="consentFormContainer" class="container">
+    <h2>Demographic Information</h2>
+    <form id="consentForm">
+      <label>
+        ID:
+        <input type="number" id="formID" required />
+      </label>
+      <button type="submit">Submit</button>
+    </form>
+    <p id="consentMessage" class="message hidden"></p>
+  </div>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const consentForm = document.getElementById("consentForm");
+      const consentMessage = document.getElementById("consentMessage");
+  
+      consentForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const formID = document.getElementById("formID").value;
+  
+        try {
+          // Create CSV data
+          const csvData = [["ID"], [formID]]; // Add header and new row
+          const csvString = csvData.map((row) => row.join(",")).join("\n");
+  
+          // Create a Blob and download the file
+          const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", "data.csv"); // File name
+          document.body.appendChild(link);
+          link.click();
+  
+          // Clean up
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+  
+          // Show success message
+          consentMessage.textContent = "CSV file downloaded successfully!";
+          consentMessage.classList.remove("hidden");
+          consentMessage.classList.remove("error");
+  
+          // Reset the form
+          consentForm.reset();
+  
+          // Emit the submit event (simulated here with a console log)
+          console.log("Form submitted successfully!");
+        } catch (error) {
+          console.error("Error generating CSV:", error);
+  
+          // Show error message
+          consentMessage.textContent = "Failed to download CSV file.";
+          consentMessage.classList.remove("hidden");
+          consentMessage.classList.add("error");
+        }
+      });
+    });
+  </script>
+  
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden; /* Prevent scrolling */
+    }
+  
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      box-sizing: border-box;
+    }
+  
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 300px;
+    }
+  
+    input, select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+  
+    button {
+      background-color: #3498db;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  
+    .message {
+      margin-top: 10px;
+      color: green;
+    }
+  
+    .message.error {
+      color: red;
+    }
+  
+    .hidden {
+      display: none;
+    }
+  </style>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Recognition Task</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            gap: 3vw;
+            width: 70vh;
+            height: 70vh;
+        }
+        .grid-item {
+            object-fit: cover;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: 0.3s;
+        }
+        .grid-item:hover {
+            border-color: #3498db;
+        }
+        p {
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="app">
+        <p id="completion-message" style="display: none;">Completed, please move onto the next task!</p>
+        <div class="grid" id="grid-container"></div>
+    </div>
+
+    <script>
+        // Variables
+        let gridSize = 2; // Starting with 2x2 grid
+        let grid = [];
+        let trial = 0;
+        let score = 0;
+        let replacedIndex = null;
+        
+        // Image paths - you'll need to adapt these paths to your project structure
+        const rightImagePaths = [];
+        const wrongImagePaths = [];
+        
+        // Preload right images (equivalent to Set A)
+        for (let i = 1; i <= 62; i++) { // Assuming 20 images, adjust as needed
+            rightImagePaths.push(`../assets/images/Right/image-${i}.jpg`);
+        }
+        
+        // Preload wrong images (equivalent to Set B)
+        for (let i = 1; i <= 8; i++) { // Assuming 10 images, adjust as needed
+            wrongImagePaths.push(`../assets/images/Wrong/image-${i}.jpg`);
+        }
+        
+        // Function to get random subset of an array
+        function getRandomSubset(array, size) {
+            return [...array]
+                .sort(() => Math.random() - 0.5)
+                .slice(0, size);
+        }
+        
+        // Function to generate grid
+        function generateGrid() {
+            const totalCells = gridSize * gridSize;
+            const gridContainer = document.getElementById('grid-container');
+            
+            // Clear previous grid
+            gridContainer.innerHTML = '';
+            
+            // Set grid style based on current grid size
+            gridContainer.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
+            gridContainer.style.gridTemplateRows = `repeat(${gridSize}, 1fr)`;
+            gridContainer.style.gap = `${5 - gridSize}vw`;
+            
+            // Create a new grid array with correct images
+            let newGrid = getRandomSubset(rightImagePaths, totalCells).map((src, i) => ({
+                src,
+                id: i + 1,
+                isCorrect: false
+            }));
+            
+            // Replace one random image with an incorrect one
+            replacedIndex = Math.floor(Math.random() * totalCells);
+            let randomWrongImage = {
+                src: wrongImagePaths[Math.floor(Math.random() * wrongImagePaths.length)],
+                id: replacedIndex + 1,
+                isCorrect: true
+            };
+            newGrid[replacedIndex] = randomWrongImage;
+            grid = newGrid;
+            
+            // Create DOM elements for each grid item
+            grid.forEach((image, index) => {
+                const img = document.createElement('img');
+                img.src = image.src;
+                img.className = 'grid-item';
+                img.dataset.id = image.id;
+                img.dataset.correct = image.isCorrect ? 'T' : 'F';
+                img.style.width = `calc(70vh / ${gridSize + 1})`;
+                img.style.height = `calc(70vh / ${gridSize + 1})`;
+                img.alt = "Game Image";
+                
+                img.addEventListener('click', () => handleClick(index));
+                
+                gridContainer.appendChild(img);
+            });
+        }
+        
+        // Function to handle click
+        function handleClick(index) {
+            if (trial >= 25) return;
+            
+            if (grid[index].isCorrect) {
+                score++;
+            }
+            
+            trial++;
+            
+            if (trial >= 25) {
+                document.getElementById('completion-message').style.display = 'block';
+            } else {
+                generateGrid();
+            }
+        }
+        
+        // Initialize the grid when page loads
+        document.addEventListener('DOMContentLoaded', generateGrid);
+    </script>
+</body>
+</html>

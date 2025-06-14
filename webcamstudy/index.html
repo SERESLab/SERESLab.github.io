@@ -1,1 +1,135 @@
-<!doctype html><html lang=""><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Vue App</title><script defer="defer" src="/js/chunk-vendors.1438a3b8.js"></script><script defer="defer" src="/js/app.673c9d94.js"></script><link href="/css/app.bc16b632.css" rel="stylesheet"></head><body><div id="app"></div></body></html>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Application</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        height: 100vh;
+      }
+      #app {
+        font-family: Avenir, Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-align: center;
+        color: #2c3e50;
+        overflow: hidden;
+        width: 100%;
+        height: 100vh;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+      }
+      .button {
+        height: 40px;
+        width: 100px;
+        margin: 10px auto;
+      }
+      .hidden {
+        display: none;
+      }
+      iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        overflow: hidden;
+        display: block;
+      }
+      .iframe-container {
+        width: 100%;
+        height: 80vh;
+        overflow: hidden;
+        margin: 0;
+        flex-grow: 1;
+      }
+      .button-container {
+        height: 20vh;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+      }
+    </style>
+      <script type="module">
+        import EmbeddedPageSdk from "https://app.realeye.io/sdk/js/testRunnerEmbeddableSdk-1.7.1.js";
+    
+        /**
+         * NOTICE: The SDK MUST be created when the UI is fully loaded and ready.
+         * So, if you are using (modern) frontend framework please use its proper event to create the SDK when everything is ready and fully rendered, instead of the vanilla JS "DOMContentLoaded" event.
+         */
+        window.addEventListener("DOMContentLoaded", () => {
+          const debugMode = false;
+          const stimulusId = null; // Or Stimulus/Item UUID from RealEye Study, e.g. "61560b76-3d31-4f0e-b530-55bd8709aadb"
+          const forceRun = false;
+    
+          const reSdk = new EmbeddedPageSdk(debugMode, stimulusId, forceRun);
+        });
+      </script>
+  </head>
+  <body>
+    <div id="app">
+      <div class="iframe-container">
+        <iframe id="taskFrame" src="" class="hidden" scrolling="no"></iframe>
+      </div>
+      <div class="button-container">
+        <button id="nextTaskButton" class="button hidden">Next Task</button>
+      </div>
+    </div>
+    <script>
+      let currentTask = 0;
+
+      // Task categories
+      const consentForm = "src/components/consentForm.html";
+      const textTasks = [
+        "src/components/textTask.html",
+        "src/components/textTask2.html",
+        "src/components/textTask3.html",
+      ];
+      const videoTasks = [
+        "src/components/videoTask.html",
+        "src/components/videoTask2.html",
+        "src/components/videoTask3.html",
+      ];
+      const faceTasks = [
+        "src/components/faceTask2.html",
+        "src/components/faceTask3.html",
+        "src/components/faceTask4.html",
+      ];
+
+      // Randomly shuffle tasks
+      const taskFiles = [
+        consentForm,
+        textTasks[Math.floor(Math.random() * textTasks.length)],
+        videoTasks[Math.floor(Math.random() * videoTasks.length)],
+        faceTasks[Math.floor(Math.random() * faceTasks.length)],
+      ];
+
+      const taskFrame = document.getElementById("taskFrame");
+      const nextTaskButton = document.getElementById("nextTaskButton");
+
+      function showTask(taskIndex) {
+        if (taskIndex < taskFiles.length) {
+          taskFrame.src = taskFiles[taskIndex];
+          taskFrame.classList.remove("hidden");
+          nextTaskButton.classList.remove("hidden");
+        } else {
+          taskFrame.src = "about:blank";
+          nextTaskButton.classList.add("hidden");
+        }
+      }
+
+      function incrementTask() {
+        currentTask++;
+        showTask(currentTask);
+      }
+
+      nextTaskButton.addEventListener("click", incrementTask);
+
+      // Initialize the first task
+      showTask(currentTask);
+    </script>
+  </body>
+</html>

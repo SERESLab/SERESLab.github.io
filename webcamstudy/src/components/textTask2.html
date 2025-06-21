@@ -17,11 +17,12 @@
         .formatted-text {
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
-            text-align: justify;
+            justify-content: flex-start; /* Align content left */
+            text-align: left; /* Left-justify text */
             margin: 40px auto;
             max-width: 33%;
             width: 100%;
+            line-height: 2; /* Double spacing */
         }
 
         .word-block {
@@ -30,13 +31,14 @@
         }
 
         .letter {
-            font-size: 18px;
+            font-size: 24px; /* Increased font size */
         }
 
         .space {
             width: 4px;
         }
     </style>
+    
 </head>
 <body>
     <div class="textTask">
@@ -99,37 +101,3 @@ Her chin was pressed so closely against her foot, that there was hardly room to 
     </script>
 </body>
 </html>
-<style>
-    .textTask {
-        text-align: center;
-        font-family: Arial, sans-serif;
-    }
-
-    h3 {
-        margin: 40px 25% 0;
-    }
-
-    .formatted-text {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        text-align: justify;
-        margin: 40px auto;
-        max-width: 33%;
-        width: 100%;
-        line-height: 2; /* Double spacing */
-    }
-
-    .word-block {
-        display: inline-flex;
-        flex-wrap: nowrap;
-    }
-
-    .letter {
-        font-size: 24px; /* Increased font size */
-    }
-
-    .space {
-        width: 4px;
-    }
-</style>

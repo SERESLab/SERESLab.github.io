@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+     <script type="module">
+      import EmbeddedPageSdk from "https://app.realeye.io/sdk/js/testRunnerEmbeddableSdk-1.7.1.js";
+
+      /**
+       * NOTICE: The SDK MUST be created when the UI is fully loaded and ready.
+       * So, if you are using (modern) frontend framework please use its proper event to create the SDK when everything is ready and fully rendered, instead of the vanilla JS "DOMContentLoaded" event.
+       */
+      window.addEventListener("DOMContentLoaded", () => {
+        const debugMode = true;
+        const stimulusId = null; // Or Stimulus/Item UUID from RealEye Study, e.g. "61560b76-3d31-4f0e-b530-55bd8709aadb"
+        const forceRun = false;
+
+        const reSdk = new EmbeddedPageSdk(debugMode, stimulusId, forceRun);
+      });
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Task Application</title>
@@ -53,31 +68,17 @@
         justify-content: center;
       }
     </style>
-      <script type="module">
-        import EmbeddedPageSdk from "https://app.realeye.io/sdk/js/testRunnerEmbeddableSdk-1.7.1.js";
-    
-        /**
-         * NOTICE: The SDK MUST be created when the UI is fully loaded and ready.
-         * So, if you are using (modern) frontend framework please use its proper event to create the SDK when everything is ready and fully rendered, instead of the vanilla JS "DOMContentLoaded" event.
-         */
-        window.addEventListener("DOMContentLoaded", () => {
-          const debugMode = false;
-          const stimulusId = null; // Or Stimulus/Item UUID from RealEye Study, e.g. "61560b76-3d31-4f0e-b530-55bd8709aadb"
-          const forceRun = false;
-    
-          const reSdk = new EmbeddedPageSdk(debugMode, stimulusId, forceRun);
-        });
-      </script>
   </head>
   <body>
     <div id="app">
-      <div class="iframe-container">
-        <iframe id="taskFrame" src="" class="hidden" scrolling="no"></iframe>
+      <div data-re-aoi-name="IFramePleaseSeeMe2" class="iframe-container">
+        <iframe data-re-aoi-name="IFramePleaseSeeMe" id="taskFrame" src="" class="hidden" scrolling="no"></iframe>
       </div>
       <div class="button-container">
         <button id="nextTaskButton" class="button hidden">Next Task</button>
       </div>
     </div>
+
     <script>
       let currentTask = 0;
 

@@ -1,0 +1,45 @@
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100vh;
+}
+
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  overflow: hidden;
+  width: 100%;
+  height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.button {
+  height: 40px;
+  width: 100px;
+  margin: 10px auto;
+}
+
+.hidden {
+  display: none;
+}
+
+.task-container {
+  width: 100%;
+  height: 80vh;
+  overflow: hidden;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.button-container {
+  height: 20vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}

@@ -1,6 +1,6 @@
 {
   "name": "webcamstudy",
-  "homepage": "https://seresl.unl.edu//webcamstudy",
+  "homepage": "https://seresl.unl.edu/webcamstudy",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

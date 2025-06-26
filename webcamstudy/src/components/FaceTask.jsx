@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-// Settings for each face task variant
 const FACE_TASKS = [
   { gridSize: 2, trials: 25 },
   { gridSize: 3, trials: 25 },
@@ -55,10 +54,10 @@ const FaceTask = () => {
 
     const timer = setTimeout(() => {
       setShowCross(false);
-    }, 10000); // Hide cross after 10s
+    }, 10000); // 10 seconds
 
     return () => clearTimeout(timer);
-  }, []); // Run once on mount
+  }, []);
 
   const handleClick = (index) => {
     if (completed) return;
@@ -100,9 +99,11 @@ const FaceTask = () => {
       }}
     >
       {showCross && (
-        <div style={styles.crossContainer}>
-          <div style={styles.cross}>+</div>
-        </div>
+        console.log("Rendering fixation cross...") || (
+          <div style={styles.crossContainer}>
+            <div style={styles.cross}>+</div>
+          </div>
+        )
       )}
 
       {!showCross && (
@@ -153,7 +154,7 @@ const FaceTask = () => {
   );
 };
 
-// Styles for the tracking dot (cross)
+// Styles
 const styles = {
   crossContainer: {
     position: 'absolute',
@@ -164,13 +165,14 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 10,
+    zIndex: 9999,
     backgroundColor: '#fff',
+    border: '3px dashed red', // Debug visual
   },
   cross: {
     fontSize: '100px',
     fontWeight: 'bold',
-    color: '#000',
+    color: 'black',
   },
 };
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const trackingdot = () => {
+const TrackingDot = () => {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
@@ -36,4 +36,4 @@ const styles = {
   },
 };
 
-export default trackingdot ;
+export default TrackingDot;

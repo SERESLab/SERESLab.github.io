@@ -1,8 +1,40 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 const TEXTS = [
-  // [Your text content remains unchanged]
-  // ...
+  `Twas brillig, and the slithy toves
+Did gyre and gimble in the wabe:
+All mimsy were the borogoves,
+And the mome raths outgrabe.
+
+“Beware the Jabberwock, my son!
+The jaws that bite, the claws that catch!
+Beware the Jubjub bird, and shun
+The frumious Bandersnatch!”
+
+He took his vorpal sword in hand;
+Long time the manxome foe he sought—
+So rested he by the Tumtum tree
+And stood awhile in thought.
+
+And, as in uffish thought he stood,
+The Jabberwock, with eyes of flame,
+Came whiffling through the tulgey wood,
+And burbled as it came!
+
+One, two! One, two! And through and through
+The vorpal blade went snicker-snack!
+He left it dead, and with its head
+He went galumphing back.
+
+“And hast thou slain the Jabberwock?
+Come to my arms, my beamish boy!
+O frabjous day! Callooh! Callay!”
+He chortled in his joy.
+
+’Twas brillig, and the slithy toves
+Did gyre and gimble in the wabe:
+All mimsy were the borogoves,
+And the mome raths outgrabe.`
 ];
 
 function pickRandomText() {
@@ -83,9 +115,11 @@ const TextTask = () => {
       }}
     >
       {showCross ? (
-        <div style={styles.crossContainer}>
-          <div style={styles.cross}>+</div>
-        </div>
+        console.log("Fixation cross is rendering...") || (
+          <div style={styles.crossContainer}>
+            <div style={styles.cross}>+</div>
+          </div>
+        )
       ) : (
         <>
           <h3 style={{ margin: '2em 25% 0' }}>
@@ -114,10 +148,10 @@ const TextTask = () => {
           flex-wrap: nowrap;
         }
         .letter {
-          font-size: 1.35em;
+          font-size: 24px;
         }
         .space {
-          width: 0.25vw;
+          width: 4px;
         }
       `}</style>
     </div>
@@ -134,13 +168,14 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 10,
+    zIndex: 9999,
     backgroundColor: '#fff',
+    border: '3px dashed red', // Temporary debug border — remove later
   },
   cross: {
     fontSize: '100px',
     fontWeight: 'bold',
-    color: '#000',
+    color: 'black',
   },
 };
 

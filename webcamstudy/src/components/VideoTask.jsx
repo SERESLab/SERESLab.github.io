@@ -27,7 +27,7 @@ const VideoTask = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowCross(false);
-    }, 10000); // Hide tracking cross after 10 seconds
+    }, 10000); // 10s
 
     return () => clearTimeout(timer);
   }, []);
@@ -35,13 +35,11 @@ const VideoTask = () => {
   useEffect(() => {
     if (showCross) return;
 
-    // Dynamically load Plyr CSS
     const plyrCss = document.createElement('link');
     plyrCss.rel = 'stylesheet';
     plyrCss.href = 'https://cdn.plyr.io/3.7.8/plyr.css';
     document.head.appendChild(plyrCss);
 
-    // Dynamically load Plyr JS
     const script = document.createElement('script');
     script.src = 'https://cdn.plyr.io/3.7.8/plyr.polyfilled.js';
     script.async = true;
@@ -73,9 +71,11 @@ const VideoTask = () => {
       }}
     >
       {showCross ? (
-        <div style={styles.crossContainer}>
-          <div style={styles.cross}>+</div>
-        </div>
+        console.log('Rendering fixation cross...') || (
+          <div style={styles.crossContainer}>
+            <div style={styles.cross}>+</div>
+          </div>
+        )
       ) : (
         <video
           ref={videoRef}
@@ -112,7 +112,8 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
-    zIndex: 10,
+    zIndex: 9999,
+    border: '3px dashed red', // ← temporary visual debug aid
   },
   cross: {
     fontSize: '100px',

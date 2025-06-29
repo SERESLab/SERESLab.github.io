@@ -12,30 +12,6 @@ function App() {
   const [taskFiles, setTaskFiles] = useState([]);
   
   useEffect(() => {
-    // Initialize RealEye SDK in the document head
-    const initializeSDK = async () => {
-      try {
-        // Create and add the script to head
-        const script = document.createElement('script');
-        script.type = 'module';
-        script.innerHTML = `
-          import EmbeddedPageSdk from "https://app.realeye.io/sdk/js/testRunnerEmbeddableSdk-1.7.1.js";
-          
-          window.addEventListener("DOMContentLoaded", () => {
-            const debugMode = false;
-            const stimulusId = null;
-            const forceRun = false;
-            
-            const reSdk = new EmbeddedPageSdk(debugMode, stimulusId, forceRun);
-          });
-        `;
-        document.head.appendChild(script);
-      } catch (error) {
-        console.error('Failed to load RealEye SDK:', error);
-      }
-    };
-
-    initializeSDK();
     generateTaskSequence();
   }, []);
 

@@ -10,25 +10,40 @@ import FaceTask from './components/FaceTask';
 function App() {
   const [currentTask, setCurrentTask] = useState(0);
   const [taskFiles, setTaskFiles] = useState([]);
-  
+  const [clickCount, setClickCount] = useState(0);
+  const [buttonVisible, setButtonVisible] = useState(true);
+
   useEffect(() => {
     generateTaskSequence();
   }, []);
 
   const generateTaskSequence = () => {
-    // Randomly shuffle tasks (same logic as original)
     const tasks = [
       'ConsentForm',
       'TextTask',
       'VideoTask',
       'FaceTask',
     ];
-
     setTaskFiles(tasks);
   };
 
   const incrementTask = () => {
-    setCurrentTask(prev => prev + 1);
+    setClickCount((prev) => prev + 1);
+    setCurrentTask((prev) => prev + 1);
+    setButtonVisible(false);
+
+    let delay = 0;
+    if (clickCount === 0) {
+      delay = 15000; // 15 seconds
+    } else if (clickCount === 1) {
+      delay = 20000; // 20 seconds
+    } else {
+      delay = 150000; // 2 min 30 seconds
+    }
+
+    setTimeout(() => {
+      setButtonVisible(true);
+    }, delay);
   };
 
   const renderCurrentTask = () => {
@@ -37,7 +52,7 @@ function App() {
     }
 
     const taskName = taskFiles[currentTask];
-    
+
     switch (taskName) {
       case 'ConsentForm':
         return <ConsentForm />;
@@ -60,7 +75,7 @@ function App() {
         {renderCurrentTask()}
       </div>
       <div className="button-container">
-        {!isTaskComplete && (
+        {!isTaskComplete && buttonVisible && (
           <button 
             id="nextTaskButton" 
             className="button"

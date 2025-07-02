@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import Papa from 'papaparse';
 
-const FACE_TASKS = [
+const TASKS = [
   { gridSize: 2, trials: 25 },
   { gridSize: 3, trials: 25 },
-  { gridSize: 4, trials: 25 },
 ];
 
 const RIGHT_IMAGE_COUNT = 62;
@@ -13,16 +13,16 @@ function getRandomSubset(array, size) {
   return [...array].sort(() => Math.random() - 0.5).slice(0, size);
 }
 
-function pickRandomFaceTask() {
-  return FACE_TASKS[Math.floor(Math.random() * FACE_TASKS.length)];
-}
-
 const FaceTask = () => {
-  const [task] = useState(() => pickRandomFaceTask());
+  const [taskStage, setTaskStage] = useState(0); // 0 for 2x2, 1 for 3x3
   const [trial, setTrial] = useState(0);
   const [grid, setGrid] = useState([]);
   const [completed, setCompleted] = useState(false);
   const [showCross, setShowCross] = useState(true);
+  const [results, setResults] = useState([]); // store result rows
+
+  const currentTask = TASKS[taskStage];
+  const { gridSize, trials: maxTrials } = currentTask;
 
   const rightImagePaths = Array.from({ length: RIGHT_IMAGE_COUNT }, (_, i) =>
     require(`../assets/images/Right/image-${i + 1}.jpg`)
@@ -32,7 +32,7 @@ const FaceTask = () => {
   );
 
   const generateNewGrid = () => {
-    const totalCells = task.gridSize * task.gridSize;
+    const totalCells = gridSize * gridSize;
     let newGrid = getRandomSubset(rightImagePaths, totalCells).map((src, i) => ({
       src,
       id: i + 1,
@@ -50,35 +50,65 @@ const FaceTask = () => {
   };
 
   useEffect(() => {
-    generateNewGrid();
-
+    setShowCross(true);
     const timer = setTimeout(() => {
       setShowCross(false);
-    }, 10000); // 10 seconds
+      generateNewGrid();
+    }, 1000); // show fixation cross for 1 second
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [trial, taskStage]);
 
   const handleClick = (index) => {
-    if (completed) return;
+    if (completed || showCross) return;
+
+    const clickedImage = grid[index];
+    const isCorrectClick = clickedImage?.isCorrect === true;
+
+    // Record result
+    const result = {
+      gridSize,
+      trial: trial + 1,
+      correct: isCorrectClick ? 'Yes' : 'No',
+    };
+    setResults((prev) => [...prev, result]);
 
     const newTrial = trial + 1;
-    setTrial(newTrial);
-
-    if (newTrial >= task.trials) {
-      setCompleted(true);
+    if (newTrial >= maxTrials) {
+      if (taskStage === 0) {
+        setTaskStage(1);
+        setTrial(0);
+      } else {
+        setCompleted(true);
+        downloadCSV([...results, result]); // Include last trial
+      }
     } else {
-      generateNewGrid();
+      setTrial(newTrial);
     }
+  };
+
+  const downloadCSV = (data) => {
+    const csv = Papa.unparse(data, {
+      columns: ['gridSize', 'trial', 'correct'],
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'face-task-results.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const gridStyle = {
     display: 'grid',
-    gap: `${5 - task.gridSize}vw`,
+    gap: `${5 - gridSize}vw`,
     width: '70vh',
     height: '70vh',
-    gridTemplateColumns: `repeat(${task.gridSize}, 1fr)`,
-    gridTemplateRows: `repeat(${task.gridSize}, 1fr)`,
+    gridTemplateColumns: `repeat(${gridSize}, 1fr)`,
+    gridTemplateRows: `repeat(${gridSize}, 1fr)`,
     justifyContent: 'center',
     alignItems: 'center',
   };
@@ -99,27 +129,25 @@ const FaceTask = () => {
       }}
     >
       {showCross && (
-        console.log("Rendering fixation cross...") || (
-          <div style={styles.crossContainer}>
-            <div style={styles.cross}>+</div>
-          </div>
-        )
+        <div style={styles.crossContainer}>
+          <div style={styles.cross}>+</div>
+        </div>
       )}
 
       {!showCross && (
         <>
-          <p
-            id="completion-message"
-            style={{
-              display: completed ? 'block' : 'none',
-              fontFamily: 'Arial, sans-serif',
-              fontSize: 18,
-              marginBottom: 20,
-            }}
-          >
-            Completed, please move onto the next task!
-          </p>
-          {!completed && (
+          {completed ? (
+            <p
+              id="completion-message"
+              style={{
+                fontFamily: 'Arial, sans-serif',
+                fontSize: 18,
+                marginBottom: 20,
+              }}
+            >
+              Completed, results downloaded!
+            </p>
+          ) : (
             <div className="grid" style={gridStyle}>
               {grid.map((image, idx) => (
                 <img
@@ -134,8 +162,8 @@ const FaceTask = () => {
                     cursor: 'pointer',
                     border: '2px solid transparent',
                     transition: '0.3s',
-                    width: `calc(70vh / ${task.gridSize + 1})`,
-                    height: `calc(70vh / ${task.gridSize + 1})`,
+                    width: `calc(70vh / ${gridSize + 1})`,
+                    height: `calc(70vh / ${gridSize + 1})`,
                   }}
                   onClick={() => handleClick(idx)}
                 />
@@ -167,7 +195,6 @@ const styles = {
     alignItems: 'center',
     zIndex: 9999,
     backgroundColor: '#fff',
-    border: '3px dashed red', // Debug visual
   },
   cross: {
     fontSize: '100px',

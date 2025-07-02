@@ -6,7 +6,7 @@ const TrackingDot = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setVisible(false);
-    }, 10000); // 10 seconds
+    }, 2000); // 2 seconds
 
     return () => clearTimeout(timer); // Cleanup on unmount
   }, []);

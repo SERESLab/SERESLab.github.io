@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Papa from 'papaparse';
 
 const TASKS = [
   { gridSize: 2, trials: 25 },
@@ -13,12 +12,13 @@ function getRandomSubset(array, size) {
   return [...array].sort(() => Math.random() - 0.5).slice(0, size);
 }
 
-const FaceTask = () => {
+const FaceTask = ({ onSubmit }) => {
   const [taskStage, setTaskStage] = useState(0); // 0 for 2x2, 1 for 3x3
   const [trial, setTrial] = useState(0);
   const [grid, setGrid] = useState([]);
   const [completed, setCompleted] = useState(false);
   const [showCross, setShowCross] = useState(true);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
   const [results, setResults] = useState([]); // store result rows
 
   const currentTask = TASKS[taskStage];
@@ -31,7 +31,16 @@ const FaceTask = () => {
     require(`../assets/images/Wrong/image-${i + 1}.jpg`)
   );
 
-  const generateNewGrid = () => {
+  const preloadImage = (src) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(src);
+      img.onerror = reject;
+      img.src = src;
+    });
+  };
+
+  const generateNewGrid = async () => {
     const totalCells = gridSize * gridSize;
     let newGrid = getRandomSubset(rightImagePaths, totalCells).map((src, i) => ({
       src,
@@ -47,28 +56,57 @@ const FaceTask = () => {
     };
 
     setGrid(newGrid);
+    setImagesLoaded(false);
+
+    // Preload all images for this grid
+    try {
+      const imagePromises = newGrid.map(image => preloadImage(image.src));
+      await Promise.all(imagePromises);
+      setImagesLoaded(true);
+    } catch (error) {
+      console.error('Error loading images:', error);
+      // Still set to true to prevent indefinite waiting
+      setImagesLoaded(true);
+    }
   };
 
   useEffect(() => {
     setShowCross(true);
-    const timer = setTimeout(() => {
-      setShowCross(false);
-      generateNewGrid();
-    }, 1000); // show fixation cross for 1 second
-
-    return () => clearTimeout(timer);
+    setImagesLoaded(false);
+    
+    // Start generating the grid immediately
+    generateNewGrid();
   }, [trial, taskStage]);
+
+  useEffect(() => {
+    // Only hide cross when both conditions are met:
+    // 1. Images are loaded
+    // 2. At least 1 second has passed
+    if (imagesLoaded) {
+      const timer = setTimeout(() => {
+        setShowCross(false);
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [imagesLoaded]);
 
   const handleClick = (index) => {
     if (completed || showCross) return;
 
     const clickedImage = grid[index];
     const isCorrectClick = clickedImage?.isCorrect === true;
+    
+    // Calculate row and column from index (1-based indexing)
+    const row = Math.floor(index / gridSize) + 1;
+    const column = (index % gridSize) + 1;
 
-    // Record result
+    // Record result with position information
     const result = {
       gridSize,
       trial: trial + 1,
+      selectedRow: row,
+      selectedColumn: column,
       correct: isCorrectClick ? 'Yes' : 'No',
     };
     setResults((prev) => [...prev, result]);
@@ -80,26 +118,12 @@ const FaceTask = () => {
         setTrial(0);
       } else {
         setCompleted(true);
-        downloadCSV([...results, result]); // Include last trial
+        const finalResults = [...results, result];
+        onSubmit?.(finalResults);
       }
     } else {
       setTrial(newTrial);
     }
-  };
-
-  const downloadCSV = (data) => {
-    const csv = Papa.unparse(data, {
-      columns: ['gridSize', 'trial', 'correct'],
-    });
-
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.setAttribute('href', url);
-    link.setAttribute('download', 'face-task-results.csv');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
   };
 
   const gridStyle = {
@@ -145,7 +169,7 @@ const FaceTask = () => {
                 marginBottom: 20,
               }}
             >
-              Completed, results downloaded!
+              Completed!
             </p>
           ) : (
             <div className="grid" style={gridStyle}>

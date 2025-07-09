@@ -27,7 +27,7 @@ const VideoTask = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowCross(false);
-    }, 10000); // 10s
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -58,87 +58,40 @@ const VideoTask = () => {
   }, [showCross]);
 
   return (
-    <div
-      className="videoTask"
-      style={{
-        height: '100vh',
-        width: '100vw',
-        display: 'flex',
-        flexDirection: 'column',
-        position: 'relative',
-        backgroundColor: '#fff',
-        overflow: 'hidden', // Prevent scrollbars
-        boxSizing: 'border-box',
-      }}
-    >
+    <div style={styles.container}>
       {showCross ? (
         <div style={styles.crossContainer}>
           <div style={styles.cross}>+</div>
         </div>
       ) : (
-        <>
-          {/* Video Section - Takes up 60% of viewport height */}
-          <div
-            style={{
-              flex: '0 0 60vh',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: '10px',
-              boxSizing: 'border-box',
-            }}
+        <div style={styles.videoSection}>
+          <video
+            ref={videoRef}
+            controls
+            crossOrigin="anonymous"
+            playsInline
+            style={styles.video}
           >
-            <video
-              ref={videoRef}
-              controls
-              crossOrigin="anonymous"
-              playsInline
-              style={{
-                width: '90%',
-                height: '90%',
-                maxWidth: '800px',
-                border: '1px solid #ccc',
-                borderRadius: 5,
-                boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-                background: '#000',
-                objectFit: 'contain',
-              }}
-            >
-              <source src={video.src} type={video.type} />
-              Your browser does not support the video tag.
-            </video>
-          </div>
-
-          {/* Survey Section - Takes up 40% of viewport height */}
-          <div
-            style={{
-              flex: '0 0 40vh',
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: '10px',
-              boxSizing: 'border-box',
-            }}
-          >
-            <iframe
-              src="https://unlcorexmuw.qualtrics.com/jfe/form/SV_6YFOhCRXbWEtLxQ?block=video"
-              style={{
-                width: '95%',
-                height: '100%',
-                border: 'none',
-                borderRadius: '5px',
-              }}
-              title="Video Survey"
-            />
-          </div>
-        </>
+            <source src={video.src} type={video.type} />
+            Your browser does not support the video tag.
+          </video>
+        </div>
       )}
     </div>
   );
 };
 
 const styles = {
+  container: {
+    height: '100vh',
+    width: '100vw',
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'relative',
+    backgroundColor: '#fff',
+    overflow: 'hidden',
+    boxSizing: 'border-box',
+  },
   crossContainer: {
     position: 'absolute',
     top: 0,
@@ -155,6 +108,25 @@ const styles = {
     fontSize: '100px',
     fontWeight: 'bold',
     color: '#000',
+  },
+  videoSection: {
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '20px',
+    boxSizing: 'border-box',
+  },
+  video: {
+    width: '90%',
+    height: '90%',
+    maxWidth: '1000px',
+    maxHeight: '80vh',
+    border: '1px solid #ccc',
+    borderRadius: 5,
+    boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+    background: '#000',
+    objectFit: 'contain',
   },
 };
 

@@ -35,7 +35,7 @@ He chortled in his joy.
 Did gyre and gimble in the wabe:
 All mimsy were the borogoves,
 And the mome raths outgrabe.`,
-  // Add your other two texts here...
+  // Add your other texts here
 ];
 
 function pickRandomText() {
@@ -50,7 +50,7 @@ const TextTask = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowCross(false);
-    }, 10000); // Hide tracking cross after 10 seconds
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -100,84 +100,22 @@ const TextTask = () => {
   }, [text, showCross]);
 
   return (
-    <div
-      className="textTask"
-      style={{
-        height: '100vh',
-        width: '100vw',
-        display: 'flex',
-        flexDirection: 'column',
-        fontFamily: 'Arial, sans-serif',
-        textAlign: 'center',
-        justifyContent: 'center',
-        alignItems: 'center',
-        position: 'relative',
-        backgroundColor: '#fff',
-        overflow: 'hidden', // Prevent scrollbars
-        boxSizing: 'border-box',
-      }}
-    >
+    <div style={styles.container}>
       {showCross ? (
         <div style={styles.crossContainer}>
           <div style={styles.cross}>+</div>
         </div>
       ) : (
-        <>
-          {/* Text Section - Takes up 50% of viewport height */}
-          <div style={{
-            flex: '0 0 50vh',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: '10px',
-            boxSizing: 'border-box',
-          }}>
-            <h3 style={{ 
-              margin: '0 0 20px 0',
-              fontSize: '18px',
-              textAlign: 'center',
-            }}>
-              Please read the following text carefully:
-            </h3>
-            <div
-              ref={formattedTextRef}
-              className="formatted-text"
-              style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'flex-start',
-              textAlign: 'left',
-              margin: '40px auto',
-              maxWidth: '33%',
-              width: '100%',
-              lineHeight: 2,
-              }}
-            />
-          </div>
-
-          {/* Survey Section - Takes up 50% of viewport height */}
-          <div style={{
-            flex: '0 0 50vh',
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: '10px',
-            boxSizing: 'border-box',
-          }}>
-            <iframe
-              src="https://unlcorexmuw.qualtrics.com/jfe/form/SV_6YFOhCRXbWEtLxQ?block=text"
-              style={{
-                width: '90%',
-                height: '100%',
-                border: 'none',
-                borderRadius: '5px',
-              }}
-              title="Survey"
-            />
-          </div>
-        </>
+        <div style={styles.textSection}>
+          <h3 style={styles.title}>
+            Please read the following text carefully:
+          </h3>
+          <div
+            ref={formattedTextRef}
+            className="formatted-text"
+            style={styles.formattedText}
+          />
+        </div>
       )}
 
       <style>{`
@@ -186,10 +124,10 @@ const TextTask = () => {
           flex-wrap: nowrap;
         }
         .letter {
-          font-size: 18px;
+          font-size: 1em;
         }
         .space {
-          width: 3px;
+          width: 4px;
         }
       `}</style>
     </div>
@@ -197,6 +135,17 @@ const TextTask = () => {
 };
 
 const styles = {
+  container: {
+    height: '100vh',
+    width: '100vw',
+    display: 'flex',
+    flexDirection: 'column',
+    fontFamily: 'Arial, sans-serif',
+    position: 'relative',
+    backgroundColor: '#fff',
+    overflow: 'hidden',
+    boxSizing: 'border-box',
+  },
   crossContainer: {
     position: 'absolute',
     top: 0,
@@ -213,6 +162,30 @@ const styles = {
     fontSize: '100px',
     fontWeight: 'bold',
     color: 'black',
+  },
+  textSection: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '20px',
+    boxSizing: 'border-box',
+  },
+  title: {
+    margin: '0 0 40px 0',
+    fontSize: '24px',
+    textAlign: 'center',
+  },
+  formattedText: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+    textAlign: 'left',
+    maxWidth: '70%',
+    width: '100%',
+    lineHeight: 2.5,
+    fontSize: '24px',
   },
 };
 

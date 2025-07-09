@@ -25,6 +25,16 @@ body {
   margin: 10px auto;
 }
 
+.button:hover {
+  background-color: #2980b9 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(52, 152, 219, 0.4) !important;
+}
+
+.button:active {
+  transform: translateY(0);
+}
+
 .hidden {
   display: none;
 }

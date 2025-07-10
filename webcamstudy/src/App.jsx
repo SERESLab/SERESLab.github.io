@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 
 // Import task components
@@ -51,7 +51,7 @@ function App() {
     setCurrentTask((prev) => prev + 1);
   };
 
-  const downloadAllData = () => {
+  const downloadAllData = useCallback(() => {
     // Create the JSON structure
     const jsonData = {
       id: parseInt(studyData.consent?.id) || 0,
@@ -124,7 +124,14 @@ function App() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  };
+  }, [studyData]);
+
+  // Auto-download data when all tasks are completed
+  useEffect(() => {
+    if (currentTask >= taskFiles.length && taskFiles.length > 0) {
+      downloadAllData();
+    }
+  }, [currentTask, taskFiles.length, downloadAllData]);
 
   // Helper function to determine text task correctness
   const determineTextCorrectness = (answer) => {
@@ -163,9 +170,7 @@ function App() {
       return (
         <div style={styles.completionContainer}>
           <h2>All tasks completed!</h2>
-          <button onClick={downloadAllData} style={styles.downloadButton}>
-            Download Results
-          </button>
+          <p>Your results have been automatically downloaded.</p>
         </div>
       );
     }
@@ -232,9 +237,8 @@ const styles = {
   },
   buttonContainer: {
     position: 'fixed',
-    bottom: '30px',
-    left: '50%',
-    transform: 'translateX(-50%)',
+    bottom: '-30px',
+    right: '30px',
     zIndex: 1000,
   },
   nextButton: {
@@ -255,15 +259,6 @@ const styles = {
     justifyContent: 'center',
     height: '100vh',
     gap: '20px',
-  },
-  downloadButton: {
-    padding: '15px 30px',
-    fontSize: '18px',
-    backgroundColor: '#27ae60',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
   },
 };
 

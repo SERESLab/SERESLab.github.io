@@ -1,12 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 
 const TASKS = [
   { gridSize: 2, trials: 25 },
   { gridSize: 3, trials: 25 },
 ];
 
-const RIGHT_IMAGE_COUNT = 62;
-const WRONG_IMAGE_COUNT = 8;
+// Function to dynamically import all images from a folder
+function importAll(r) {
+  let images = {};
+  r.keys().forEach((item, index) => {
+    images[item.replace('./', '')] = r(item);
+  });
+  return Object.values(images);
+}
 
 function getRandomSubset(array, size) {
   return [...array].sort(() => Math.random() - 0.5).slice(0, size);
@@ -24,11 +30,14 @@ const FaceTask = ({ onSubmit }) => {
   const currentTask = TASKS[taskStage];
   const { gridSize, trials: maxTrials } = currentTask;
 
-  const rightImagePaths = Array.from({ length: RIGHT_IMAGE_COUNT }, (_, i) =>
-    require(`../assets/images/Right/image-${i + 1}.jpg`)
+  // Dynamically load all images from Right and Wrong folders
+  const rightImagePaths = useMemo(() => 
+    importAll(require.context('../assets/images/Right', false, /\.(png|jpe?g|svg)$/)),
+    []
   );
-  const wrongImagePaths = Array.from({ length: WRONG_IMAGE_COUNT }, (_, i) =>
-    require(`../assets/images/Wrong/image-${i + 1}.jpg`)
+  const wrongImagePaths = useMemo(() => 
+    importAll(require.context('../assets/images/Wrong', false, /\.(png|jpe?g|svg)$/)),
+    []
   );
 
   const preloadImage = (src) => {
@@ -40,19 +49,21 @@ const FaceTask = ({ onSubmit }) => {
     });
   };
 
-  const generateNewGrid = async () => {
+  const generateNewGrid = useCallback(async () => {
     const totalCells = gridSize * gridSize;
-    let newGrid = getRandomSubset(rightImagePaths, totalCells).map((src, i) => ({
+    // Start with wrong faces (Wrong images) - these should NOT be clicked
+    let newGrid = getRandomSubset(wrongImagePaths, totalCells).map((src, i) => ({
       src,
       id: i + 1,
-      isCorrect: false,
+      isCorrect: false, // These are incorrect to click - avoid these
     }));
 
+    // Replace one random position with a correct face (the target to find)
     const replacedIndex = Math.floor(Math.random() * totalCells);
     newGrid[replacedIndex] = {
-      src: wrongImagePaths[Math.floor(Math.random() * wrongImagePaths.length)],
+      src: rightImagePaths[Math.floor(Math.random() * rightImagePaths.length)],
       id: replacedIndex + 1,
-      isCorrect: true,
+      isCorrect: true, // This is the one to click - the correct face
     };
 
     setGrid(newGrid);
@@ -68,7 +79,7 @@ const FaceTask = ({ onSubmit }) => {
       // Still set to true to prevent indefinite waiting
       setImagesLoaded(true);
     }
-  };
+  }, [gridSize, rightImagePaths, wrongImagePaths]);
 
   useEffect(() => {
     setShowCross(true);
@@ -76,7 +87,7 @@ const FaceTask = ({ onSubmit }) => {
     
     // Start generating the grid immediately
     generateNewGrid();
-  }, [trial, taskStage]);
+  }, [trial, taskStage, generateNewGrid]);
 
   useEffect(() => {
     // Only hide cross when both conditions are met:

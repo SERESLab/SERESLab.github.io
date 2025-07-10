@@ -22,6 +22,7 @@ function pickRandomVideo() {
 const VideoTask = () => {
   const [video] = useState(() => pickRandomVideo());
   const [showCross, setShowCross] = useState(true);
+  const [videoLoadError, setVideoLoadError] = useState(false);
   const videoRef = useRef(null);
 
   useEffect(() => {
@@ -44,18 +45,37 @@ const VideoTask = () => {
     script.src = 'https://cdn.plyr.io/3.7.8/plyr.polyfilled.js';
     script.async = true;
     script.onload = () => {
+      if (!videoRef.current) return;
+
       // eslint-disable-next-line no-undef
-      new window.Plyr(videoRef.current, {
+      const player = new window.Plyr(videoRef.current, {
         controls: ['play', 'progress', 'current-time', 'mute', 'volume'],
       });
+
+      player.on('ready', () => {
+        player.play().catch((error) => {
+          // Fallback: try to play without muted attribute
+          videoRef.current.muted = false;
+          player.play();
+        });
+      });
+
+      player.on('error', () => {
+        setVideoLoadError(true);
+      });
     };
+
     document.body.appendChild(script);
 
     return () => {
-      document.head.removeChild(plyrCss);
-      document.body.removeChild(script);
+      if (document.head.contains(plyrCss)) {
+        document.head.removeChild(plyrCss);
+      }
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
     };
-  }, [showCross]);
+  }, [showCross, video.src]);
 
   return (
     <div style={styles.container}>
@@ -65,16 +85,27 @@ const VideoTask = () => {
         </div>
       ) : (
         <div style={styles.videoSection}>
-          <video
-            ref={videoRef}
-            controls
-            crossOrigin="anonymous"
-            playsInline
-            style={styles.video}
-          >
-            <source src={video.src} type={video.type} />
-            Your browser does not support the video tag.
-          </video>
+          {videoLoadError ? (
+            <div style={styles.errorContainer}>
+              <h3>Video Loading Error</h3>
+              <p>There was an issue loading the video file: {video.src}</p>
+              <p>Please check the file format and try again.</p>
+            </div>
+          ) : (
+            <video
+              ref={videoRef}
+              controls
+              autoPlay
+              muted
+              crossOrigin="anonymous"
+              playsInline
+              style={styles.video}
+              onError={() => setVideoLoadError(true)}
+            >
+              <source src={video.src} type={video.type} />
+              Your browser does not support the video tag.
+            </video>
+          )}
         </div>
       )}
     </div>
@@ -127,6 +158,14 @@ const styles = {
     boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
     background: '#000',
     objectFit: 'contain',
+  },
+  errorContainer: {
+    textAlign: 'center',
+    padding: '40px',
+    backgroundColor: '#f8f9fa',
+    border: '1px solid #e9ecef',
+    borderRadius: '8px',
+    maxWidth: '500px',
   },
 };
 

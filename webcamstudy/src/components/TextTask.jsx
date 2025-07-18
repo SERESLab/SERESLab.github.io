@@ -35,7 +35,6 @@ He chortled in his joy.
 Did gyre and gimble in the wabe:
 All mimsy were the borogoves,
 And the mome raths outgrabe.`,
-  // Add your other texts here
 ];
 
 function pickRandomText() {
@@ -51,7 +50,6 @@ const TextTask = () => {
     const timer = setTimeout(() => {
       setShowCross(false);
     }, 1000);
-
     return () => clearTimeout(timer);
   }, []);
 
@@ -75,8 +73,7 @@ const TextTask = () => {
       wordBlock.classList.add("word-block");
 
       if (isWord) {
-        wordBlock.dataset.sentence = sentenceCount;
-        wordBlock.dataset.word = wordCount;
+        wordBlock.setAttribute("data-re-aoi-name", `s${sentenceCount}-w${wordCount}`);
       }
 
       word.split('').forEach(char => {

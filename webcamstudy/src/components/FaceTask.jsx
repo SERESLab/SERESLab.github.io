@@ -19,23 +19,22 @@ function getRandomSubset(array, size) {
 }
 
 const FaceTask = ({ onSubmit }) => {
-  const [taskStage, setTaskStage] = useState(0); // 0 for 2x2, 1 for 3x3
+  const [taskStage, setTaskStage] = useState(0);
   const [trial, setTrial] = useState(0);
   const [grid, setGrid] = useState([]);
   const [completed, setCompleted] = useState(false);
   const [showCross, setShowCross] = useState(true);
   const [imagesLoaded, setImagesLoaded] = useState(false);
-  const [results, setResults] = useState([]); // store result rows
+  const [results, setResults] = useState([]);
 
   const currentTask = TASKS[taskStage];
   const { gridSize, trials: maxTrials } = currentTask;
 
-  // Dynamically load all images from Right and Wrong folders
-  const rightImagePaths = useMemo(() => 
+  const rightImagePaths = useMemo(() =>
     importAll(require.context('../assets/images/Right', false, /\.(png|jpe?g|svg)$/)),
     []
   );
-  const wrongImagePaths = useMemo(() => 
+  const wrongImagePaths = useMemo(() =>
     importAll(require.context('../assets/images/Wrong', false, /\.(png|jpe?g|svg)$/)),
     []
   );
@@ -51,32 +50,28 @@ const FaceTask = ({ onSubmit }) => {
 
   const generateNewGrid = useCallback(async () => {
     const totalCells = gridSize * gridSize;
-    // Start with wrong faces (Wrong images) - these should NOT be clicked
     let newGrid = getRandomSubset(wrongImagePaths, totalCells).map((src, i) => ({
       src,
       id: i + 1,
-      isCorrect: false, // These are incorrect to click - avoid these
+      isCorrect: false,
     }));
 
-    // Replace one random position with a correct face (the target to find)
     const replacedIndex = Math.floor(Math.random() * totalCells);
     newGrid[replacedIndex] = {
       src: rightImagePaths[Math.floor(Math.random() * rightImagePaths.length)],
       id: replacedIndex + 1,
-      isCorrect: true, // This is the one to click - the correct face
+      isCorrect: true,
     };
 
     setGrid(newGrid);
     setImagesLoaded(false);
 
-    // Preload all images for this grid
     try {
       const imagePromises = newGrid.map(image => preloadImage(image.src));
       await Promise.all(imagePromises);
       setImagesLoaded(true);
     } catch (error) {
       console.error('Error loading images:', error);
-      // Still set to true to prevent indefinite waiting
       setImagesLoaded(true);
     }
   }, [gridSize, rightImagePaths, wrongImagePaths]);
@@ -84,20 +79,14 @@ const FaceTask = ({ onSubmit }) => {
   useEffect(() => {
     setShowCross(true);
     setImagesLoaded(false);
-    
-    // Start generating the grid immediately
     generateNewGrid();
   }, [trial, taskStage, generateNewGrid]);
 
   useEffect(() => {
-    // Only hide cross when both conditions are met:
-    // 1. Images are loaded
-    // 2. At least 1 second has passed
     if (imagesLoaded) {
       const timer = setTimeout(() => {
         setShowCross(false);
       }, 1000);
-
       return () => clearTimeout(timer);
     }
   }, [imagesLoaded]);
@@ -107,12 +96,10 @@ const FaceTask = ({ onSubmit }) => {
 
     const clickedImage = grid[index];
     const isCorrectClick = clickedImage?.isCorrect === true;
-    
-    // Calculate row and column from index (1-based indexing)
+
     const row = Math.floor(index / gridSize) + 1;
     const column = (index % gridSize) + 1;
 
-    // Record result with position information
     const result = {
       gridSize,
       trial: trial + 1,
@@ -184,25 +171,30 @@ const FaceTask = ({ onSubmit }) => {
             </p>
           ) : (
             <div className="grid" style={gridStyle}>
-              {grid.map((image, idx) => (
-                <img
-                  key={`${trial}-${image.id}`}
-                  src={image.src}
-                  className="grid-item"
-                  data-id={image.id}
-                  data-correct={image.isCorrect ? 'T' : 'F'}
-                  alt="Game"
-                  style={{
-                    objectFit: 'cover',
-                    cursor: 'pointer',
-                    border: '2px solid transparent',
-                    transition: '0.3s',
-                    width: `calc(70vh / ${gridSize + 1})`,
-                    height: `calc(70vh / ${gridSize + 1})`,
-                  }}
-                  onClick={() => handleClick(idx)}
-                />
-              ))}
+              {grid.map((image, idx) => {
+                const row = Math.floor(idx / gridSize) + 1;
+                const column = (idx % gridSize) + 1;
+                return (
+                  <img
+                    key={`${trial}-${image.id}`}
+                    src={image.src}
+                    className="grid-item"
+                    data-id={image.id}
+                    data-correct={image.isCorrect ? 'T' : 'F'}
+                    data-re-aoi-name={`${row}-${column}-${image.isCorrect ? 'correct' : 'incorrect'}`}
+                    alt="Game"
+                    style={{
+                      objectFit: 'cover',
+                      cursor: 'pointer',
+                      border: '2px solid transparent',
+                      transition: '0.3s',
+                      width: `calc(70vh / ${gridSize + 1})`,
+                      height: `calc(70vh / ${gridSize + 1})`,
+                    }}
+                    onClick={() => handleClick(idx)}
+                  />
+                );
+              })}
             </div>
           )}
         </>
@@ -217,7 +209,6 @@ const FaceTask = ({ onSubmit }) => {
   );
 };
 
-// Styles
 const styles = {
   crossContainer: {
     position: 'absolute',

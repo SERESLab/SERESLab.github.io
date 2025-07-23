@@ -83,6 +83,7 @@ const FaceTask = ({ onSubmit }) => {
   }, [trial, taskStage, generateNewGrid]);
 
   useEffect(() => {
+
     if (imagesLoaded) {
       const timer = setTimeout(() => {
         setShowCross(false);

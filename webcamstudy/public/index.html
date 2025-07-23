@@ -34,6 +34,12 @@
         const forceRun = false;
 
         const reSdk = new EmbeddedPageSdk(debugMode, stimulusId, forceRun);
+        reSdk.startNextExposure();
+      });
+
+      window.addEventListener("endmeplease", () => {
+        
+        reSdk.finishEyeTrackingTest();
       });
     </script>
   </head>

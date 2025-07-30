@@ -23,7 +23,23 @@ const VideoTask = () => {
   const [video] = useState(() => pickRandomVideo());
   const [showCross, setShowCross] = useState(true);
   const [videoLoadError, setVideoLoadError] = useState(false);
+  const [plyrReady, setPlyrReady] = useState(false);
   const videoRef = useRef(null);
+
+  // Preload Plyr CSS to prevent layout shifts
+  useEffect(() => {
+    const plyrCss = document.createElement('link');
+    plyrCss.rel = 'stylesheet';
+    plyrCss.href = 'https://cdn.plyr.io/3.7.8/plyr.css';
+    plyrCss.onload = () => setPlyrReady(true);
+    document.head.appendChild(plyrCss);
+
+    return () => {
+      if (document.head.contains(plyrCss)) {
+        document.head.removeChild(plyrCss);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -34,12 +50,7 @@ const VideoTask = () => {
   }, []);
 
   useEffect(() => {
-    if (showCross) return;
-
-    const plyrCss = document.createElement('link');
-    plyrCss.rel = 'stylesheet';
-    plyrCss.href = 'https://cdn.plyr.io/3.7.8/plyr.css';
-    document.head.appendChild(plyrCss);
+    if (showCross || !plyrReady) return;
 
     const script = document.createElement('script');
     script.src = 'https://cdn.plyr.io/3.7.8/plyr.polyfilled.js';
@@ -47,12 +58,30 @@ const VideoTask = () => {
     script.onload = () => {
       if (!videoRef.current) return;
 
+      // Apply initial sizing before Plyr initialization
+      const videoElement = videoRef.current;
+      videoElement.style.width = '90%';
+      videoElement.style.height = '90%';
+      videoElement.style.maxWidth = '1000px';
+      videoElement.style.maxHeight = '80vh';
+
       // eslint-disable-next-line no-undef
       const player = new window.Plyr(videoRef.current, {
         controls: ['play', 'progress', 'current-time', 'mute', 'volume'],
+        ratio: null, // Maintain original video ratio
+        fullscreen: { enabled: false }, // Disable fullscreen to maintain our sizing
       });
 
       player.on('ready', () => {
+        // Ensure sizing is maintained after Plyr initialization
+        const plyrContainer = videoElement.closest('.plyr');
+        if (plyrContainer) {
+          plyrContainer.style.width = '90%';
+          plyrContainer.style.height = '90%';
+          plyrContainer.style.maxWidth = '1000px';
+          plyrContainer.style.maxHeight = '80vh';
+        }
+        
         player.play().catch((error) => {
           // Fallback: try to play without muted attribute
           videoRef.current.muted = false;
@@ -68,14 +97,11 @@ const VideoTask = () => {
     document.body.appendChild(script);
 
     return () => {
-      if (document.head.contains(plyrCss)) {
-        document.head.removeChild(plyrCss);
-      }
       if (document.body.contains(script)) {
         document.body.removeChild(script);
       }
     };
-  }, [showCross, video.src]);
+  }, [showCross, plyrReady, video.src]);
 
   return (
     <div style={styles.container}>
@@ -101,6 +127,16 @@ const VideoTask = () => {
               playsInline
               style={styles.video}
               onError={() => setVideoLoadError(true)}
+              onLoadedMetadata={() => {
+                // Ensure size is maintained when metadata loads
+                if (videoRef.current) {
+                  const video = videoRef.current;
+                  video.style.width = '90%';
+                  video.style.height = '90%';
+                  video.style.maxWidth = '1000px';
+                  video.style.maxHeight = '80vh';
+                }
+              }}
             >
               <source src={video.src} type={video.type} />
               Your browser does not support the video tag.
@@ -108,6 +144,24 @@ const VideoTask = () => {
           )}
         </div>
       )}
+      
+      <style>{`
+        .plyr {
+          width: 90% !important;
+          height: 90% !important;
+          max-width: 1000px !important;
+          max-height: 80vh !important;
+        }
+        .plyr__video-wrapper {
+          width: 100% !important;
+          height: 100% !important;
+        }
+        .plyr video {
+          width: 100% !important;
+          height: 100% !important;
+          object-fit: contain !important;
+        }
+      `}</style>
     </div>
   );
 };

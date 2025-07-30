@@ -8,7 +8,10 @@ const ConsentForm = ({ onSubmit }) => {
     otherGender: '',
     ethnicity: '',
     classRank: '',
-    major: ''
+    major: '',
+    visionStatus: '',
+    wearsGlasses: '',
+    wearsContactLenses: ''
   });
 
   const handleInputChange = (field, value) => {
@@ -29,7 +32,8 @@ const ConsentForm = ({ onSubmit }) => {
   };
 
   const isFormValid = formData.id && formData.ageRange && formData.gender && 
-                     formData.ethnicity && formData.classRank && formData.major;
+                     formData.ethnicity && formData.classRank && formData.major &&
+                     formData.visionStatus && formData.wearsGlasses && formData.wearsContactLenses;
 
   return (
     <div style={styles.container}>
@@ -144,6 +148,63 @@ const ConsentForm = ({ onSubmit }) => {
             style={styles.input}
             required
           />
+        </div>
+
+        <div style={styles.fieldRow}>
+          <label style={styles.sideLabel}>Vision Status:</label>
+          <div style={styles.radioGroup}>
+            {['Normal vision', 'Short sighted', 'Long sighted'].map(status => (
+              <label key={status} style={styles.radioLabel}>
+                <input
+                  type="radio"
+                  name="visionStatus"
+                  value={status}
+                  checked={formData.visionStatus === status}
+                  onChange={(e) => handleInputChange('visionStatus', e.target.value)}
+                  style={styles.radio}
+                />
+                {status}
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <div style={styles.fieldRow}>
+          <label style={styles.sideLabel}>Do you wear glasses:</label>
+          <div style={styles.radioGroup}>
+            {['Yes', 'No'].map(answer => (
+              <label key={answer} style={styles.radioLabel}>
+                <input
+                  type="radio"
+                  name="wearsGlasses"
+                  value={answer}
+                  checked={formData.wearsGlasses === answer}
+                  onChange={(e) => handleInputChange('wearsGlasses', e.target.value)}
+                  style={styles.radio}
+                />
+                {answer}
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <div style={styles.fieldRow}>
+          <label style={styles.sideLabel}>Do you wear contact lenses:</label>
+          <div style={styles.radioGroup}>
+            {['Yes', 'No'].map(answer => (
+              <label key={answer} style={styles.radioLabel}>
+                <input
+                  type="radio"
+                  name="wearsContactLenses"
+                  value={answer}
+                  checked={formData.wearsContactLenses === answer}
+                  onChange={(e) => handleInputChange('wearsContactLenses', e.target.value)}
+                  style={styles.radio}
+                />
+                {answer}
+              </label>
+            ))}
+          </div>
         </div>
 
         <button

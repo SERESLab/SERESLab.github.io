@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 
-// Import task components
 import ConsentForm from './components/ConsentForm';
 import TextTask from './components/TextTask';
 import TextSurvey from './components/TextSurvey';
@@ -60,6 +59,9 @@ function App() {
       ethnicity: studyData.consent?.ethnicity || '',
       education: studyData.consent?.classRank || '',
       major: studyData.consent?.major || '',
+      visionStatus: studyData.consent?.visionStatus || '',
+      wearsGlasses: studyData.consent?.wearsGlasses || '',
+      wearsContactLenses: studyData.consent?.wearsContactLenses || '',
       responses: [],
       timestamp: new Date().toISOString()
     };
@@ -84,34 +86,40 @@ function App() {
 
     // Add face task responses
     if (studyData.faceTask && Array.isArray(studyData.faceTask)) {
-      const face2x2Results = studyData.faceTask.filter(result => result.gridSize === 2);
-      const face3x3Results = studyData.faceTask.filter(result => result.gridSize === 3);
+      // Group results by emotion, gender, and grid size
+      const emotions = ['happy', 'angry', 'sad'];
+      const genders = ['male', 'female'];
+      const gridSizes = [2, 3];
 
-      if (face2x2Results.length > 0) {
-        const face2x2Response = {
-          task: "Face2x2",
-          response: face2x2Results.map(result => ({
-            selectedRow: result.selectedRow || 1,
-            selectedColumn: result.selectedColumn || 1,
-            isCorrect: result.correct === 'Yes'
-          })),
-          isCorrect: calculateOverallFaceCorrectness(face2x2Results)
-        };
-        jsonData.responses.push(face2x2Response);
-      }
+      emotions.forEach(emotion => {
+        genders.forEach(gender => {
+          gridSizes.forEach(gridSize => {
+            const filteredResults = studyData.faceTask.filter(result => 
+              result.emotion === emotion && 
+              result.gender === gender && 
+              result.gridSize === gridSize
+            );
 
-      if (face3x3Results.length > 0) {
-        const face3x3Response = {
-          task: "Face3x3",
-          response: face3x3Results.map(result => ({
-            selectedRow: result.selectedRow || 1,
-            selectedColumn: result.selectedColumn || 1,
-            isCorrect: result.correct === 'Yes'
-          })),
-          isCorrect: calculateOverallFaceCorrectness(face3x3Results)
-        };
-        jsonData.responses.push(face3x3Response);
-      }
+            if (filteredResults.length > 0) {
+              const taskName = `Face_${emotion}_${gender}_${gridSize}x${gridSize}`;
+              const response = {
+                task: taskName,
+                response: filteredResults.map(result => ({
+                  trial: result.trial,
+                  emotion: result.emotion,
+                  gender: result.gender,
+                  gridSize: result.gridSize,
+                  selectedRow: result.selectedRow || 1,
+                  selectedColumn: result.selectedColumn || 1,
+                  isCorrect: result.correct === 'Yes'
+                })),
+                isCorrect: calculateOverallFaceCorrectness(filteredResults)
+              };
+              jsonData.responses.push(response);
+            }
+          });
+        });
+      });
     }
 
     // Download JSON file
@@ -204,23 +212,23 @@ function App() {
                          !['ConsentForm', 'TextSurvey', 'VideoSurvey', 'FaceTask'].includes(currentTaskName);
 
   return (
-    <div id="app" style={styles.appContainer}>
-      <div className="task-container" style={styles.taskContainer}>
-        {renderCurrentTask()}
-      </div>
-      {showNextButton && (
-        <div className="button-container" style={styles.buttonContainer}>
-          <button 
-            id="nextTaskButton" 
-            className="button"
-            style={styles.nextButton}
-            onClick={incrementTask}
-          >
-            Next Task
-          </button>
+      <div id="app" style={styles.appContainer}>
+        <div className="task-container" style={styles.taskContainer}>
+          {renderCurrentTask()}
         </div>
-      )}
-    </div>
+        {showNextButton && (
+          <div className="button-container" style={styles.buttonContainer}>
+            <button 
+              id="nextTaskButton" 
+              className="button"
+              style={styles.nextButton}
+              onClick={incrementTask}
+            >
+              Next Task
+            </button>
+          </div>
+        )}
+      </div>
   );
 }
 

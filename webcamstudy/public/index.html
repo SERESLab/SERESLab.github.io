@@ -28,18 +28,21 @@
     <script type="module">
       import EmbeddedPageSdk from "https://app.realeye.io/sdk/js/testRunnerEmbeddableSdk-1.7.1.js";
 
+      let reSdk = null;
+
       window.addEventListener("DOMContentLoaded", () => {
         const debugMode = false;
         const stimulusId = null;
         const forceRun = false;
 
-        const reSdk = new EmbeddedPageSdk(debugMode, stimulusId, forceRun);
+        reSdk = new EmbeddedPageSdk(debugMode, stimulusId, forceRun);
         reSdk.startNextExposure();
       });
 
       window.addEventListener("endmeplease", () => {
-        
-        reSdk.finishEyeTrackingTest();
+        if (reSdk) {
+          reSdk.finishEyeTrackingTest();
+        }
       });
     </script>
   </head>

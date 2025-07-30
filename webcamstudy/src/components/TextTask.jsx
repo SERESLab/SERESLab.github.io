@@ -44,17 +44,29 @@ function pickRandomText() {
 const TextTask = () => {
   const [text] = useState(() => pickRandomText());
   const [showCross, setShowCross] = useState(true);
+  const [showInstruction, setShowInstruction] = useState(false);
   const formattedTextRef = useRef(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    // First show cross for 1 second
+    const crossTimer = setTimeout(() => {
       setShowCross(false);
+      setShowInstruction(true);
     }, 1000);
-    return () => clearTimeout(timer);
+
+    // Then show instruction for 1 second  
+    const instructionTimer = setTimeout(() => {
+      setShowInstruction(false);
+    }, 2000);
+
+    return () => {
+      clearTimeout(crossTimer);
+      clearTimeout(instructionTimer);
+    };
   }, []);
 
   useEffect(() => {
-    if (showCross) return;
+    if (showCross || showInstruction) return;
 
     let sentenceCount = 1;
     let wordCount = 1;
@@ -94,7 +106,7 @@ const TextTask = () => {
         sentenceCount++;
       }
     });
-  }, [text, showCross]);
+  }, [text, showCross, showInstruction]);
 
   return (
     <div style={styles.container}>
@@ -102,11 +114,14 @@ const TextTask = () => {
         <div style={styles.crossContainer}>
           <div style={styles.cross}>+</div>
         </div>
+      ) : showInstruction ? (
+        <div style={styles.instructionContainer}>
+          <h2 style={styles.instructionText}>
+            Please read the following text carefully
+          </h2>
+        </div>
       ) : (
         <div style={styles.textSection}>
-          <h3 style={styles.title}>
-            Please read the following text carefully:
-          </h3>
           <div
             ref={formattedTextRef}
             className="formatted-text"
@@ -160,6 +175,24 @@ const styles = {
     fontWeight: 'bold',
     color: 'black',
   },
+  instructionContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    height: '100vh',
+    width: '100vw',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 9999,
+    backgroundColor: '#fff',
+  },
+  instructionText: {
+    fontSize: '32px',
+    textAlign: 'center',
+    fontWeight: 'normal',
+    margin: 0,
+  },
   textSection: {
     flex: 1,
     display: 'flex',
@@ -168,11 +201,6 @@ const styles = {
     alignItems: 'center',
     padding: '20px',
     boxSizing: 'border-box',
-  },
-  title: {
-    margin: '0 0 40px 0',
-    fontSize: '24px',
-    textAlign: 'center',
   },
   formattedText: {
     display: 'flex',

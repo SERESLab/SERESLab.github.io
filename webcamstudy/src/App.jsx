@@ -4,6 +4,9 @@ import './App.css';
 import ConsentForm from './components/ConsentForm';
 import TextTask from './components/TextTask';
 import TextSurvey from './components/TextSurvey';
+import SmoothPursuitVideoTask from './components/SmoothPursuitVideoTask';
+import InstructionVideoTask from './components/InstructionVideoTask';
+import InstructionVideoSurvey from './components/InstructionVideoSurvey';
 import VideoTask from './components/VideoTask';
 import VideoSurvey from './components/VideoSurvey';
 import FaceTask from './components/FaceTask';
@@ -14,6 +17,8 @@ function App() {
   const [studyData, setStudyData] = useState({
     consent: null,
     textTask: null,
+    smoothPursuitVideoTask: null,
+    instructionVideoTask: null,
     videoTask: null,
     faceTask: null
   });
@@ -27,6 +32,9 @@ function App() {
       'ConsentForm',
       'TextTask',
       'TextSurvey',
+      'SmoothPursuitVideoTask',
+      'InstructionVideoTask',
+      'InstructionVideoSurvey',
       'VideoTask',
       'VideoSurvey',
       'FaceTask',
@@ -75,6 +83,28 @@ function App() {
       });
     }
 
+    // Add smooth pursuit video task response
+    if (studyData.smoothPursuitVideoTask) {
+      jsonData.responses.push({
+        task: "SmoothPursuitVideo",
+        response: studyData.smoothPursuitVideoTask,
+        isCorrect: true // Completion-based task
+      });
+    }
+
+    // Add instruction video task response
+    if (studyData.instructionVideoTask) {
+      jsonData.responses.push({
+        task: "InstructionVideo",
+        response: {
+          ballTransfers: studyData.instructionVideoTask.ballTransfers,
+          noticedShirtChange: studyData.instructionVideoTask.noticedShirtChange,
+          noticedGorilla: studyData.instructionVideoTask.noticedGorilla
+        },
+        isCorrect: true // No right/wrong answers for this task
+      });
+    }
+
     // Add video task response
     if (studyData.videoTask?.selectedAnswer) {
       jsonData.responses.push({
@@ -109,8 +139,12 @@ function App() {
                   emotion: result.emotion,
                   gender: result.gender,
                   gridSize: result.gridSize,
-                  selectedRow: result.selectedRow || 1,
-                  selectedColumn: result.selectedColumn || 1,
+                  startTime: result.startTime,
+                  endTime: result.endTime,
+                  selectedRow: result.selectedRow,
+                  selectedColumn: result.selectedColumn,
+                  correctRow: result.correctRow,
+                  correctColumn: result.correctColumn,
                   isCorrect: result.correct === 'Yes'
                 })),
                 isCorrect: calculateOverallFaceCorrectness(filteredResults)
@@ -193,6 +227,12 @@ function App() {
         return <TextTask />;
       case 'TextSurvey':
         return <TextSurvey onSubmit={(data) => handleTaskComplete('textTask', data)} />;
+      case 'SmoothPursuitVideoTask':
+        return <SmoothPursuitVideoTask onSubmit={(data) => handleTaskComplete('smoothPursuitVideoTask', data)} />;
+      case 'InstructionVideoTask':
+        return <InstructionVideoTask />;
+      case 'InstructionVideoSurvey':
+        return <InstructionVideoSurvey onSubmit={(data) => handleTaskComplete('instructionVideoTask', data)} />;
       case 'VideoTask':
         return <VideoTask />;
       case 'VideoSurvey':
@@ -209,7 +249,7 @@ function App() {
   
   // Show Next Task button only for tasks that don't have their own Continue button
   const showNextButton = !isTaskComplete && 
-                         !['ConsentForm', 'TextSurvey', 'VideoSurvey', 'FaceTask'].includes(currentTaskName);
+                         !['ConsentForm', 'TextSurvey', 'SmoothPursuitVideoTask', 'InstructionVideoSurvey', 'VideoSurvey', 'FaceTask'].includes(currentTaskName);
 
   return (
       <div id="app" style={styles.appContainer}>

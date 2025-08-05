@@ -1,25 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-const VIDEOS = [
+const INSTRUCTION_VIDEOS = [
   {
-    src: require('../assets/Fumble.mp4'),
-    type: 'video/mp4',
-  },
-  {
-    src: require('../assets/clip2.mp4'),
-    type: 'video/mp4',
-  },
-  {
-    src: require('../assets/clip3.mp4'),
+    src: require('../assets/clip2.mp4'), // You'll need to add this video file
     type: 'video/mp4',
   },
 ];
 
 function pickRandomVideo() {
-  return VIDEOS[Math.floor(Math.random() * VIDEOS.length)];
+  return INSTRUCTION_VIDEOS[Math.floor(Math.random() * INSTRUCTION_VIDEOS.length)];
 }
 
-const VideoTask = () => {
+const InstructionVideoTask = () => {
   const [video] = useState(() => pickRandomVideo());
   const [showCross, setShowCross] = useState(true);
   const [showInstruction, setShowInstruction] = useState(false);
@@ -138,7 +130,7 @@ const VideoTask = () => {
       ) : showInstruction ? (
         <div style={styles.instructionContainer}>
           <h2 style={styles.instructionText}>
-            Please watch the following video carefully
+            Follow the instructions given in the video
           </h2>
         </div>
       ) : (
@@ -273,4 +265,4 @@ const styles = {
   },
 };
 
-export default VideoTask;
+export default InstructionVideoTask;

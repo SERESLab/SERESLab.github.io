@@ -3,20 +3,20 @@ import React, { useEffect, useState, useCallback, useMemo } from 'react';
 // Define the task sequence
 const TASK_SEQUENCE = [
   // Happy emotion tasks
-  { emotion: 'happy', gridSize: 2, gender: 'male', trials: 5 },
-  { emotion: 'happy', gridSize: 2, gender: 'female', trials: 5 },
-  { emotion: 'happy', gridSize: 3, gender: 'male', trials: 5 },
-  { emotion: 'happy', gridSize: 3, gender: 'female', trials: 5 },
+  { emotion: 'happy', gridSize: 2, gender: 'male', trials: 4 },
+  { emotion: 'happy', gridSize: 2, gender: 'female', trials: 4 },
+  { emotion: 'happy', gridSize: 3, gender: 'male', trials: 9 },
+  { emotion: 'happy', gridSize: 3, gender: 'female', trials: 9 },
   // Angry emotion tasks
-  { emotion: 'angry', gridSize: 2, gender: 'male', trials: 5 },
-  { emotion: 'angry', gridSize: 2, gender: 'female', trials: 5 },
-  { emotion: 'angry', gridSize: 3, gender: 'male', trials: 5 },
-  { emotion: 'angry', gridSize: 3, gender: 'female', trials: 5 },
+  { emotion: 'angry', gridSize: 2, gender: 'male', trials: 4 },
+  { emotion: 'angry', gridSize: 2, gender: 'female', trials: 4 },
+  { emotion: 'angry', gridSize: 3, gender: 'male', trials: 9 },
+  { emotion: 'angry', gridSize: 3, gender: 'female', trials: 9 },
   // Sad emotion tasks
-  { emotion: 'sad', gridSize: 2, gender: 'male', trials: 5 },
-  { emotion: 'sad', gridSize: 2, gender: 'female', trials: 5 },
-  { emotion: 'sad', gridSize: 3, gender: 'male', trials: 5 },
-  { emotion: 'sad', gridSize: 3, gender: 'female', trials: 5 },
+  { emotion: 'sad', gridSize: 2, gender: 'male', trials: 4 },
+  { emotion: 'sad', gridSize: 2, gender: 'female', trials: 4 },
+  { emotion: 'sad', gridSize: 3, gender: 'male', trials: 9 },
+  { emotion: 'sad', gridSize: 3, gender: 'female', trials: 9 },
 ];
 
 // Function to dynamically import all images from a folder
@@ -41,9 +41,30 @@ const FaceTask = ({ onSubmit }) => {
   const [showInstruction, setShowInstruction] = useState(false);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [results, setResults] = useState([]);
+  //TODO: Fix the faces not being shown in the correct order, positions are correct.
+  const [trialStartTime, setTrialStartTime] = useState(null);
+  const [correctPositions, setCorrectPositions] = useState([]);
 
   const currentTask = TASK_SEQUENCE[taskIndex];
   const { emotion, gridSize, gender, trials: maxTrials } = currentTask || {};
+
+  // Generate all possible positions for a grid size
+  const generatePositions = useCallback((size) => {
+    const positions = [];
+    for (let i = 0; i < size * size; i++) {
+      positions.push(i);
+    }
+    // Shuffle the positions to randomize the order
+    return positions.sort(() => Math.random() - 0.5);
+  }, []);
+
+  // Initialize correct positions when task starts
+  useEffect(() => {
+    if (currentTask && trial === 0) {
+      const positions = generatePositions(gridSize);
+      setCorrectPositions(positions);
+    }
+  }, [currentTask, trial, gridSize, generatePositions]);
 
   // Import all images for each emotion and gender combination
   const imageLibrary = useMemo(() => {
@@ -84,7 +105,7 @@ const FaceTask = ({ onSubmit }) => {
   };
 
   const generateNewGrid = useCallback(async () => {
-    if (!currentTask) return;
+    if (!currentTask || correctPositions.length === 0) return;
 
     const totalCells = gridSize * gridSize;
     
@@ -100,7 +121,7 @@ const FaceTask = ({ onSubmit }) => {
       }
     });
 
-    console.log(`Total distractor images for ${gender}:`, distractorImages.length);
+    console.log(`Trial ${trial + 1}, using position ${correctPositions[trial]} for ${gender} ${emotion} ${gridSize}x${gridSize}`);
 
     if (targetImages.length === 0) {
       console.error(`No target images found for ${gender} ${emotion}`);
@@ -121,14 +142,18 @@ const FaceTask = ({ onSubmit }) => {
       src,
       id: i + 1,
       isCorrect: false,
+      row: Math.floor(i / gridSize) + 1,
+      column: (i % gridSize) + 1,
     }));
 
-    // Replace one random cell with target emotion
-    const replacedIndex = Math.floor(Math.random() * totalCells);
-    newGrid[replacedIndex] = {
+    // Use the predetermined position for the correct image
+    const correctPosition = correctPositions[trial];
+    newGrid[correctPosition] = {
       src: targetImages[Math.floor(Math.random() * targetImages.length)],
-      id: replacedIndex + 1,
+      id: correctPosition + 1,
       isCorrect: true,
+      row: Math.floor(correctPosition / gridSize) + 1,
+      column: (correctPosition % gridSize) + 1,
     };
 
     setGrid(newGrid);
@@ -142,7 +167,7 @@ const FaceTask = ({ onSubmit }) => {
       console.error('Error loading images:', error);
       setImagesLoaded(true);
     }
-  }, [currentTask, emotion, gridSize, gender, imageLibrary]);
+  }, [currentTask, emotion, gridSize, gender, imageLibrary, trial, correctPositions]);
 
   // Check if we need to show instruction (first task of each emotion)
   const shouldShowInstruction = useCallback(() => {
@@ -153,7 +178,7 @@ const FaceTask = ({ onSubmit }) => {
   }, [taskIndex]);
 
   useEffect(() => {
-    if (completed || !currentTask) return;
+    if (completed || !currentTask || correctPositions.length === 0) return;
 
     const needsInstruction = trial === 0 && shouldShowInstruction();
     
@@ -175,12 +200,14 @@ const FaceTask = ({ onSubmit }) => {
       setImagesLoaded(false);
       generateNewGrid();
     }
-  }, [trial, taskIndex, generateNewGrid, completed, currentTask, shouldShowInstruction]);
+  }, [trial, taskIndex, generateNewGrid, completed, currentTask, shouldShowInstruction, correctPositions]);
 
   useEffect(() => {
     if (imagesLoaded && !showInstruction) {
       const timer = setTimeout(() => {
         setShowCross(false);
+        // Record trial start time when grid becomes visible
+        setTrialStartTime(new Date().toISOString());
       }, 1000);
       return () => clearTimeout(timer);
     }
@@ -189,19 +216,29 @@ const FaceTask = ({ onSubmit }) => {
   const handleClick = (index) => {
     if (completed || showCross || showInstruction) return;
 
+    const trialEndTime = new Date().toISOString();
     const clickedImage = grid[index];
     const isCorrectClick = clickedImage?.isCorrect === true;
 
-    const row = Math.floor(index / gridSize) + 1;
-    const column = (index % gridSize) + 1;
+    const selectedRow = Math.floor(index / gridSize) + 1;
+    const selectedColumn = (index % gridSize) + 1;
+
+    // Find the correct image position
+    const correctImage = grid.find(img => img.isCorrect);
+    const correctRow = correctImage?.row || null;
+    const correctColumn = correctImage?.column || null;
 
     const result = {
       emotion,
       gender,
       gridSize,
       trial: trial + 1,
-      selectedRow: row,
-      selectedColumn: column,
+      startTime: trialStartTime,
+      endTime: trialEndTime,
+      selectedRow,
+      selectedColumn,
+      correctRow,
+      correctColumn,
       correct: isCorrectClick ? 'Yes' : 'No',
     };
     
@@ -219,6 +256,8 @@ const FaceTask = ({ onSubmit }) => {
       } else {
         setTaskIndex(nextTaskIndex);
         setTrial(0);
+        // Reset correct positions for the new task
+        setCorrectPositions([]);
       }
     } else {
       setTrial(newTrial);

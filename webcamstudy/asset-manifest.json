@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "https://seresl.unl.edu/webcamstudy/static/css/main.3de88975.css",
-    "main.js": "https://seresl.unl.edu/webcamstudy/static/js/main.c0f7ecad.js",
+    "main.js": "https://seresl.unl.edu/webcamstudy/static/js/main.6c79de19.js",
     "static/js/453.e44939a0.chunk.js": "https://seresl.unl.edu/webcamstudy/static/js/453.e44939a0.chunk.js",
     "static/media/clip2.mp4": "https://seresl.unl.edu/webcamstudy/static/media/clip2.1e6e426f2cdb61fe74ec.mp4",
     "static/media/clip3.mp4": "https://seresl.unl.edu/webcamstudy/static/media/clip3.3341365941d9bce4b98b.mp4",
@@ -67,13 +67,19 @@
     "static/media/image-10.jpg": "https://seresl.unl.edu/webcamstudy/static/media/image-10.fcdfd9fbc352940b0d95.jpg",
     "static/media/image-16.jpg": "https://seresl.unl.edu/webcamstudy/static/media/image-16.8583b0dd5e9bb251fc9c.jpg",
     "static/media/image-8.jpg": "https://seresl.unl.edu/webcamstudy/static/media/image-8.e491c615c0e21b7007f5.jpg",
+    "static/media/Star.mp4": "https://seresl.unl.edu/webcamstudy/static/media/Star.388e38b3b5f3bf1da0f3.mp4",
+    "static/media/Infinity.mp4": "https://seresl.unl.edu/webcamstudy/static/media/Infinity.956b2d87181ad169c213.mp4",
+    "static/media/Circle.mp4": "https://seresl.unl.edu/webcamstudy/static/media/Circle.5116e4afb5a982335a49.mp4",
+    "static/media/Triangle.mp4": "https://seresl.unl.edu/webcamstudy/static/media/Triangle.4aa86744bd0e40e70c45.mp4",
+    "static/media/Square.mp4": "https://seresl.unl.edu/webcamstudy/static/media/Square.97d1564e2ad6437c0d73.mp4",
+    "static/media/Left_to_right.mp4": "https://seresl.unl.edu/webcamstudy/static/media/Left_to_right.a018dc1145d70a3cb6d1.mp4",
     "index.html": "https://seresl.unl.edu/webcamstudy/index.html",
     "main.3de88975.css.map": "https://seresl.unl.edu/webcamstudy/static/css/main.3de88975.css.map",
-    "main.c0f7ecad.js.map": "https://seresl.unl.edu/webcamstudy/static/js/main.c0f7ecad.js.map",
+    "main.6c79de19.js.map": "https://seresl.unl.edu/webcamstudy/static/js/main.6c79de19.js.map",
     "453.e44939a0.chunk.js.map": "https://seresl.unl.edu/webcamstudy/static/js/453.e44939a0.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.3de88975.css",
-    "static/js/main.c0f7ecad.js"
+    "static/js/main.6c79de19.js"
   ]
 }

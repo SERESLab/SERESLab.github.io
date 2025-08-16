@@ -19,7 +19,7 @@ function pickRandomVideo() {
   return VIDEOS[Math.floor(Math.random() * VIDEOS.length)];
 }
 
-const VideoTask = () => {
+const VideoTask = ({ onVideoEnded }) => {
   const [video] = useState(() => pickRandomVideo());
   const [showCross, setShowCross] = useState(true);
   const [showInstruction, setShowInstruction] = useState(false);
@@ -109,6 +109,12 @@ const VideoTask = () => {
         player.on('error', () => {
           setVideoLoadError(true);
         });
+
+        player.on('ended', () => {
+          if (onVideoEnded) {
+            onVideoEnded();
+          }
+        });
       } catch (error) {
         console.error('Error initializing Plyr:', error);
         setVideoLoadError(true);
@@ -127,7 +133,7 @@ const VideoTask = () => {
         document.body.removeChild(script);
       }
     };
-  }, [showCross, showInstruction, plyrReady, video.src]);
+  }, [showCross, showInstruction, plyrReady, video.src, onVideoEnded]);
 
   return (
     <div style={styles.container}>
@@ -257,10 +263,7 @@ const styles = {
     height: '90%',
     maxWidth: '1000px',
     maxHeight: '80vh',
-    border: '1px solid #ccc',
-    borderRadius: 5,
-    boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-    background: '#000',
+    background: '#fff',
     objectFit: 'contain',
   },
   errorContainer: {
@@ -271,6 +274,13 @@ const styles = {
     borderRadius: '8px',
     maxWidth: '500px',
   },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: '30px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    zIndex: 1000,
+  }
 };
 
 export default VideoTask;

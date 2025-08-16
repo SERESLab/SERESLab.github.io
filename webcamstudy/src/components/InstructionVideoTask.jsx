@@ -11,7 +11,7 @@ function pickRandomVideo() {
   return INSTRUCTION_VIDEOS[Math.floor(Math.random() * INSTRUCTION_VIDEOS.length)];
 }
 
-const InstructionVideoTask = () => {
+const InstructionVideoTask = ({ onVideoEnded }) => {
   const [video] = useState(() => pickRandomVideo());
   const [showCross, setShowCross] = useState(true);
   const [showInstruction, setShowInstruction] = useState(false);
@@ -101,6 +101,12 @@ const InstructionVideoTask = () => {
         player.on('error', () => {
           setVideoLoadError(true);
         });
+
+        player.on('ended', () => {
+          if (onVideoEnded) {
+            onVideoEnded();
+          }
+        });
       } catch (error) {
         console.error('Error initializing Plyr:', error);
         setVideoLoadError(true);
@@ -119,7 +125,7 @@ const InstructionVideoTask = () => {
         document.body.removeChild(script);
       }
     };
-  }, [showCross, showInstruction, plyrReady, video.src]);
+  }, [showCross, showInstruction, plyrReady, video.src, onVideoEnded]);
 
   return (
     <div style={styles.container}>
@@ -168,7 +174,7 @@ const InstructionVideoTask = () => {
           )}
         </div>
       )}
-      
+
       <style>{`
         .plyr {
           width: 90% !important;
@@ -249,10 +255,7 @@ const styles = {
     height: '90%',
     maxWidth: '1000px',
     maxHeight: '80vh',
-    border: '1px solid #ccc',
-    borderRadius: 5,
-    boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-    background: '#000',
+    background: '#fff',
     objectFit: 'contain',
   },
   errorContainer: {
@@ -262,7 +265,7 @@ const styles = {
     border: '1px solid #e9ecef',
     borderRadius: '8px',
     maxWidth: '500px',
-  },
+  }
 };
 
 export default InstructionVideoTask;

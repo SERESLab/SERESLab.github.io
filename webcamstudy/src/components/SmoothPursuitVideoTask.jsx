@@ -2,38 +2,38 @@ import React, { useEffect, useRef, useState } from 'react';
 
 const SMOOTH_PURSUIT_VIDEOS = [
   {
-    src: require('../assets/smooth-pursuit/Circle.mp4'),
+    src: require('../assets/smooth-pursuit/circle.mp4'),
     name: 'Circle',
     type: 'video/mp4',
   },
   {
-    src: require('../assets/smooth-pursuit/Square.mp4'),
+    src: require('../assets/smooth-pursuit/square.mp4'),
     name: 'Square',
     type: 'video/mp4',
   },
   {
-    src: require('../assets/smooth-pursuit/Infinity.mp4'),
+    src: require('../assets/smooth-pursuit/infinity.mp4'),
     name: 'Infinity',
     type: 'video/mp4',
   },
   {
-    src: require('../assets/smooth-pursuit/Star.mp4'),
+    src: require('../assets/smooth-pursuit/star.mp4'),
     name: 'Star',
     type: 'video/mp4',
   },
   {
-    src: require('../assets/smooth-pursuit/Triangle.mp4'),
+    src: require('../assets/smooth-pursuit/triangle.mp4'),
     name: 'Triangle',
     type: 'video/mp4',
   },
   {
-    src: require('../assets/smooth-pursuit/Left_to_right.mp4'),
+    src: require('../assets/smooth-pursuit/left_right.mp4'),
     name: 'Left to Right',
     type: 'video/mp4',
   },
 ];
 
-const SmoothPursuitVideoTask = ({ onSubmit }) => {
+const SmoothPursuitVideoTask = ({ onSubmit, onTaskComplete }) => {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [phase, setPhase] = useState('cross'); // 'cross', 'instruction', 'video'
   const [videoEnded, setVideoEnded] = useState(false);
@@ -72,6 +72,9 @@ const SmoothPursuitVideoTask = ({ onSubmit }) => {
 
     const handleEnded = () => {
       setVideoEnded(true);
+      if (isLastVideo) {
+        onTaskComplete?.();
+      }
     };
 
     const handleError = () => {
@@ -115,12 +118,13 @@ const SmoothPursuitVideoTask = ({ onSubmit }) => {
 
   const handleNextVideo = () => {
     if (isLastVideo) {
-      // All videos completed
+      // All videos completed - store data and signal task completion
       const completionData = {
         videosCompleted: SMOOTH_PURSUIT_VIDEOS.length,
         completedAt: new Date().toISOString()
       };
       onSubmit?.(completionData);
+      onTaskComplete?.(); // Signal that the task is complete to show next button
     } else {
       // Move to next video
       setCurrentVideoIndex(prev => prev + 1);
@@ -156,7 +160,7 @@ const SmoothPursuitVideoTask = ({ onSubmit }) => {
                   onClick={handleNextVideo}
                   style={styles.errorButton}
                 >
-                  {isLastVideo ? 'Continue to Next Task' : 'Skip to Next Video'}
+                  {isLastVideo ? 'Finish Videos' : 'Skip to Next Video'}
                 </button>
               </div>
             ) : (
@@ -177,12 +181,12 @@ const SmoothPursuitVideoTask = ({ onSubmit }) => {
                   Your browser does not support the video tag.
                 </video>
                 
-                {videoEnded && (
+                {videoEnded && !isLastVideo && (
                   <button
                     onClick={handleNextVideo}
                     style={styles.nextButton}
                   >
-                    {isLastVideo ? 'Continue to Next Task' : 'Next Video'}
+                    {'Next Video'}
                   </button>
                 )}
               </>
@@ -197,13 +201,6 @@ const SmoothPursuitVideoTask = ({ onSubmit }) => {
 
   return (
     <div style={styles.container}>
-      {/* Header with progress */}
-      <div style={styles.header}>
-        <h3 style={styles.headerText}>
-          Video {currentVideoIndex + 1} of {SMOOTH_PURSUIT_VIDEOS.length}: {currentVideo?.name}
-        </h3>
-      </div>
-
       {renderContent()}
     </div>
   );
@@ -219,23 +216,6 @@ const styles = {
     backgroundColor: '#fff',
     overflow: 'hidden',
     boxSizing: 'border-box',
-  },
-  header: {
-    position: 'absolute',
-    top: '20px',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    zIndex: 1000,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    padding: '10px 20px',
-    borderRadius: '8px',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-  },
-  headerText: {
-    margin: 0,
-    fontSize: '18px',
-    color: '#2c3e50',
-    textAlign: 'center',
   },
   phaseContainer: {
     height: '100vh',
@@ -272,10 +252,8 @@ const styles = {
     height: '80%',
     maxWidth: '1000px',
     maxHeight: '80vh',
-    border: '1px solid #ccc',
-    borderRadius: '8px',
-    boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-    backgroundColor: '#000',
+    border: 'none',
+    background: '#fff',
   },
   nextButton: {
     position: 'absolute',

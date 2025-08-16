@@ -25,7 +25,7 @@ const InstructionVideoSurvey = ({ onSubmit }) => {
         
         {/* Ball Transfers Question */}
         <div style={styles.questionGroup}>
-          <h3 style={styles.question}>How many ball transfers did you count?</h3>
+          <h3 style={styles.question}>How many times did the white team transfer the ball?</h3>
           <input
             type="number"
             value={ballTransfers}
@@ -38,7 +38,7 @@ const InstructionVideoSurvey = ({ onSubmit }) => {
 
         {/* Shirt Change Question */}
         <div style={styles.questionGroup}>
-          <h3 style={styles.question}>Did you notice a shirt change?</h3>
+          <h3 style={styles.question}>Did you notice that the shirt colors of the teams changed?</h3>
           <div style={styles.radioGroup}>
             {['Yes', 'No'].map(option => (
               <label key={option} style={styles.radioLabel}>
@@ -58,7 +58,7 @@ const InstructionVideoSurvey = ({ onSubmit }) => {
 
         {/* Gorilla Question */}
         <div style={styles.questionGroup}>
-          <h3 style={styles.question}>Did you notice a gorilla?</h3>
+          <h3 style={styles.question}>Did you notice the gorilla walking through the middle of the frame?</h3>
           <div style={styles.radioGroup}>
             {['Yes', 'No'].map(option => (
               <label key={option} style={styles.radioLabel}>

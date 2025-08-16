@@ -23,6 +23,14 @@ function App() {
     faceTask: null
   });
 
+  // State to track study timing
+  const [startTime, setStartTime] = useState(null);
+
+  // State to track video completion
+  const [instructionVideoEnded, setInstructionVideoEnded] = useState(false);
+  const [videoTaskEnded, setVideoTaskEnded] = useState(false);
+  const [smoothPursuitTaskEnded, setSmoothPursuitTaskEnded] = useState(false);
+
   useEffect(() => {
     generateTaskSequence();
   }, []);
@@ -48,6 +56,11 @@ function App() {
       [taskType]: data
     }));
     
+    // Set start time when consent form is completed
+    if (taskType === 'consent') {
+      setStartTime(new Date().toISOString());
+    }
+    
     // Auto-advance to next task
     setTimeout(() => {
       incrementTask();
@@ -56,6 +69,10 @@ function App() {
 
   const incrementTask = () => {
     setCurrentTask((prev) => prev + 1);
+    // Reset video end states when moving to next task
+    setInstructionVideoEnded(false);
+    setVideoTaskEnded(false);
+    setSmoothPursuitTaskEnded(false);
   };
 
   const downloadAllData = useCallback(() => {
@@ -71,7 +88,8 @@ function App() {
       wearsGlasses: studyData.consent?.wearsGlasses || '',
       wearsContactLenses: studyData.consent?.wearsContactLenses || '',
       responses: [],
-      timestamp: new Date().toISOString()
+      startTime: startTime,
+      endTime: new Date().toISOString()
     };
 
     // Add text task response
@@ -166,7 +184,7 @@ function App() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  }, [studyData]);
+  }, [studyData, startTime]);
 
   // Auto-download data when all tasks are completed
   useEffect(() => {
@@ -228,13 +246,16 @@ function App() {
       case 'TextSurvey':
         return <TextSurvey onSubmit={(data) => handleTaskComplete('textTask', data)} />;
       case 'SmoothPursuitVideoTask':
-        return <SmoothPursuitVideoTask onSubmit={(data) => handleTaskComplete('smoothPursuitVideoTask', data)} />;
+        return <SmoothPursuitVideoTask 
+          onSubmit={(data) => handleTaskComplete('smoothPursuitVideoTask', data)} 
+          onTaskComplete={() => setSmoothPursuitTaskEnded(true)}
+        />;
       case 'InstructionVideoTask':
-        return <InstructionVideoTask />;
+        return <InstructionVideoTask onVideoEnded={() => setInstructionVideoEnded(true)} />;
       case 'InstructionVideoSurvey':
         return <InstructionVideoSurvey onSubmit={(data) => handleTaskComplete('instructionVideoTask', data)} />;
       case 'VideoTask':
-        return <VideoTask />;
+        return <VideoTask onVideoEnded={() => setVideoTaskEnded(true)} />;
       case 'VideoSurvey':
         return <VideoSurvey onSubmit={(data) => handleTaskComplete('videoTask', data)} />;
       case 'FaceTask':
@@ -247,9 +268,25 @@ function App() {
   const isTaskComplete = currentTask >= taskFiles.length;
   const currentTaskName = taskFiles[currentTask];
   
+  // Check if current video task has ended
+  const isVideoTaskComplete = () => {
+    if (currentTaskName === 'InstructionVideoTask') {
+      return instructionVideoEnded;
+    }
+    if (currentTaskName === 'VideoTask') {
+      return videoTaskEnded;
+    }
+    if (currentTaskName === 'SmoothPursuitVideoTask') {
+      return smoothPursuitTaskEnded;
+    }
+    return true; // For non-video tasks, always allow next button
+  };
+  
   // Show Next Task button only for tasks that don't have their own Continue button
+  // and only when video tasks have ended
   const showNextButton = !isTaskComplete && 
-                         !['ConsentForm', 'TextSurvey', 'SmoothPursuitVideoTask', 'InstructionVideoSurvey', 'VideoSurvey', 'FaceTask'].includes(currentTaskName);
+                         !['ConsentForm', 'TextSurvey', 'InstructionVideoSurvey', 'VideoSurvey', 'FaceTask'].includes(currentTaskName) &&
+                         isVideoTaskComplete();
 
   return (
       <div id="app" style={styles.appContainer}>

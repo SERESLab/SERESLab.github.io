@@ -73,18 +73,18 @@ const FaceTask = ({ onSubmit }) => {
     try {
       // Male images
       library.male = {
-        angry: importAll(require.context('../assets/images/male/angry', false, /\.(png|jpe?g|svg)$/)),
-        happy: importAll(require.context('../assets/images/male/happy', false, /\.(png|jpe?g|svg)$/)),
-        other: importAll(require.context('../assets/images/male/other', false, /\.(png|jpe?g|svg)$/)),
-        sad: importAll(require.context('../assets/images/male/sad', false, /\.(png|jpe?g|svg)$/)),
+        angry: importAll(require.context('../assets/images/Male/Mad', false, /\.(png|jpe?g|svg)$/)),
+        happy: importAll(require.context('../assets/images/Male/Happy', false, /\.(png|jpe?g|svg)$/)),
+        other: importAll(require.context('../assets/images/Male/Other', false, /\.(png|jpe?g|svg)$/)),
+        sad: importAll(require.context('../assets/images/Male/Sad', false, /\.(png|jpe?g|svg)$/)),
       };
 
       // Female images
       library.female = {
-        angry: importAll(require.context('../assets/images/female/angry', false, /\.(png|jpe?g|svg)$/)),
-        happy: importAll(require.context('../assets/images/female/happy', false, /\.(png|jpe?g|svg)$/)),
-        other: importAll(require.context('../assets/images/female/other', false, /\.(png|jpe?g|svg)$/)),
-        sad: importAll(require.context('../assets/images/female/sad', false, /\.(png|jpe?g|svg)$/)),
+        angry: importAll(require.context('../assets/images/Female/Mad', false, /\.(png|jpe?g|svg)$/)),
+        happy: importAll(require.context('../assets/images/Female/Happy', false, /\.(png|jpe?g|svg)$/)),
+        other: importAll(require.context('../assets/images/Female/Other', false, /\.(png|jpe?g|svg)$/)),
+        sad: importAll(require.context('../assets/images/Female/Sad', false, /\.(png|jpe?g|svg)$/)),
       };
 
       console.log('Image library loaded:', library);

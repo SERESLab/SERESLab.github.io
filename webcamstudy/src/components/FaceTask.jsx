@@ -351,7 +351,7 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    height: '90vh',
+    height: '100vh',
     width: '100vw',
     overflow: 'hidden',
     position: 'relative',

@@ -1,30 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const TextSurvey = ({ onSubmit }) => {
   const [selectedAnswer, setSelectedAnswer] = useState('');
+  const [currentTextTask, setCurrentTextTask] = useState(null);
+
+  useEffect(() => {
+    // Get the current text task from sessionStorage
+    const storedTextTask = sessionStorage.getItem('currentTextTask');
+    if (storedTextTask) {
+      setCurrentTextTask(JSON.parse(storedTextTask));
+    }
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const result = {
       selectedAnswer,
+      correctAnswer: currentTextTask?.correctAnswer,
+      isCorrect: selectedAnswer === currentTextTask?.correctAnswer,
+      textId: currentTextTask?.id,
       timestamp: new Date().toISOString()
     };
     onSubmit?.(result);
   };
 
+  if (!currentTextTask) {
+    return (
+      <div style={styles.container}>
+        <div>Loading question...</div>
+      </div>
+    );
+  }
+
   return (
     <div style={styles.container}>
       <form onSubmit={handleSubmit} style={styles.form}>
         <h2 style={styles.title}>Text Comprehension Question</h2>
-        <h3 style={styles.question}>What is the main theme of the passage you just read?</h3>
+        <h3 style={styles.question}>{currentTextTask.question}</h3>
         
         <div style={styles.radioGroup}>
-          {[
-            'Adventure and heroism',
-            'Love and romance', 
-            'Science and technology',
-            'Family relationships'
-          ].map(option => (
+          {currentTextTask.answers.map(option => (
             <label key={option} style={styles.radioLabel}>
               <input
                 type="radio"

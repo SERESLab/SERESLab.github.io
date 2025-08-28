@@ -1,40 +1,30 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 const TEXTS = [
-  `Twas brillig, and the slithy toves
-Did gyre and gimble in the wabe:
-All mimsy were the borogoves,
-And the mome raths outgrabe.
-
-"Beware the Jabberwock, my son!
-The jaws that bite, the claws that catch!
-Beware the Jubjub bird, and shun
-The frumious Bandersnatch!"
-
-He took his vorpal sword in hand;
-Long time the manxome foe he sought—
-So rested he by the Tumtum tree
-And stood awhile in thought.
-
-And, as in uffish thought he stood,
-The Jabberwock, with eyes of flame,
-Came whiffling through the tulgey wood,
-And burbled as it came!
-
-One, two! One, two! And through and through
-The vorpal blade went snicker-snack!
-He left it dead, and with its head
-He went galumphing back.
-
-"And hast thou slain the Jabberwock?
-Come to my arms, my beamish boy!
-O frabjous day! Callooh! Callay!"
-He chortled in his joy.
-
-'Twas brillig, and the slithy toves
-Did gyre and gimble in the wabe:
-All mimsy were the borogoves,
-And the mome raths outgrabe.`,
+  {
+    id: 1,
+    text: `In addition, a study was made of the planet's surface, which is covered by an ocean dotted with innumerable flat, low-lying islands whose combined area is less than that of Europe, although the diameter of Solaris is a fifth greater than Earth's. These expanses of barren, rocky territory, irregularly distributed, are largely concentrated in the southern hemisphere.`,
+    question: "What is the planet's surface like?",
+    answers: [
+      'It has many low-lying islands.',
+      'It has an island the size of Europe.',
+      'It is a rocky area of around 600 square miles.',
+      'It is mostly desert-like.'
+    ],
+    correctAnswer: 'It has many low-lying islands.'
+  },
+  {
+    id: 2,
+    text: `The discovery of Solaris dated from about 100 years before I was born. The planet orbits two suns: a red sun and a blue sun. For 45 years after its discovery, no spacecraft had visited Solaris. At that time, the Gamow-Shapley theory — that life was impossible on planets which are satellites of two solar bodies — was firmly believed. The orbit is constantly being modified by variations in the gravitational pull in the course of its revolutions around the two suns.`,
+    question: "How many suns does Solaris orbit around?",
+    answers: [
+      'Four',
+      'Two',
+      'One',
+      'None'
+    ],
+    correctAnswer: 'Two'
+  }
 ];
 
 function pickRandomText() {
@@ -42,10 +32,15 @@ function pickRandomText() {
 }
 
 const TextTask = () => {
-  const [text] = useState(() => pickRandomText());
+  const [selectedText] = useState(() => pickRandomText());
   const [showCross, setShowCross] = useState(true);
   const [showInstruction, setShowInstruction] = useState(false);
   const formattedTextRef = useRef(null);
+
+  // Store selected text in sessionStorage so TextSurvey can access it
+  useEffect(() => {
+    sessionStorage.setItem('currentTextTask', JSON.stringify(selectedText));
+  }, [selectedText]);
 
   useEffect(() => {
     // First show cross for 1 second
@@ -73,7 +68,7 @@ const TextTask = () => {
     let character_id = 0;
     let formattedTextContainer = formattedTextRef.current;
 
-    let cleanedText = text.replace(/\n+/g, ' ');
+    let cleanedText = selectedText.text.replace(/\n+/g, ' ');
     let words = cleanedText.match(/[\w'']+|[.,!?;:"""—-]|\s+/g) || [];
 
     formattedTextContainer.innerHTML = '';
@@ -106,7 +101,7 @@ const TextTask = () => {
         sentenceCount++;
       }
     });
-  }, [text, showCross, showInstruction]);
+  }, [selectedText.text, showCross, showInstruction]);
 
   return (
     <div style={styles.container}>

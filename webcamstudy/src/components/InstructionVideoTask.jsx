@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 const INSTRUCTION_VIDEOS = [
   {
-    src: require('../assets/clip2.mp4'), // You'll need to add this video file
+    src: require('../assets/monkey_business.mp4'), // You'll need to add this video file
     type: 'video/mp4',
   },
 ];

@@ -16,14 +16,12 @@ const VideoSurvey = ({ onSubmit }) => {
     <div style={styles.container}>
       <form onSubmit={handleSubmit} style={styles.form}>
         <h2 style={styles.title}>Video Comprehension Question</h2>
-        <h3 style={styles.question}>What was the main focus of the video you just watched?</h3>
+        <h3 style={styles.question}>Did the blue team score in the video?</h3>
         
         <div style={styles.radioGroup}>
           {[
-            'Sports performance',
-            'Educational content',
-            'Entertainment',
-            'Documentary footage'
+            'Yes',
+            'No'
           ].map(option => (
             <label key={option} style={styles.radioLabel}>
               <input

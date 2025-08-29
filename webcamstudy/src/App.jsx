@@ -209,10 +209,8 @@ function App() {
   const determineVideoCorrectness = (answer) => {
     // Define correct answers for video comprehension
     const correctAnswers = {
-      'Sports performance': true,
-      'Educational content': false,
-      'Entertainment': false,
-      'Documentary footage': false
+      'No': true,
+      'Yes': false
     };
     return correctAnswers[answer] || false;
   };

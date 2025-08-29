@@ -2,17 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 
 const VIDEOS = [
   {
-    src: require('../assets/Fumble.mp4'),
+    src: require('../assets/soccer-vid.mp4'),
     type: 'video/mp4',
-  },
-  {
-    src: require('../assets/clip2.mp4'),
-    type: 'video/mp4',
-  },
-  {
-    src: require('../assets/clip3.mp4'),
-    type: 'video/mp4',
-  },
+  }
 ];
 
 function pickRandomVideo() {

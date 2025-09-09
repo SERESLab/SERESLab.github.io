@@ -9,6 +9,7 @@ import InstructionVideoSurvey from "./components/InstructionVideoSurvey";
 import VideoTask from "./components/VideoTask";
 import VideoSurvey from "./components/VideoSurvey";
 import FaceTask from "./components/FaceTask";
+import ValidationGrid from "./components/validation_grid/ValidationGrid";
 
 function App() {
   const [currentTask, setCurrentTask] = useState(0);
@@ -39,6 +40,7 @@ function App() {
 
   const generateTaskSequence = () => {
     const tasks = [
+      "ValidationGrid",
       'ConsentForm',
       "TextTask",
       "SmoothPursuitVideoTask",
@@ -122,7 +124,7 @@ function App() {
         task: "InstructionVideo",
         response: {
           ballTransfers: studyData.instructionVideoTask.ballTransfers,
-          noticedShirtChange: studyData.instructionVideoTask.noticedShirtChange,
+          curtainColor: studyData.instructionVideoTask.curtainColor,
           noticedGorilla: studyData.instructionVideoTask.noticedGorilla,
         },
         isCorrect: true, // No right/wrong answers for this task
@@ -286,6 +288,8 @@ function App() {
         return (
           <FaceTask onSubmit={(data) => handleTaskComplete("faceTask", data)} />
         );
+      case "ValidationGrid":
+        return <ValidationGrid onComplete={incrementTask} />;
       default:
         return <div>Unknown task</div>;
     }

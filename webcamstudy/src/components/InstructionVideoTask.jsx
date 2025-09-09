@@ -136,7 +136,7 @@ const InstructionVideoTask = ({ onVideoEnded }) => {
       ) : showInstruction ? (
         <div style={styles.instructionContainer}>
           <h2 style={styles.instructionText}>
-            Follow the instructions given in the video
+            Count how many times the players wearing white pass the ball.
           </h2>
         </div>
       ) : (
@@ -165,6 +165,7 @@ const InstructionVideoTask = ({ onVideoEnded }) => {
                   video.style.height = '90%';
                   video.style.maxWidth = '1000px';
                   video.style.maxHeight = '80vh';
+                  video.muted = true; // <-- Ensure muted for autoplay
                 }
               }}
             >

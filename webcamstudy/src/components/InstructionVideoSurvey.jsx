@@ -2,21 +2,21 @@ import React, { useState } from 'react';
 
 const InstructionVideoSurvey = ({ onSubmit }) => {
   const [ballTransfers, setBallTransfers] = useState('');
-  const [noticedShirtChange, setNoticedShirtChange] = useState('');
+  const [curtainColor, setCurtainColor] = useState('');
   const [noticedGorilla, setNoticedGorilla] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const result = {
       ballTransfers: parseInt(ballTransfers) || 0,
-      noticedShirtChange,
+      curtainColor,
       noticedGorilla,
       timestamp: new Date().toISOString()
     };
     onSubmit?.(result);
   };
 
-  const isFormValid = ballTransfers !== '' && noticedShirtChange !== '' && noticedGorilla !== '';
+  const isFormValid = ballTransfers !== '' && curtainColor.trim() !== '' && noticedGorilla !== '';
 
   return (
     <div style={styles.container}>
@@ -25,7 +25,7 @@ const InstructionVideoSurvey = ({ onSubmit }) => {
         
         {/* Ball Transfers Question */}
         <div style={styles.questionGroup}>
-          <h3 style={styles.question}>How many times did the white team transfer the ball?</h3>
+          <h3 style={styles.question}>How many times did the players wearing white pass the ball?</h3>
           <input
             type="number"
             value={ballTransfers}
@@ -36,24 +36,16 @@ const InstructionVideoSurvey = ({ onSubmit }) => {
           />
         </div>
 
-        {/* Shirt Change Question */}
+        {/* Curtain Color Question */}
         <div style={styles.questionGroup}>
-          <h3 style={styles.question}>Did you notice that the shirt colors of the teams changed?</h3>
-          <div style={styles.radioGroup}>
-            {['Yes', 'No'].map(option => (
-              <label key={option} style={styles.radioLabel}>
-                <input
-                  type="radio"
-                  name="shirtChange"
-                  value={option}
-                  checked={noticedShirtChange === option}
-                  onChange={(e) => setNoticedShirtChange(e.target.value)}
-                  style={styles.radio}
-                />
-                {option}
-              </label>
-            ))}
-          </div>
+          <h3 style={styles.question}>What was the color of the curtain in the background at the end of the video?</h3>
+          <input
+            type="text"
+            value={curtainColor}
+            onChange={(e) => setCurtainColor(e.target.value)}
+            placeholder="Enter color"
+            style={styles.numberInput}
+          />
         </div>
 
         {/* Gorilla Question */}

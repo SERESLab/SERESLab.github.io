@@ -2,27 +2,27 @@ import React, { useEffect, useRef, useState } from 'react';
 
 const SMOOTH_PURSUIT_VIDEOS = [
   {
-    src: require('../assets/smooth-pursuit/circle.mp4'),
+    src: require('../assets/smooth-pursuit/Circle.mp4'),
     name: 'Circle',
     type: 'video/mp4',
   },
   {
-    src: require('../assets/smooth-pursuit/square.mp4'),
+    src: require('../assets/smooth-pursuit/Square.mp4'),
     name: 'Square',
     type: 'video/mp4',
   },
   {
-    src: require('../assets/smooth-pursuit/infinity.mp4'),
+    src: require('../assets/smooth-pursuit/Infinity.mp4'),
     name: 'Infinity',
     type: 'video/mp4',
   },
   {
-    src: require('../assets/smooth-pursuit/star.mp4'),
+    src: require('../assets/smooth-pursuit/Star.mp4'),
     name: 'Star',
     type: 'video/mp4',
   },
   {
-    src: require('../assets/smooth-pursuit/triangle.mp4'),
+    src: require('../assets/smooth-pursuit/Triangle.mp4'),
     name: 'Triangle',
     type: 'video/mp4',
   },

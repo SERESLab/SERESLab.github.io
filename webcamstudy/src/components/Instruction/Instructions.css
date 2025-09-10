@@ -1,0 +1,197 @@
+/* Container for the survey */
+.instruction-survey-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  font-family: Arial, sans-serif;
+  background-color: #fff;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Survey form */
+.instruction-survey-form {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* Survey title */
+.instruction-survey-title {
+  font-size: 28px;
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Question group */
+.instruction-survey-question-group {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Question text */
+.instruction-survey-question {
+  font-size: 20px;
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* Number and text input */
+.instruction-survey-input {
+  padding: 12px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 200px;
+  align-self: center;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+/* Radio group */
+.instruction-survey-radio-group {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+/* Radio label */
+.instruction-survey-radio-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.2s;
+}
+
+/* Radio input */
+.instruction-survey-radio {
+  margin: 0;
+  transform: scale(1.2);
+}
+
+/* Continue button */
+.instruction-survey-button {
+  padding: 15px 40px;
+  font-size: 18px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin-top: 20px;
+  min-width: 140px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  align-self: center;
+}
+
+/* Task container */
+.instruction-task-container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background-color: #fff;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Cross overlay */
+.instruction-cross-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  z-index: 9999;
+}
+
+.instruction-cross {
+  font-size: 100px;
+  font-weight: bold;
+  color: #000;
+}
+
+/* Instruction overlay */
+.instruction-instruction-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  background-color: #fff;
+}
+
+.instruction-instruction-text {
+  font-size: 32px;
+  text-align: center;
+  font-weight: normal;
+  margin: 0;
+}
+
+/* Video section */
+.instruction-video-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.instruction-video {
+  width: 90%;
+  height: 90%;
+  max-width: 1000px;
+  max-height: 80vh;
+  background: #fff;
+  object-fit: contain;
+}
+
+/* Plyr overrides */
+.instruction-plyr {
+  width: 90% !important;
+  height: 90% !important;
+  max-width: 1000px !important;
+  max-height: 80vh !important;
+}
+.plyr__video-wrapper {
+  width: 100% !important;
+  height: 100% !important;
+}
+.plyr video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+}
+
+/* Error container */
+.instruction-error-container {
+  text-align: center;
+  padding: 40px;
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  max-width: 500px;
+}

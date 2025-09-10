@@ -4,16 +4,25 @@ import "./App.css";
 import ConsentForm from "./components/ConsentForm";
 import TextTask from "./components/Text/TextTask";
 import SmoothPursuitVideoTask from "./components/SmoothPursuitVideoTask";
-import InstructionVideoTask from "./components/InstructionVideoTask";
-import InstructionVideoSurvey from "./components/InstructionVideoSurvey";
-import VideoTask from "./components/VideoTask";
-import VideoSurvey from "./components/VideoSurvey";
+import InstructionVideoTask from "./components/Instruction/InstructionVideoTask";
+import VideoTask from "./components/Video/VideoTask";
 import FaceTask from "./components/FaceTask";
 import ValidationGrid from "./components/validation_grid/ValidationGrid";
+
+// Utility to shuffle an array
+function shuffle(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
 
 function App() {
   const [currentTask, setCurrentTask] = useState(0);
   const [taskFiles, setTaskFiles] = useState([]);
+  const [randomizedOrder, setRandomizedOrder] = useState([]);
   const [studyData, setStudyData] = useState({
     consent: null,
     textTask: null,
@@ -39,18 +48,17 @@ function App() {
   }, []);
 
   const generateTaskSequence = () => {
-    const tasks = [
-      "ValidationGrid",
-      'ConsentForm',
+    const alwaysFirst = ["ValidationGrid", "ConsentForm"];
+    const toRandomize = [
       "TextTask",
       "SmoothPursuitVideoTask",
-      'InstructionVideoTask',
-      'InstructionVideoSurvey',
-      'VideoTask',
-      'VideoSurvey',
-      'FaceTask',
+      "InstructionVideoTask",
+      "VideoTask",
+      "FaceTask",
     ];
-    setTaskFiles(tasks);
+    const randomized = shuffle(toRandomize);
+    setRandomizedOrder(randomized);
+    setTaskFiles([...alwaysFirst, ...randomized]);
   };
 
   const handleTaskComplete = (taskType, data) => {
@@ -94,6 +102,7 @@ function App() {
       responses: [],
       startTime: startTime,
       endTime: new Date().toISOString(),
+      TaskOrder: randomizedOrder, // Add the randomized order to output
     };
 
     // Add text task responses (now an array of objects)
@@ -122,23 +131,20 @@ function App() {
     if (studyData.instructionVideoTask) {
       jsonData.responses.push({
         task: "InstructionVideo",
-        response: {
-          ballTransfers: studyData.instructionVideoTask.ballTransfers,
-          curtainColor: studyData.instructionVideoTask.curtainColor,
-          noticedGorilla: studyData.instructionVideoTask.noticedGorilla,
-        },
+        response: studyData.instructionVideoTask,
         isCorrect: true, // No right/wrong answers for this task
       });
     }
 
-    // Add video task response
-    if (studyData.videoTask?.selectedAnswer) {
+    // Add video task response (now handled in VideoTask, not VideoSurvey)
+    if (studyData.videoTask) {
       jsonData.responses.push({
         task: "Video",
         response: studyData.videoTask.selectedAnswer,
         isCorrect: determineVideoCorrectness(
           studyData.videoTask.selectedAnswer
         ),
+        timestamp: studyData.videoTask.timestamp,
       });
     }
 
@@ -197,7 +203,7 @@ function App() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  }, [studyData, startTime]);
+  }, [studyData, startTime, randomizedOrder]);
 
   // Auto-download data when all tasks are completed
   useEffect(() => {
@@ -265,23 +271,13 @@ function App() {
       case "InstructionVideoTask":
         return (
           <InstructionVideoTask
-            onVideoEnded={() => setInstructionVideoEnded(true)}
-          />
-        );
-      case "InstructionVideoSurvey":
-        return (
-          <InstructionVideoSurvey
-            onSubmit={(data) =>
-              handleTaskComplete("instructionVideoTask", data)
-            }
+            onComplete={(data) => handleTaskComplete("instructionVideoTask", data)}
           />
         );
       case "VideoTask":
-        return <VideoTask onVideoEnded={() => setVideoTaskEnded(true)} />;
-      case "VideoSurvey":
         return (
-          <VideoSurvey
-            onSubmit={(data) => handleTaskComplete("videoTask", data)}
+          <VideoTask
+            onComplete={(data) => handleTaskComplete("videoTask", data)}
           />
         );
       case "FaceTask":
@@ -319,8 +315,6 @@ function App() {
     ((currentTaskName === "TextTask" && textTaskComplete) ||
       ![
         "ConsentForm",
-        "InstructionVideoSurvey",
-        "VideoSurvey",
         "FaceTask",
         "TextTask",
       ].includes(currentTaskName) &&

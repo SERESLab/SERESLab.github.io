@@ -28,6 +28,7 @@ const VideoSurvey = ({ onSubmit }) => {
                 checked={selectedAnswer === option}
                 onChange={(e) => setSelectedAnswer(e.target.value)}
                 className="video-task-radio"
+                data-re-aoi-name="VideoAwnser"
               />
               {option}
             </label>
@@ -35,6 +36,7 @@ const VideoSurvey = ({ onSubmit }) => {
         </div>
         <button
           type="submit"
+          data-re-aoi-name="VideoSubmit"
           disabled={!selectedAnswer}
           className="video-task-survey-button"
           style={{

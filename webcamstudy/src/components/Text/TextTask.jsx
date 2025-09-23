@@ -152,6 +152,7 @@ const TextTask = forwardRef(({ onComplete }, ref) => {
                     checked={answers[1] === option}
                     onChange={() => handleRadio(1, option)}
                     className="radio"
+                    data-re-aoi-name="TextAwnser1"
                   />
                   {option}
                 </label>
@@ -163,6 +164,7 @@ const TextTask = forwardRef(({ onComplete }, ref) => {
               type="submit"
               disabled={!answers[1]}
               className="text-task-button"
+              data-re-aoi-name="TextSubmit"
             >
               Continue
             </button>
@@ -193,6 +195,7 @@ const TextTask = forwardRef(({ onComplete }, ref) => {
                     value={option}
                     checked={answers[2] === option}
                     onChange={() => handleRadio(2, option)}
+                    data-re-aoi-name="TextQuestion2"
                     className="radio"
                   />
                   {option}

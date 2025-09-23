@@ -1,36 +1,23 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+// 1. Import video files directly at the top
+// This is the modern and most reliable way to handle static assets.
+import circleVideo from '../assets/smooth-pursuit/Circle.mp4';
+import squareVideo from '../assets/smooth-pursuit/Square.mp4';
+import infinityVideo from '../assets/smooth-pursuit/Infinity.mp4';
+import starVideo from '../assets/smooth-pursuit/Star.mp4';
+import triangleVideo from '../assets/smooth-pursuit/Triangle.mp4';
+import leftRightVideo from '../assets/smooth-pursuit/left_right.mp4';
+
+// Use the imported variables in your array.
+// The 'type' property is no longer needed as we set the src directly.
 const SMOOTH_PURSUIT_VIDEOS = [
-  {
-    src: require('../assets/smooth-pursuit/Circle.mp4'),
-    name: 'Circle',
-    type: 'video/mp4',
-  },
-  {
-    src: require('../assets/smooth-pursuit/Square.mp4'),
-    name: 'Square',
-    type: 'video/mp4',
-  },
-  {
-    src: require('../assets/smooth-pursuit/Infinity.mp4'),
-    name: 'Infinity',
-    type: 'video/mp4',
-  },
-  {
-    src: require('../assets/smooth-pursuit/Star.mp4'),
-    name: 'Star',
-    type: 'video/mp4',
-  },
-  {
-    src: require('../assets/smooth-pursuit/Triangle.mp4'),
-    name: 'Triangle',
-    type: 'video/mp4',
-  },
-  {
-    src: require('../assets/smooth-pursuit/left_right.mp4'),
-    name: 'Left to Right',
-    type: 'video/mp4',
-  },
+  { src: circleVideo, name: 'Circle' },
+  { src: squareVideo, name: 'Square' },
+  { src: infinityVideo, name: 'Infinity' },
+  { src: starVideo, name: 'Star' },
+  { src: triangleVideo, name: 'Triangle' },
+  { src: leftRightVideo, name: 'Left to Right' },
 ];
 
 const SmoothPursuitVideoTask = ({ onSubmit, onTaskComplete }) => {
@@ -43,21 +30,14 @@ const SmoothPursuitVideoTask = ({ onSubmit, onTaskComplete }) => {
   const currentVideo = SMOOTH_PURSUIT_VIDEOS[currentVideoIndex];
   const isLastVideo = currentVideoIndex === SMOOTH_PURSUIT_VIDEOS.length - 1;
 
-  // Handle phase transitions for each video
+  // This logic remains the same
   useEffect(() => {
     setPhase('cross');
     setVideoEnded(false);
     setVideoError(false);
 
-    // Cross phase (1 second)
-    const crossTimer = setTimeout(() => {
-      setPhase('instruction');
-    }, 1000);
-
-    // Instruction phase (1 second)
-    const instructionTimer = setTimeout(() => {
-      setPhase('video');
-    }, 2000);
+    const crossTimer = setTimeout(() => setPhase('instruction'), 1000);
+    const instructionTimer = setTimeout(() => setPhase('video'), 2000);
 
     return () => {
       clearTimeout(crossTimer);
@@ -65,7 +45,7 @@ const SmoothPursuitVideoTask = ({ onSubmit, onTaskComplete }) => {
     };
   }, [currentVideoIndex]);
 
-  // Handle video events
+  // This logic remains the same
   useEffect(() => {
     const video = videoRef.current;
     if (!video || phase !== 'video') return;
@@ -76,57 +56,35 @@ const SmoothPursuitVideoTask = ({ onSubmit, onTaskComplete }) => {
         onTaskComplete?.();
       }
     };
-
-    const handleError = () => {
+    const handleError = (e) => {
       setVideoError(true);
-      console.error('Video playback error for:', currentVideo.src);
+      console.error('Video playback error:', currentVideo.name, e);
     };
-
     const handleCanPlay = () => {
       setVideoError(false);
-      // Auto-play when video is ready
-      video.play().catch(error => {
-        console.warn('Autoplay failed:', error);
-      });
-    };
-
-    // Prevent fullscreen attempts
-    const preventFullscreen = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      return false;
+      video.play().catch(error => console.warn('Autoplay failed:', error));
     };
 
     video.addEventListener('ended', handleEnded);
     video.addEventListener('error', handleError);
     video.addEventListener('canplay', handleCanPlay);
-    video.addEventListener('dblclick', preventFullscreen);
-    video.addEventListener('webkitbeginfullscreen', preventFullscreen);
-    video.addEventListener('mozfullscreenchange', preventFullscreen);
-    video.addEventListener('fullscreenchange', preventFullscreen);
 
     return () => {
       video.removeEventListener('ended', handleEnded);
       video.removeEventListener('error', handleError);
       video.removeEventListener('canplay', handleCanPlay);
-      video.removeEventListener('dblclick', preventFullscreen);
-      video.removeEventListener('webkitbeginfullscreen', preventFullscreen);
-      video.removeEventListener('mozfullscreenchange', preventFullscreen);
-      video.removeEventListener('fullscreenchange', preventFullscreen);
     };
-  }, [phase, currentVideo]);
+  }, [phase, currentVideo, isLastVideo, onTaskComplete]);
 
   const handleNextVideo = () => {
     if (isLastVideo) {
-      // All videos completed - store data and signal task completion
       const completionData = {
         videosCompleted: SMOOTH_PURSUIT_VIDEOS.length,
         completedAt: new Date().toISOString()
       };
       onSubmit?.(completionData);
-      onTaskComplete?.(); // Signal that the task is complete to show next button
+      onTaskComplete?.();
     } else {
-      // Move to next video
       setCurrentVideoIndex(prev => prev + 1);
     }
   };
@@ -139,16 +97,12 @@ const SmoothPursuitVideoTask = ({ onSubmit, onTaskComplete }) => {
             <div style={styles.cross}>+</div>
           </div>
         );
-
       case 'instruction':
         return (
           <div style={styles.phaseContainer}>
-            <h2 style={styles.instructionText}>
-              Track the ball in the video
-            </h2>
+            <h2 style={styles.instructionText}>Track the ball in the video</h2>
           </div>
         );
-
       case 'video':
         return (
           <div style={styles.videoContainer}>
@@ -156,18 +110,17 @@ const SmoothPursuitVideoTask = ({ onSubmit, onTaskComplete }) => {
               <div style={styles.errorContainer}>
                 <h3>Video Loading Error</h3>
                 <p>There was an issue loading: {currentVideo.name}</p>
-                <button 
-                  onClick={handleNextVideo}
-                  style={styles.errorButton}
-                >
-                  {isLastVideo ? 'Finish Videos' : 'Skip to Next Video'}
+                <button onClick={handleNextVideo} style={styles.errorButton}>
+                  {isLastVideo ? 'Finish Task' : 'Skip to Next Video'}
                 </button>
               </div>
             ) : (
               <>
+                {/* 2. Set the 'src' attribute directly on the <video> tag */}
                 <video
                   ref={videoRef}
                   style={styles.video}
+                  src={currentVideo.src}
                   controls
                   muted
                   playsInline
@@ -177,35 +130,27 @@ const SmoothPursuitVideoTask = ({ onSubmit, onTaskComplete }) => {
                   onContextMenu={(e) => e.preventDefault()}
                   onDoubleClick={(e) => e.preventDefault()}
                 >
-                  <source src={currentVideo.src} type={currentVideo.type} />
                   Your browser does not support the video tag.
                 </video>
                 
                 {videoEnded && !isLastVideo && (
-                  <button
-                    onClick={handleNextVideo}
-                    style={styles.nextButton}
-                  >
-                    {'Next Video'}
+                  <button onClick={handleNextVideo} style={styles.nextButton}>
+                    Next Video
                   </button>
                 )}
               </>
             )}
           </div>
         );
-
       default:
         return null;
     }
   };
 
-  return (
-    <div style={styles.container}>
-      {renderContent()}
-    </div>
-  );
+  return <div style={styles.container}>{renderContent()}</div>;
 };
 
+// Styles remain the same
 const styles = {
   container: {
     height: '100vh',

@@ -201,7 +201,7 @@ const TextTask = forwardRef(({ onComplete }, ref) => {
                   {option}
                 </label>
               ))}
-            </div>
+            </div> 
           </div>
           {/* No button here; Next Task button from App.jsx will appear */}
         </div>

@@ -233,7 +233,8 @@ function App() {
   };
 
   const renderCurrentTask = () => {
-    if (currentTask >= taskFiles.length) {
+    if (currentTask >= taskFiles.length && taskFiles.length > 0) {
+      console.log(currentTask, taskFiles.length);
       window.dispatchEvent(new Event("endmeplease"));
       return (
         <div style={styles.completionContainer}>

@@ -45,7 +45,7 @@ function App() {
 
   useEffect(() => {
     generateTaskSequence();
-    window.dispatchEvent("DOMContentLoaded");
+    window.dispatchEvent(new Event("DOMContentLoaded"));
   }, []);
 
   const generateTaskSequence = () => {

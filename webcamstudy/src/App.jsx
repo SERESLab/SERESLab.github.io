@@ -334,7 +334,7 @@ function App() {
 
   return (
     <div id="app" style={styles.appContainer}>
-      <div className="task-container" style={styles.taskContainer}>
+      <div className="task-container" style={styles.taskContainer} data-re-aoi-name={currentTaskName}>
         {renderCurrentTask()}
       </div>
       {showNextButton && (

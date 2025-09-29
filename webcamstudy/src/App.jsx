@@ -45,7 +45,6 @@ function App() {
 
   useEffect(() => {
     generateTaskSequence();
-    window.dispatchEvent(new Event("DOMContentLoaded"));
   }, []);
 
   const generateTaskSequence = () => {
@@ -333,7 +332,7 @@ function App() {
   };
 
   return (
-    <div id="app" style={styles.appContainer} data-re-aoi-name="finding-start">
+    <div id="app" style={styles.appContainer}>
       <div className="task-container" style={styles.taskContainer} data-re-aoi-name={currentTaskName}>
         {renderCurrentTask()}
       </div>

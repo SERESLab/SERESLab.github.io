@@ -1,20 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import gridImage from "../../assets/5point_1920x1080.png";
 import "./ValidationGrid.css";
 
 const ValidationGrid = ({ onComplete }) => {
   const [showPrompt, setShowPrompt] = useState(true);
-
-  useEffect(() => {
-    let timer;
-    if (!showPrompt) {
-      // Show grid for 6 seconds, then complete
-      timer = setTimeout(() => {
-        onComplete?.();
-      }, 6000);
-    }
-    return () => clearTimeout(timer);
-  }, [showPrompt, onComplete]);
 
   return (
     <div className="validation-grid-container">

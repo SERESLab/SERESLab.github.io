@@ -48,7 +48,7 @@ function App() {
   }, []);
 
   const generateTaskSequence = () => {
-    const alwaysFirst = ["ValidationGrid", "ConsentForm"];
+    const alwaysFirst = ["ConsentForm", "ValidationGrid"];
     const toRandomize = [
       "TextTask",
       "SmoothPursuitVideoTask",

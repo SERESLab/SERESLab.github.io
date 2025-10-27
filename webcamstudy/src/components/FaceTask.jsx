@@ -310,17 +310,20 @@ const FaceTask = ({ onSubmit }) => {
           {grid.map((image, idx) => {
             const row = Math.floor(idx / gridSize) + 1;
             const column = (idx % gridSize) + 1;
-            const rowStr = row.toString();
-            const colStr = column.toString();
-            const correctness = image.isCorrect ? 'correct' : 'incorrect';
-            const aoName = `face-task-${taskIndex}-trial-${trial}-row${rowStr}-col${colStr}-${correctness}`;
+            const rowStr = (row || 0).toString();
+            const colStr = (column || 0).toString();
+            const taskIdx = taskIndex ?? 0;
+            const trialNum = trial ?? 0;
+            const isCorrect = image?.isCorrect ?? false;
+            const correctness = isCorrect ? 'correct' : 'incorrect';
+            const aoName = `face-task-${taskIdx}-trial-${trialNum}-row${rowStr}-col${colStr}-${correctness}`;
             return (
               <img
                 key={`${taskIndex}-${trial}-${image.id}`}
                 src={image.src}
                 className="grid-item"
                 data-id={image.id}
-                data-correct={image.isCorrect ? 'T' : 'F'}
+                data-correct={isCorrect ? 'T' : 'F'}
                 data-emotion={emotion}
                 data-gender={gender}
                 data-re-aoi-name={aoName}

@@ -293,7 +293,8 @@ function App() {
   };
 
   const isTaskComplete = currentTask >= taskFiles.length;
-  const currentTaskName = taskFiles[currentTask] || "Initializing";
+  const rawTaskName = taskFiles[currentTask] || "";
+  const currentTaskName = (typeof rawTaskName === 'string' && rawTaskName.trim()) || "Initializing";
 
   // Check if current video task has ended
   const isVideoTaskComplete = () => {
@@ -332,7 +333,7 @@ function App() {
   };
 
   return (
-    <div id="app" style={styles.appContainer}>
+    <div id="app" style={styles.appContainer} data-re-aoi-name="seemeplz">
       <div className="task-container" style={styles.taskContainer} data-re-aoi-name={currentTaskName}>
         {renderCurrentTask()}
       </div>

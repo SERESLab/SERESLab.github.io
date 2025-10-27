@@ -29,11 +29,11 @@ const TEXTS = [
 ];
 
 const formatText = (text, ref) => {
-  if (!ref.current) return;
+  if (!ref.current || !text) return;
   let sentenceCount = 1;
   let wordCount = 1;
   let character_id = 0;
-  let cleanedText = text.replace(/\n+/g, ' ');
+  let cleanedText = (text || '').replace(/\n+/g, ' ');
   let words = cleanedText.match(/[\w'']+|[.,!?;:"""—-]|\s+/g) || [];
   ref.current.innerHTML = '';
   words.forEach(word => {
@@ -41,20 +41,23 @@ const formatText = (text, ref) => {
     let isSpace = /^\s+$/.test(word);
     let wordBlock = document.createElement("span");
     wordBlock.classList.add("word-block");
-    // Always set an AOI name for the word block
+    // Always set an AOI name for the word block with fallbacks
+    const sCount = sentenceCount || 1;
+    const wCount = wordCount || 1;
     if (isWord) {
-      wordBlock.setAttribute("data-re-aoi-name", `s${sentenceCount}-w${wordCount}`);
+      wordBlock.setAttribute("data-re-aoi-name", `s${sCount}-w${wCount}`);
     } else if (isSpace) {
-      wordBlock.setAttribute("data-re-aoi-name", `s${sentenceCount}-space-${wordCount}`);
+      wordBlock.setAttribute("data-re-aoi-name", `s${sCount}-space-${wCount}`);
     } else {
-      wordBlock.setAttribute("data-re-aoi-name", `s${sentenceCount}-punct-${wordCount}`);
+      wordBlock.setAttribute("data-re-aoi-name", `s${sCount}-punct-${wCount}`);
     }
     word.split('').forEach(char => {
       let charSpan = document.createElement("span");
       charSpan.textContent = isSpace ? '' : char;
       // Create descriptive AOI names for characters
       let charType = isSpace ? 'space' : (isWord ? 'letter' : 'punct');
-      charSpan.setAttribute("data-re-aoi-name", `s${sentenceCount}-${charType}-c${character_id}`);
+      const charId = character_id || 0;
+      charSpan.setAttribute("data-re-aoi-name", `s${sCount}-${charType}-c${charId}`);
       character_id++;
       charSpan.classList.add(isSpace ? "space" : "letter");
       wordBlock.appendChild(charSpan);

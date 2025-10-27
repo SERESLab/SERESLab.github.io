@@ -37,13 +37,15 @@ const SmoothPursuitVideoTask = ({ onSubmit, onTaskComplete }) => {
     setVideoError(false);
 
     const crossTimer = setTimeout(() => setPhase('instruction'), 1000);
-    const instructionTimer = setTimeout(() => setPhase('video'), 2000);
 
     return () => {
       clearTimeout(crossTimer);
-      clearTimeout(instructionTimer);
     };
   }, [currentVideoIndex]);
+
+  const handleInstructionContinue = () => {
+    setPhase('video');
+  };
 
   // This logic remains the same
   useEffect(() => {
@@ -101,6 +103,12 @@ const SmoothPursuitVideoTask = ({ onSubmit, onTaskComplete }) => {
         return (
           <div style={styles.phaseContainer}>
             <h2 style={styles.instructionText}>Track the ball in the video</h2>
+            <button
+              onClick={handleInstructionContinue}
+              style={styles.continueButton}
+            >
+              Continue
+            </button>
           </div>
         );
       case 'video':
@@ -121,7 +129,7 @@ const SmoothPursuitVideoTask = ({ onSubmit, onTaskComplete }) => {
                   ref={videoRef}
                   style={styles.video}
                   src={currentVideo.src}
-                  controls
+                  controls={false}
                   muted
                   playsInline
                   preload="auto"
@@ -166,6 +174,7 @@ const styles = {
     height: '100vh',
     width: '100vw',
     display: 'flex',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
@@ -180,7 +189,19 @@ const styles = {
     textAlign: 'center',
     fontWeight: 'normal',
     margin: 0,
+    marginBottom: '30px',
     color: '#2c3e50',
+  },
+  continueButton: {
+    fontSize: '24px',
+    fontWeight: 'bold',
+    padding: '15px 40px',
+    backgroundColor: '#3498db',
+    color: 'white',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
   },
   videoContainer: {
     height: '100vh',

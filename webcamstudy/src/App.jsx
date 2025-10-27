@@ -6,7 +6,6 @@ import TextTask from "./components/Text/TextTask";
 import SmoothPursuitVideoTask from "./components/SmoothPursuitVideoTask";
 import InstructionVideoTask from "./components/Instruction/InstructionVideoTask";
 import VideoTask from "./components/Video/VideoTask";
-import FaceTask from "./components/FaceTask";
 import FaceTask2x2 from "./components/FaceTask2x2";
 import FaceTask3x3 from "./components/FaceTask3x3";
 import ValidationGrid from "./components/validation_grid/ValidationGrid";
@@ -31,7 +30,6 @@ function App() {
     smoothPursuitVideoTask: null,
     instructionVideoTask: null,
     videoTask: null,
-    faceTask: null,
     faceTask2x2: null,
     faceTask3x3: null,
   });
@@ -150,49 +148,6 @@ function App() {
           studyData.videoTask.selectedAnswer
         ),
         timestamp: studyData.videoTask.timestamp,
-      });
-    }
-
-    // Add face task responses
-    if (studyData.faceTask && Array.isArray(studyData.faceTask)) {
-      // Group results by emotion, gender, and grid size
-      const emotions = ["happy", "angry", "sad"];
-      const genders = ["male", "female"];
-      const gridSizes = [2, 3];
-
-      emotions.forEach((emotion) => {
-        genders.forEach((gender) => {
-          gridSizes.forEach((gridSize) => {
-            const filteredResults = studyData.faceTask.filter(
-              (result) =>
-                result.emotion === emotion &&
-                result.gender === gender &&
-                result.gridSize === gridSize
-            );
-
-            if (filteredResults.length > 0) {
-              const taskName = `Face_${emotion}_${gender}_${gridSize}x${gridSize}`;
-              const response = {
-                task: taskName,
-                response: filteredResults.map((result) => ({
-                  trial: result.trial,
-                  emotion: result.emotion,
-                  gender: result.gender,
-                  gridSize: result.gridSize,
-                  startTime: result.startTime,
-                  endTime: result.endTime,
-                  selectedRow: result.selectedRow,
-                  selectedColumn: result.selectedColumn,
-                  correctRow: result.correctRow,
-                  correctColumn: result.correctColumn,
-                  isCorrect: result.correct === "Yes",
-                })),
-                isCorrect: calculateOverallFaceCorrectness(filteredResults),
-              };
-              jsonData.responses.push(response);
-            }
-          });
-        });
       });
     }
 
@@ -366,10 +321,6 @@ function App() {
             onComplete={(data) => handleTaskComplete("videoTask", data)}
           />
         );
-      case "FaceTask":
-        return (
-          <FaceTask onSubmit={(data) => handleTaskComplete("faceTask", data)} />
-        );
       case "FaceTask2x2":
         return (
           <FaceTask2x2 onSubmit={(data) => handleTaskComplete("faceTask2x2", data)} />
@@ -410,7 +361,6 @@ function App() {
     (((currentTaskName === "TextTask" && textTaskComplete) ||
       (![
         "ConsentForm",
-        "FaceTask",
         "FaceTask2x2",
         "FaceTask3x3",
         "TextTask",

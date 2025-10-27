@@ -38,16 +38,15 @@ const InstructionVideoTask = ({ onComplete }) => {
       setShowCross(false);
       setShowInstruction(true);
     }, 1000);
-  
-    const instructionTimer = setTimeout(() => {
-      setShowInstruction(false);
-    }, 2000);
 
     return () => {
       clearTimeout(crossTimer);
-      clearTimeout(instructionTimer);
     };
   }, []);
+
+  const handleInstructionContinue = () => {
+    setShowInstruction(false);
+  };
 
   useEffect(() => {
     if (showCross || showInstruction || !plyrReady || step !== 0) return;
@@ -64,7 +63,7 @@ const InstructionVideoTask = ({ onComplete }) => {
       try {
         // eslint-disable-next-line no-undef
         const player = new window.Plyr(videoRef.current, {
-          controls: ['play', 'progress', 'current-time', 'mute', 'volume'],
+          controls: [],
           ratio: null,
           fullscreen: { enabled: false },
         });
@@ -125,6 +124,12 @@ const InstructionVideoTask = ({ onComplete }) => {
           <h2 className="instruction-instruction-text">
             Count how many times the players wearing white pass the ball.
           </h2>
+          <button
+            onClick={handleInstructionContinue}
+            className="instruction-continue-button"
+          >
+            Continue
+          </button>
         </div>
       ) : step === 0 ? (
         <div className="instruction-video-section">
@@ -137,7 +142,7 @@ const InstructionVideoTask = ({ onComplete }) => {
           ) : (
             <video
               ref={videoRef}
-              controls
+              controls={false}
               autoPlay
               muted
               crossOrigin="anonymous"

@@ -293,7 +293,7 @@ function App() {
   };
 
   const isTaskComplete = currentTask >= taskFiles.length;
-  const currentTaskName = taskFiles[currentTask];
+  const currentTaskName = taskFiles[currentTask] || "Initializing";
 
   // Check if current video task has ended
   const isVideoTaskComplete = () => {

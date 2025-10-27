@@ -29,6 +29,7 @@ const TEXTS = [
 ];
 
 const formatText = (text, ref) => {
+  if (!ref.current) return;
   let sentenceCount = 1;
   let wordCount = 1;
   let character_id = 0;

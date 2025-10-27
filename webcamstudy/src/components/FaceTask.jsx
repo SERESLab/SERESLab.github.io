@@ -310,6 +310,10 @@ const FaceTask = ({ onSubmit }) => {
           {grid.map((image, idx) => {
             const row = Math.floor(idx / gridSize) + 1;
             const column = (idx % gridSize) + 1;
+            const rowStr = row.toString();
+            const colStr = column.toString();
+            const correctness = image.isCorrect ? 'correct' : 'incorrect';
+            const aoName = `face-task-${taskIndex}-trial-${trial}-row${rowStr}-col${colStr}-${correctness}`;
             return (
               <img
                 key={`${taskIndex}-${trial}-${image.id}`}
@@ -319,7 +323,7 @@ const FaceTask = ({ onSubmit }) => {
                 data-correct={image.isCorrect ? 'T' : 'F'}
                 data-emotion={emotion}
                 data-gender={gender}
-                data-re-aoi-name={`${row}-${column}-${image.isCorrect ? 'correct' : 'incorrect'}`}
+                data-re-aoi-name={aoName}
                 alt={`${gender} ${emotion} face`}
                 style={{
                   objectFit: 'cover',

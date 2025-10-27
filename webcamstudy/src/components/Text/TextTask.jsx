@@ -41,13 +41,21 @@ const formatText = (text, ref) => {
     let isSpace = /^\s+$/.test(word);
     let wordBlock = document.createElement("span");
     wordBlock.classList.add("word-block");
+    // Always set an AOI name for the word block
     if (isWord) {
       wordBlock.setAttribute("data-re-aoi-name", `s${sentenceCount}-w${wordCount}`);
+    } else if (isSpace) {
+      wordBlock.setAttribute("data-re-aoi-name", `s${sentenceCount}-space-${wordCount}`);
+    } else {
+      wordBlock.setAttribute("data-re-aoi-name", `s${sentenceCount}-punct-${wordCount}`);
     }
     word.split('').forEach(char => {
       let charSpan = document.createElement("span");
       charSpan.textContent = isSpace ? '' : char;
-      charSpan.setAttribute("data-re-aoi-name", character_id++);
+      // Create descriptive AOI names for characters
+      let charType = isSpace ? 'space' : (isWord ? 'letter' : 'punct');
+      charSpan.setAttribute("data-re-aoi-name", `s${sentenceCount}-${charType}-c${character_id}`);
+      character_id++;
       charSpan.classList.add(isSpace ? "space" : "letter");
       wordBlock.appendChild(charSpan);
     });

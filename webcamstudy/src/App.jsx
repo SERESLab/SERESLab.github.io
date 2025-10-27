@@ -7,6 +7,8 @@ import SmoothPursuitVideoTask from "./components/SmoothPursuitVideoTask";
 import InstructionVideoTask from "./components/Instruction/InstructionVideoTask";
 import VideoTask from "./components/Video/VideoTask";
 import FaceTask from "./components/FaceTask";
+import FaceTask2x2 from "./components/FaceTask2x2";
+import FaceTask3x3 from "./components/FaceTask3x3";
 import ValidationGrid from "./components/validation_grid/ValidationGrid";
 
 // Utility to shuffle an array
@@ -30,6 +32,8 @@ function App() {
     instructionVideoTask: null,
     videoTask: null,
     faceTask: null,
+    faceTask2x2: null,
+    faceTask3x3: null,
   });
 
   // State to track study timing
@@ -54,7 +58,8 @@ function App() {
       "SmoothPursuitVideoTask",
       "InstructionVideoTask",
       "VideoTask",
-      "FaceTask",
+      "FaceTask2x2",
+      "FaceTask3x3",
     ];
     const randomized = shuffle(toRandomize);
     setRandomizedOrder(randomized);
@@ -191,6 +196,86 @@ function App() {
       });
     }
 
+    // Add face task 2x2 responses
+    if (studyData.faceTask2x2 && Array.isArray(studyData.faceTask2x2)) {
+      // Group results by emotion and gender
+      const emotions = ["happy", "angry", "sad"];
+      const genders = ["male", "female"];
+
+      emotions.forEach((emotion) => {
+        genders.forEach((gender) => {
+          const filteredResults = studyData.faceTask2x2.filter(
+            (result) =>
+              result.emotion === emotion &&
+              result.gender === gender &&
+              result.gridSize === 2
+          );
+
+          if (filteredResults.length > 0) {
+            const taskName = `Face2x2_${emotion}_${gender}`;
+            const response = {
+              task: taskName,
+              response: filteredResults.map((result) => ({
+                trial: result.trial,
+                emotion: result.emotion,
+                gender: result.gender,
+                gridSize: result.gridSize,
+                startTime: result.startTime,
+                endTime: result.endTime,
+                selectedRow: result.selectedRow,
+                selectedColumn: result.selectedColumn,
+                correctRow: result.correctRow,
+                correctColumn: result.correctColumn,
+                isCorrect: result.correct === "Yes",
+              })),
+              isCorrect: calculateOverallFaceCorrectness(filteredResults),
+            };
+            jsonData.responses.push(response);
+          }
+        });
+      });
+    }
+
+    // Add face task 3x3 responses
+    if (studyData.faceTask3x3 && Array.isArray(studyData.faceTask3x3)) {
+      // Group results by emotion and gender
+      const emotions = ["happy", "angry", "sad"];
+      const genders = ["male", "female"];
+
+      emotions.forEach((emotion) => {
+        genders.forEach((gender) => {
+          const filteredResults = studyData.faceTask3x3.filter(
+            (result) =>
+              result.emotion === emotion &&
+              result.gender === gender &&
+              result.gridSize === 3
+          );
+
+          if (filteredResults.length > 0) {
+            const taskName = `Face3x3_${emotion}_${gender}`;
+            const response = {
+              task: taskName,
+              response: filteredResults.map((result) => ({
+                trial: result.trial,
+                emotion: result.emotion,
+                gender: result.gender,
+                gridSize: result.gridSize,
+                startTime: result.startTime,
+                endTime: result.endTime,
+                selectedRow: result.selectedRow,
+                selectedColumn: result.selectedColumn,
+                correctRow: result.correctRow,
+                correctColumn: result.correctColumn,
+                isCorrect: result.correct === "Yes",
+              })),
+              isCorrect: calculateOverallFaceCorrectness(filteredResults),
+            };
+            jsonData.responses.push(response);
+          }
+        });
+      });
+    }
+
     // Download JSON file
     const jsonString = JSON.stringify(jsonData, null, 2);
     const blob = new Blob([jsonString], {
@@ -285,6 +370,14 @@ function App() {
         return (
           <FaceTask onSubmit={(data) => handleTaskComplete("faceTask", data)} />
         );
+      case "FaceTask2x2":
+        return (
+          <FaceTask2x2 onSubmit={(data) => handleTaskComplete("faceTask2x2", data)} />
+        );
+      case "FaceTask3x3":
+        return (
+          <FaceTask3x3 onSubmit={(data) => handleTaskComplete("faceTask3x3", data)} />
+        );
       case "ValidationGrid":
         return <ValidationGrid onComplete={incrementTask} />;
       default:
@@ -314,13 +407,15 @@ function App() {
   // and only when video tasks have ended
   const showNextButton =
     !isTaskComplete &&
-    ((currentTaskName === "TextTask" && textTaskComplete) ||
-      ![
+    (((currentTaskName === "TextTask" && textTaskComplete) ||
+      (![
         "ConsentForm",
         "FaceTask",
+        "FaceTask2x2",
+        "FaceTask3x3",
         "TextTask",
       ].includes(currentTaskName) &&
-      isVideoTaskComplete());
+      isVideoTaskComplete())));
 
   const handleNextTask = () => {
     // If TextTask, collect results before advancing

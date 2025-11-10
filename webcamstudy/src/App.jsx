@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect, useCallback } from "react";
 import "./App.css";
 
 import ConsentForm from "./components/ConsentForm";
+import ContinueButton from "./components/ContinueButton";
 import TextTask from "./components/Text/TextTask";
 import SmoothPursuitVideoTask from "./components/SmoothPursuitVideoTask";
 import InstructionVideoTask from "./components/Instruction/InstructionVideoTask";
@@ -364,6 +365,7 @@ function App() {
         "FaceTask2x2",
         "FaceTask3x3",
         "TextTask",
+        "ValidationGrid",
       ].includes(currentTaskName) &&
       isVideoTaskComplete())));
 
@@ -383,16 +385,7 @@ function App() {
         {renderCurrentTask()}
       </div>
       {showNextButton && (
-        <div className="button-container" style={styles.buttonContainer}>
-          <button
-            id="nextTaskButton"
-            className="button"
-            style={styles.nextButton}
-            onClick={handleNextTask}
-          >
-            Next Task
-          </button>
-        </div>
+        <ContinueButton onClick={handleNextTask} />
       )}
     </div>
   );
@@ -408,25 +401,9 @@ const styles = {
   },
   taskContainer: {
     flex: 1,
-    overflow: "hidden",
+    overflow: "auto", // allow child content (like ConsentForm) to scroll when taller than the viewport
   },
-  buttonContainer: {
-    position: "fixed",
-    bottom: "-30px",
-    right: "30px",
-    zIndex: 1000,
-  },
-  nextButton: {
-    fontSize: "18px",
-    backgroundColor: "#3498db",
-    color: "white",
-    border: "none",
-    borderRadius: "5px",
-    marginTop: "20px",
-    minWidth: "200px",
-    boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
-    transition: "all 0.3s ease",
-  },
+  // Removed custom next button styles in favor of shared ContinueButton
   completionContainer: {
     display: "flex",
     flexDirection: "column",

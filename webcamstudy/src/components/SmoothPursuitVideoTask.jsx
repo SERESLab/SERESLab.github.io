@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import ContinueButton from './ContinueButton';
 
 // 1. Import video files directly at the top
 // This is the modern and most reliable way to handle static assets.
@@ -103,12 +104,7 @@ const SmoothPursuitVideoTask = ({ onSubmit, onTaskComplete }) => {
         return (
           <div style={styles.phaseContainer}>
             <h2 style={styles.instructionText}>Track the ball in the video</h2>
-            <button
-              onClick={handleInstructionContinue}
-              style={styles.continueButton}
-            >
-              Continue
-            </button>
+            <ContinueButton onClick={handleInstructionContinue} />
           </div>
         );
       case 'video':
@@ -118,9 +114,7 @@ const SmoothPursuitVideoTask = ({ onSubmit, onTaskComplete }) => {
               <div style={styles.errorContainer}>
                 <h3>Video Loading Error</h3>
                 <p>There was an issue loading: {currentVideo.name}</p>
-                <button onClick={handleNextVideo} style={styles.errorButton}>
-                  {isLastVideo ? 'Finish Task' : 'Skip to Next Video'}
-                </button>
+                <ContinueButton onClick={handleNextVideo} />
               </div>
             ) : (
               <>
@@ -142,9 +136,7 @@ const SmoothPursuitVideoTask = ({ onSubmit, onTaskComplete }) => {
                 </video>
                 
                 {videoEnded && !isLastVideo && (
-                  <button onClick={handleNextVideo} style={styles.nextButton}>
-                    Next Video
-                  </button>
+                  <ContinueButton onClick={handleNextVideo} />
                 )}
               </>
             )}
@@ -192,17 +184,6 @@ const styles = {
     marginBottom: '30px',
     color: '#2c3e50',
   },
-  continueButton: {
-    fontSize: '24px',
-    fontWeight: 'bold',
-    padding: '15px 40px',
-    backgroundColor: '#3498db',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    transition: 'all 0.3s ease',
-  },
   videoContainer: {
     height: '100vh',
     width: '100vw',
@@ -221,23 +202,6 @@ const styles = {
     border: 'none',
     background: '#fff',
   },
-  nextButton: {
-    position: 'absolute',
-    bottom: '30px',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    padding: '15px 30px',
-    fontSize: '18px',
-    backgroundColor: '#3498db',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-    transition: 'all 0.3s ease',
-    cursor: 'pointer',
-    minWidth: '200px',
-    zIndex: 1000,
-  },
   errorContainer: {
     textAlign: 'center',
     padding: '40px',
@@ -246,16 +210,7 @@ const styles = {
     borderRadius: '8px',
     maxWidth: '500px',
   },
-  errorButton: {
-    padding: '10px 20px',
-    fontSize: '16px',
-    backgroundColor: '#e74c3c',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    marginTop: '15px',
-  },
+  // Button styles are unified via ContinueButton component
 };
 
 export default SmoothPursuitVideoTask;

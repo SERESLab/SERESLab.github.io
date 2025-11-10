@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import ContinueButton from '../ContinueButton';
 import InstructionVideoSurvey from './InstructionVideoSurvey';
 import './Instructions.css';
 
@@ -124,12 +125,7 @@ const InstructionVideoTask = ({ onComplete }) => {
           <h2 className="instruction-instruction-text">
             Count how many times the players wearing white pass the ball.
           </h2>
-          <button
-            onClick={handleInstructionContinue}
-            className="instruction-continue-button"
-          >
-            Continue
-          </button>
+          <ContinueButton onClick={handleInstructionContinue} />
         </div>
       ) : step === 0 ? (
         <div className="instruction-video-section">

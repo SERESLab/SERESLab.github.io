@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import ContinueButton from '../ContinueButton';
 import './VideoTask.css'; // Create this CSS file for styles
 import VideoSurvey from './VideoSurvey';
 
@@ -122,12 +123,7 @@ const handleSurveySubmit = (result) => {
           <h2 className="video-task-instruction-text">
             Please watch the following video carefully
           </h2>
-          <button
-            onClick={handleInstructionContinue}
-            className="video-task-continue-button"
-          >
-            Continue
-          </button>
+          <ContinueButton onClick={handleInstructionContinue} />
         </div>
       ) : step === 0 ? (
         <div className="video-task-video-section">

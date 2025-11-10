@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import ContinueButton from './ContinueButton';
 
 // Define the task sequence for 3x3 grids
 const TASK_SEQUENCE = [
@@ -288,12 +289,7 @@ const FaceTask3x3 = ({ onSubmit }) => {
           <div style={styles.instructionText}>
             {getInstructionText()}
           </div>
-          <button
-            onClick={handleInstructionContinue}
-            style={styles.continueButton}
-          >
-            Continue
-          </button>
+          <ContinueButton onClick={handleInstructionContinue} />
         </div>
       )}
 
@@ -403,18 +399,7 @@ const styles = {
     textAlign: 'center',
     padding: '40px',
   },
-  continueButton: {
-    fontSize: '24px',
-    fontWeight: 'bold',
-    padding: '15px 40px',
-    backgroundColor: '#3498db',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    marginTop: '30px',
-    transition: 'all 0.3s ease',
-  },
+  // Replaced inline continueButton with shared ContinueButton component
   completionContainer: {
     display: 'flex',
     flexDirection: 'column',

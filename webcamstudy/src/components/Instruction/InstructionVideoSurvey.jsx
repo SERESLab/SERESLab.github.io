@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ContinueButton from '../ContinueButton';
 import './Instructions.css';
 
 const InstructionVideoSurvey = ({ onSubmit }) => {
@@ -69,17 +70,7 @@ const InstructionVideoSurvey = ({ onSubmit }) => {
           </div>
         </div>
         
-        <button
-          type="submit"
-          disabled={!isFormValid}
-          className="instruction-survey-button"
-          style={{
-            opacity: isFormValid ? 1 : 0.5,
-            cursor: isFormValid ? 'pointer' : 'not-allowed'
-          }}
-        >
-          Continue
-        </button>
+        <ContinueButton type="submit" disabled={!isFormValid} />
       </form>
     </div>
   );

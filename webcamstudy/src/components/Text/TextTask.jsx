@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
+import ContinueButton from '../ContinueButton';
 import './TextTask.css';
 
 const TEXTS = [
@@ -147,7 +148,7 @@ const TextTask = forwardRef(({ onComplete }, ref) => {
             />
           </div>
           <div className="button-row">
-            <button type="submit" className="text-task-button">Continue</button>
+            <ContinueButton type="submit" />
           </div>
         </form>
       ) : step === 1 ? (
@@ -172,14 +173,7 @@ const TextTask = forwardRef(({ onComplete }, ref) => {
             </div>
           </div>
           <div className="button-row">
-            <button
-              type="submit"
-              disabled={!answers[1]}
-              className="text-task-button"
-              data-re-aoi-name="TextSubmit"
-            >
-              Continue
-            </button>
+            <ContinueButton type="submit" disabled={!answers[1]} />
           </div>
         </form>
       ) : step === 2 ? (
@@ -191,7 +185,7 @@ const TextTask = forwardRef(({ onComplete }, ref) => {
             />
           </div>
           <div className="button-row">
-            <button type="submit" className="text-task-button">Continue</button>
+            <ContinueButton type="submit" />
           </div>
         </form>
       ) : step === 3 ? (

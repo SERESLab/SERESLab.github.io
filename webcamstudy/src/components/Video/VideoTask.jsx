@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import ContinueButton from '../ContinueButton';
 import './VideoTask.css'; // Create this CSS file for styles
 import VideoSurvey from './VideoSurvey';
 
@@ -37,16 +38,15 @@ const VideoTask = ({ onComplete }) => {
       setShowCross(false);
       setShowInstruction(true);
     }, 1000);
- 
-    const instructionTimer = setTimeout(() => {
-      setShowInstruction(false);
-    }, 2000);
 
     return () => {
       clearTimeout(crossTimer);
-      clearTimeout(instructionTimer);
     };
   }, []);
+
+  const handleInstructionContinue = () => {
+    setShowInstruction(false);
+  };
 
   useEffect(() => {
     if (showCross || showInstruction || !plyrReady || step !== 0) return;
@@ -62,7 +62,7 @@ const VideoTask = ({ onComplete }) => {
       try {
         // eslint-disable-next-line no-undef
         const player = new window.Plyr(videoRef.current, {
-          controls: ['play', 'progress', 'current-time', 'mute', 'volume'],
+          controls: [],
           ratio: null,
           fullscreen: { enabled: false },
         });
@@ -123,6 +123,7 @@ const handleSurveySubmit = (result) => {
           <h2 className="video-task-instruction-text">
             Please watch the following video carefully
           </h2>
+          <ContinueButton onClick={handleInstructionContinue} />
         </div>
       ) : step === 0 ? (
         <div className="video-task-video-section">
@@ -135,7 +136,7 @@ const handleSurveySubmit = (result) => {
           ) : (
             <video
               ref={videoRef}
-              controls
+              controls={false}
               autoPlay
               muted
               crossOrigin="anonymous"

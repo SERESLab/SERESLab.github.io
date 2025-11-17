@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
+import ContinueButton from '../ContinueButton';
 import './TextTask.css';
 
 const TEXTS = [
@@ -29,10 +30,11 @@ const TEXTS = [
 ];
 
 const formatText = (text, ref) => {
+  if (!ref.current || !text) return;
   let sentenceCount = 1;
   let wordCount = 1;
   let character_id = 0;
-  let cleanedText = text.replace(/\n+/g, ' ');
+  let cleanedText = (text || '').replace(/\n+/g, ' ');
   let words = cleanedText.match(/[\w'']+|[.,!?;:"""—-]|\s+/g) || [];
   ref.current.innerHTML = '';
   words.forEach(word => {
@@ -40,13 +42,24 @@ const formatText = (text, ref) => {
     let isSpace = /^\s+$/.test(word);
     let wordBlock = document.createElement("span");
     wordBlock.classList.add("word-block");
+    // Always set an AOI name for the word block with fallbacks
+    const sCount = sentenceCount || 1;
+    const wCount = wordCount || 1;
     if (isWord) {
-      wordBlock.setAttribute("data-re-aoi-name", `s${sentenceCount}-w${wordCount}`);
+      wordBlock.setAttribute("data-re-aoi-name", `s${sCount}-w${wCount}`);
+    } else if (isSpace) {
+      wordBlock.setAttribute("data-re-aoi-name", `s${sCount}-space-${wCount}`);
+    } else {
+      wordBlock.setAttribute("data-re-aoi-name", `s${sCount}-punct-${wCount}`);
     }
     word.split('').forEach(char => {
       let charSpan = document.createElement("span");
       charSpan.textContent = isSpace ? '' : char;
-      charSpan.setAttribute("data-re-aoi-name", character_id++);
+      // Create descriptive AOI names for characters
+      let charType = isSpace ? 'space' : (isWord ? 'letter' : 'punct');
+      const charId = character_id || 0;
+      charSpan.setAttribute("data-re-aoi-name", `s${sCount}-${charType}-c${charId}`);
+      character_id++;
       charSpan.classList.add(isSpace ? "space" : "letter");
       wordBlock.appendChild(charSpan);
     });
@@ -135,7 +148,7 @@ const TextTask = forwardRef(({ onComplete }, ref) => {
             />
           </div>
           <div className="button-row">
-            <button type="submit" className="text-task-button">Continue</button>
+            <ContinueButton type="submit" />
           </div>
         </form>
       ) : step === 1 ? (
@@ -160,14 +173,7 @@ const TextTask = forwardRef(({ onComplete }, ref) => {
             </div>
           </div>
           <div className="button-row">
-            <button
-              type="submit"
-              disabled={!answers[1]}
-              className="text-task-button"
-              data-re-aoi-name="TextSubmit"
-            >
-              Continue
-            </button>
+            <ContinueButton type="submit" disabled={!answers[1]} />
           </div>
         </form>
       ) : step === 2 ? (
@@ -179,7 +185,7 @@ const TextTask = forwardRef(({ onComplete }, ref) => {
             />
           </div>
           <div className="button-row">
-            <button type="submit" className="text-task-button">Continue</button>
+            <ContinueButton type="submit" />
           </div>
         </form>
       ) : step === 3 ? (

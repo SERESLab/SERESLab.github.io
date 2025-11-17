@@ -2,11 +2,13 @@ import React, { useRef, useState, useEffect, useCallback } from "react";
 import "./App.css";
 
 import ConsentForm from "./components/ConsentForm";
+import ContinueButton from "./components/ContinueButton";
 import TextTask from "./components/Text/TextTask";
 import SmoothPursuitVideoTask from "./components/SmoothPursuitVideoTask";
 import InstructionVideoTask from "./components/Instruction/InstructionVideoTask";
 import VideoTask from "./components/Video/VideoTask";
-import FaceTask from "./components/FaceTask";
+import FaceTask2x2 from "./components/FaceTask2x2";
+import FaceTask3x3 from "./components/FaceTask3x3";
 import ValidationGrid from "./components/validation_grid/ValidationGrid";
 
 // Utility to shuffle an array
@@ -29,7 +31,8 @@ function App() {
     smoothPursuitVideoTask: null,
     instructionVideoTask: null,
     videoTask: null,
-    faceTask: null,
+    faceTask2x2: null,
+    faceTask3x3: null,
   });
 
   // State to track study timing
@@ -60,13 +63,14 @@ function App() {
   }, []);
 
   const generateTaskSequence = () => {
-    const alwaysFirst = ["ValidationGrid", "ConsentForm"];
+    const alwaysFirst = ["ConsentForm", "ValidationGrid"];
     const toRandomize = [
       "TextTask",
       "SmoothPursuitVideoTask",
       "InstructionVideoTask",
       "VideoTask",
-      "FaceTask",
+      "FaceTask2x2",
+      "FaceTask3x3",
     ];
     const randomized = shuffle(toRandomize);
     setRandomizedOrder(randomized);
@@ -160,45 +164,82 @@ function App() {
       });
     }
 
-    // Add face task responses
-    if (studyData.faceTask && Array.isArray(studyData.faceTask)) {
-      // Group results by emotion, gender, and grid size
+    // Add face task 2x2 responses
+    if (studyData.faceTask2x2 && Array.isArray(studyData.faceTask2x2)) {
+      // Group results by emotion and gender
       const emotions = ["happy", "angry", "sad"];
       const genders = ["male", "female"];
-      const gridSizes = [2, 3];
 
       emotions.forEach((emotion) => {
         genders.forEach((gender) => {
-          gridSizes.forEach((gridSize) => {
-            const filteredResults = studyData.faceTask.filter(
-              (result) =>
-                result.emotion === emotion &&
-                result.gender === gender &&
-                result.gridSize === gridSize
-            );
+          const filteredResults = studyData.faceTask2x2.filter(
+            (result) =>
+              result.emotion === emotion &&
+              result.gender === gender &&
+              result.gridSize === 2
+          );
 
-            if (filteredResults.length > 0) {
-              const taskName = `Face_${emotion}_${gender}_${gridSize}x${gridSize}`;
-              const response = {
-                task: taskName,
-                response: filteredResults.map((result) => ({
-                  trial: result.trial,
-                  emotion: result.emotion,
-                  gender: result.gender,
-                  gridSize: result.gridSize,
-                  startTime: result.startTime,
-                  endTime: result.endTime,
-                  selectedRow: result.selectedRow,
-                  selectedColumn: result.selectedColumn,
-                  correctRow: result.correctRow,
-                  correctColumn: result.correctColumn,
-                  isCorrect: result.correct === "Yes",
-                })),
-                isCorrect: calculateOverallFaceCorrectness(filteredResults),
-              };
-              jsonData.responses.push(response);
-            }
-          });
+          if (filteredResults.length > 0) {
+            const taskName = `Face2x2_${emotion}_${gender}`;
+            const response = {
+              task: taskName,
+              response: filteredResults.map((result) => ({
+                trial: result.trial,
+                emotion: result.emotion,
+                gender: result.gender,
+                gridSize: result.gridSize,
+                startTime: result.startTime,
+                endTime: result.endTime,
+                selectedRow: result.selectedRow,
+                selectedColumn: result.selectedColumn,
+                correctRow: result.correctRow,
+                correctColumn: result.correctColumn,
+                isCorrect: result.correct === "Yes",
+              })),
+              isCorrect: calculateOverallFaceCorrectness(filteredResults),
+            };
+            jsonData.responses.push(response);
+          }
+        });
+      });
+    }
+
+    // Add face task 3x3 responses
+    if (studyData.faceTask3x3 && Array.isArray(studyData.faceTask3x3)) {
+      // Group results by emotion and gender
+      const emotions = ["happy", "angry", "sad"];
+      const genders = ["male", "female"];
+
+      emotions.forEach((emotion) => {
+        genders.forEach((gender) => {
+          const filteredResults = studyData.faceTask3x3.filter(
+            (result) =>
+              result.emotion === emotion &&
+              result.gender === gender &&
+              result.gridSize === 3
+          );
+
+          if (filteredResults.length > 0) {
+            const taskName = `Face3x3_${emotion}_${gender}`;
+            const response = {
+              task: taskName,
+              response: filteredResults.map((result) => ({
+                trial: result.trial,
+                emotion: result.emotion,
+                gender: result.gender,
+                gridSize: result.gridSize,
+                startTime: result.startTime,
+                endTime: result.endTime,
+                selectedRow: result.selectedRow,
+                selectedColumn: result.selectedColumn,
+                correctRow: result.correctRow,
+                correctColumn: result.correctColumn,
+                isCorrect: result.correct === "Yes",
+              })),
+              isCorrect: calculateOverallFaceCorrectness(filteredResults),
+            };
+            jsonData.responses.push(response);
+          }
         });
       });
     }
@@ -293,9 +334,13 @@ function App() {
             onComplete={(data) => handleTaskComplete("videoTask", data)}
           />
         );
-      case "FaceTask":
+      case "FaceTask2x2":
         return (
-          <FaceTask onSubmit={(data) => handleTaskComplete("faceTask", data)} />
+          <FaceTask2x2 onSubmit={(data) => handleTaskComplete("faceTask2x2", data)} />
+        );
+      case "FaceTask3x3":
+        return (
+          <FaceTask3x3 onSubmit={(data) => handleTaskComplete("faceTask3x3", data)} />
         );
       case "ValidationGrid":
         return <ValidationGrid onComplete={incrementTask} />;
@@ -305,7 +350,8 @@ function App() {
   };
 
   const isTaskComplete = currentTask >= taskFiles.length;
-  const currentTaskName = taskFiles[currentTask];
+  const rawTaskName = taskFiles[currentTask] || "";
+  const currentTaskName = (typeof rawTaskName === 'string' && rawTaskName.trim()) || "Initializing";
 
   // Check if current video task has ended
   const isVideoTaskComplete = () => {
@@ -325,13 +371,15 @@ function App() {
   // and only when video tasks have ended
   const showNextButton =
     !isTaskComplete &&
-    ((currentTaskName === "TextTask" && textTaskComplete) ||
-      ![
+    (((currentTaskName === "TextTask" && textTaskComplete) ||
+      (![
         "ConsentForm",
-        "FaceTask",
+        "FaceTask2x2",
+        "FaceTask3x3",
         "TextTask",
+        "ValidationGrid",
       ].includes(currentTaskName) &&
-      isVideoTaskComplete());
+      isVideoTaskComplete())));
 
   const handleNextTask = () => {
     // If TextTask, collect results before advancing
@@ -344,21 +392,12 @@ function App() {
   };
 
   return (
-    <div id="app" style={styles.appContainer}>
+    <div id="app" style={styles.appContainer} data-re-aoi-name="seemeplz">
       <div className="task-container" style={styles.taskContainer} data-re-aoi-name={currentTaskName}>
         {renderCurrentTask()}
       </div>
       {showNextButton && (
-        <div className="button-container" style={styles.buttonContainer}>
-          <button
-            id="nextTaskButton"
-            className="button"
-            style={styles.nextButton}
-            onClick={handleNextTask}
-          >
-            Next Task
-          </button>
-        </div>
+        <ContinueButton onClick={handleNextTask} />
       )}
     </div>
   );
@@ -374,25 +413,9 @@ const styles = {
   },
   taskContainer: {
     flex: 1,
-    overflow: "hidden",
+    overflow: "auto", // allow child content (like ConsentForm) to scroll when taller than the viewport
   },
-  buttonContainer: {
-    position: "fixed",
-    bottom: "-30px",
-    right: "30px",
-    zIndex: 1000,
-  },
-  nextButton: {
-    fontSize: "18px",
-    backgroundColor: "#3498db",
-    color: "white",
-    border: "none",
-    borderRadius: "5px",
-    marginTop: "20px",
-    minWidth: "200px",
-    boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
-    transition: "all 0.3s ease",
-  },
+  // Removed custom next button styles in favor of shared ContinueButton
   completionContainer: {
     display: "flex",
     flexDirection: "column",

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ContinueButton from '../ContinueButton';
 import './VideoTask.css';
 
 const VideoSurvey = ({ onSubmit }) => {
@@ -34,18 +35,7 @@ const VideoSurvey = ({ onSubmit }) => {
             </label>
           ))}
         </div>
-        <button
-          type="submit"
-          data-re-aoi-name="VideoSubmit"
-          disabled={!selectedAnswer}
-          className="video-task-survey-button"
-          style={{
-            opacity: selectedAnswer ? 1 : 0.5,
-            cursor: selectedAnswer ? 'pointer' : 'not-allowed'
-          }}
-        >
-          Continue
-        </button>
+        <ContinueButton type="submit" disabled={!selectedAnswer} />
       </form>
     </div>
   );

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ContinueButton from './ContinueButton';
 
 const ConsentForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -207,17 +208,7 @@ const ConsentForm = ({ onSubmit }) => {
           </div>
         </div>
 
-        <button
-          type="submit"
-          disabled={!isFormValid}
-          style={{
-            ...styles.button,
-            opacity: isFormValid ? 1 : 0.5,
-            cursor: isFormValid ? 'pointer' : 'not-allowed'
-          }}
-        >
-          Continue
-        </button>
+        <ContinueButton type="submit" disabled={!isFormValid} />
       </form>
     </div>
   );
@@ -228,12 +219,12 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
-    height: '100vh',
-    width: '100vw',
+    justifyContent: 'flex-start', // keep horizontal centering, align content to top so it can scroll
+    minHeight: '100vh', // allow the container to grow and be scrollable instead of fixed height
+    width: '100%',
     fontFamily: 'Arial, sans-serif',
     backgroundColor: '#fff',
-    overflow: 'auto',
+    overflowY: 'auto',
     padding: '20px',
     boxSizing: 'border-box',
   },
@@ -311,19 +302,7 @@ const styles = {
   radio: {
     margin: 0,
   },
-  button: {
-    padding: '15px 40px',
-    fontSize: '18px',
-    backgroundColor: '#3498db',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    marginTop: '20px',
-    minWidth: '140px',
-    boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-    transition: 'all 0.3s ease',
-    alignSelf: 'center', // Center the button
-  },
+  // Button styling now centralized in ContinueButton component
 };
 
 export default ConsentForm;

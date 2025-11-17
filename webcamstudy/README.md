@@ -63,8 +63,6 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/a
 
 ### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+To9 deploy the Webcam study application, run the `npm run deploy` command. This will build the project, and copy all the contents freom the build folder into the main directory. This allows the contents to be visible to the Github-Hosted website which will be updated automatically. You may see the status of deployment in the Github commit itself.
 
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+NOTE: if you do NOT run the `npm run deploy` command, then the changes will not be shown on the hosted site.

@@ -1,20 +1,15 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import ContinueButton from './ContinueButton';
 
-// Define the task sequence
+// Define the task sequence for 3x3 grids
 const TASK_SEQUENCE = [
   // Happy emotion tasks
-  { emotion: 'happy', gridSize: 2, gender: 'male', trials: 4 },
-  { emotion: 'happy', gridSize: 2, gender: 'female', trials: 4 },
   { emotion: 'happy', gridSize: 3, gender: 'male', trials: 9 },
   { emotion: 'happy', gridSize: 3, gender: 'female', trials: 9 },
   // Angry emotion tasks
-  { emotion: 'angry', gridSize: 2, gender: 'male', trials: 4 },
-  { emotion: 'angry', gridSize: 2, gender: 'female', trials: 4 },
   { emotion: 'angry', gridSize: 3, gender: 'male', trials: 9 },
   { emotion: 'angry', gridSize: 3, gender: 'female', trials: 9 },
   // Sad emotion tasks
-  { emotion: 'sad', gridSize: 2, gender: 'male', trials: 4 },
-  { emotion: 'sad', gridSize: 2, gender: 'female', trials: 4 },
   { emotion: 'sad', gridSize: 3, gender: 'male', trials: 9 },
   { emotion: 'sad', gridSize: 3, gender: 'female', trials: 9 },
 ];
@@ -32,7 +27,7 @@ function getRandomSubset(array, size) {
   return [...array].sort(() => Math.random() - 0.5).slice(0, size);
 }
 
-const FaceTask = ({ onSubmit }) => {
+const FaceTask3x3 = ({ onSubmit }) => {
   const [taskIndex, setTaskIndex] = useState(0);
   const [trial, setTrial] = useState(0);
   const [grid, setGrid] = useState([]);
@@ -41,7 +36,6 @@ const FaceTask = ({ onSubmit }) => {
   const [showInstruction, setShowInstruction] = useState(false);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [results, setResults] = useState([]);
-  //TODO: Fix the faces not being shown in the correct order, positions are correct.
   const [trialStartTime, setTrialStartTime] = useState(null);
   const [correctPositions, setCorrectPositions] = useState([]);
 
@@ -169,7 +163,7 @@ const FaceTask = ({ onSubmit }) => {
     }
   }, [currentTask, emotion, gridSize, gender, imageLibrary, trial, correctPositions]);
 
-  // Check if we need to show instruction (first task of each emotion)
+  // Check if we need to show instruction - ALWAYS show for each emotion change
   const shouldShowInstruction = useCallback(() => {
     if (taskIndex === 0) return true; // First task overall
     const currentEmotion = TASK_SEQUENCE[taskIndex]?.emotion;
@@ -186,14 +180,6 @@ const FaceTask = ({ onSubmit }) => {
       // Show instruction for new emotion
       setShowInstruction(true);
       setShowCross(false);
-      const instructionTimer = setTimeout(() => {
-        setShowInstruction(false);
-        setShowCross(true);
-        setImagesLoaded(false);
-        generateNewGrid();
-      }, 2000); // Show instruction for 2 seconds
-
-      return () => clearTimeout(instructionTimer);
     } else {
       // Normal trial flow
       setShowCross(true);
@@ -201,6 +187,13 @@ const FaceTask = ({ onSubmit }) => {
       generateNewGrid();
     }
   }, [trial, taskIndex, generateNewGrid, completed, currentTask, shouldShowInstruction, correctPositions]);
+
+  const handleInstructionContinue = () => {
+    setShowInstruction(false);
+    setShowCross(true);
+    setImagesLoaded(false);
+    generateNewGrid();
+  };
 
   useEffect(() => {
     if (imagesLoaded && !showInstruction) {
@@ -284,7 +277,7 @@ const FaceTask = ({ onSubmit }) => {
   if (completed) {
     return (
       <div style={styles.completionContainer}>
-        <p style={styles.completionText}>Face Recognition Task Completed!</p>
+        <p style={styles.completionText}>3x3 Grid Face Recognition Task Completed!</p>
       </div>
     );
   }
@@ -296,6 +289,7 @@ const FaceTask = ({ onSubmit }) => {
           <div style={styles.instructionText}>
             {getInstructionText()}
           </div>
+          <ContinueButton onClick={handleInstructionContinue} />
         </div>
       )}
 
@@ -316,7 +310,7 @@ const FaceTask = ({ onSubmit }) => {
             const trialNum = trial ?? 0;
             const isCorrect = image?.isCorrect ?? false;
             const correctness = isCorrect ? 'correct' : 'incorrect';
-            const aoName = `face-task-${taskIdx}-trial-${trialNum}-row${rowStr}-col${colStr}-${correctness}`;
+            const aoName = `face-task-3x3-${taskIdx}-trial-${trialNum}-row${rowStr}-col${colStr}-${correctness}`;
             return (
               <img
                 key={`${taskIndex}-${trial}-${image.id}`}
@@ -346,6 +340,10 @@ const FaceTask = ({ onSubmit }) => {
       <style>{`
         .grid-item:hover {
           border-color: #3498db;
+        }
+        button:hover {
+          background-color: #2980b9;
+          transform: scale(1.05);
         }
       `}</style>
     </div>
@@ -388,6 +386,7 @@ const styles = {
     height: '100vh',
     width: '100vw',
     display: 'flex',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 9999,
@@ -400,6 +399,7 @@ const styles = {
     textAlign: 'center',
     padding: '40px',
   },
+  // Replaced inline continueButton with shared ContinueButton component
   completionContainer: {
     display: 'flex',
     flexDirection: 'column',
@@ -417,4 +417,5 @@ const styles = {
   },
 };
 
-export default FaceTask;
+export default FaceTask3x3;
+

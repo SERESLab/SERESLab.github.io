@@ -43,6 +43,18 @@ function App() {
 
   const textTaskRef = useRef();
 
+  // Initialize Realeye.io SDK after React has mounted
+  useEffect(() => {
+    // Wait for React to render initial content before initializing SDK
+    const timer = setTimeout(() => {
+      if (window.initRealeyeSDK && typeof window.initRealeyeSDK === 'function') {
+        window.initRealeyeSDK();
+      }
+    }, 500); // Small delay to ensure React has rendered
+
+    return () => clearTimeout(timer);
+  }, []);
+
   useEffect(() => {
     generateTaskSequence();
   }, []);

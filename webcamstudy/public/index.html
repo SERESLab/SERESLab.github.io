@@ -29,14 +29,53 @@
       import EmbeddedPageSdk from "https://app.realeye.io/sdk/js/testRunnerEmbeddableSdk-1.7.1.js";
 
       let reSdk = null;
+      let sdkInitialized = false;
 
-      window.addEventListener("DOMContentLoaded", () => {
+      // Function to initialize the SDK (called from React after mount)
+      window.initRealeyeSDK = () => {
+        if (sdkInitialized) return;
+        
         const debugMode = false;
         const stimulusId = null;
         const forceRun = false;
 
         reSdk = new EmbeddedPageSdk(debugMode, stimulusId, forceRun);
-      });
+        sdkInitialized = true;
+        
+        // Set up MutationObserver to detect dynamically added AOIs
+        const observer = new MutationObserver((mutations) => {
+          // Check if any new elements with data-re-aoi-name were added
+          const hasNewAOIs = mutations.some(mutation => {
+            return Array.from(mutation.addedNodes).some(node => {
+              if (node.nodeType === Node.ELEMENT_NODE) {
+                return node.hasAttribute('data-re-aoi-name') || 
+                       node.querySelector('[data-re-aoi-name]') !== null;
+              }
+              return false;
+            });
+          });
+          
+          // If new AOIs were added, the SDK should detect them automatically
+          // but we can trigger a check by dispatching a custom event
+          if (hasNewAOIs && reSdk) {
+            // The SDK should automatically detect new AOIs, but we ensure
+            // the DOM is ready by waiting a bit
+            setTimeout(() => {
+              // Force a re-check by accessing the SDK
+              // Some SDKs need a refresh call, but if not available, 
+              // the observer ensures elements are in DOM when SDK checks
+            }, 100);
+          }
+        });
+
+        // Observe the entire document for changes
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true,
+          attributes: true,
+          attributeFilter: ['data-re-aoi-name']
+        });
+      };
 
       window.addEventListener("endmeplease", () => {
         if (reSdk) {

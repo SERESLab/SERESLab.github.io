@@ -10,6 +10,7 @@ import VideoTask from "./components/Video/VideoTask";
 import FaceTask2x2 from "./components/FaceTask2x2";
 import FaceTask3x3 from "./components/FaceTask3x3";
 import ValidationGrid from "./components/validation_grid/ValidationGrid";
+import PostQuestionnaire from "./components/PostQuestionnaire";
 
 // Utility to shuffle an array
 function shuffle(array) {
@@ -33,6 +34,7 @@ function App() {
     videoTask: null,
     faceTask2x2: null,
     faceTask3x3: null,
+    postQuestionnaire: null,
   });
 
   // State to track study timing
@@ -72,9 +74,10 @@ function App() {
       "FaceTask2x2",
       "FaceTask3x3",
     ];
+    const alwaysLast = ["PostQuestionnaire"];
     const randomized = shuffle(toRandomize);
     setRandomizedOrder(randomized);
-    setTaskFiles([...alwaysFirst, ...randomized]);
+    setTaskFiles([...alwaysFirst, ...randomized, ...alwaysLast]);
   };
 
   const handleTaskComplete = (taskType, data) => {
@@ -244,6 +247,22 @@ function App() {
       });
     }
 
+    // Add post-questionnaire responses
+    if (studyData.postQuestionnaire) {
+      jsonData.postQuestionnaire = {
+        difficulty: studyData.postQuestionnaire.difficulty,
+        hasVisualImpairments: studyData.postQuestionnaire.hasVisualImpairments,
+        visualImpairmentsSpecify: studyData.postQuestionnaire.visualImpairmentsSpecify || "",
+        hadReadingProblems: studyData.postQuestionnaire.hadReadingProblems,
+        readingProblemsSpecify: studyData.postQuestionnaire.readingProblemsSpecify || "",
+        completedTimely: studyData.postQuestionnaire.completedTimely,
+        thingsLiked: studyData.postQuestionnaire.thingsLiked || "",
+        thingsDisliked: studyData.postQuestionnaire.thingsDisliked || "",
+        otherComments: studyData.postQuestionnaire.otherComments || "",
+        timestamp: studyData.postQuestionnaire.timestamp,
+      };
+    }
+
     // Download JSON file
     const jsonString = JSON.stringify(jsonData, null, 2);
     const blob = new Blob([jsonString], {
@@ -344,6 +363,12 @@ function App() {
         );
       case "ValidationGrid":
         return <ValidationGrid onComplete={incrementTask} />;
+      case "PostQuestionnaire":
+        return (
+          <PostQuestionnaire
+            onSubmit={(data) => handleTaskComplete("postQuestionnaire", data)}
+          />
+        );
       default:
         return <div>Unknown task</div>;
     }
@@ -378,6 +403,7 @@ function App() {
         "FaceTask3x3",
         "TextTask",
         "ValidationGrid",
+        "PostQuestionnaire",
       ].includes(currentTaskName) &&
       isVideoTaskComplete())));
 

@@ -39,6 +39,7 @@ function App() {
 
   // State to track study timing
   const [startTime, setStartTime] = useState(null);
+  const [pageLoadTime, setPageLoadTime] = useState(null);
 
   // State to track video completion
   const [instructionVideoEnded, setInstructionVideoEnded] = useState(false);
@@ -47,6 +48,12 @@ function App() {
   const [textTaskComplete, setTextTaskComplete] = useState(false);
 
   const textTaskRef = useRef();
+
+  // Store page load time (ISO format) when component first mounts
+  useEffect(() => {
+    const loadTime = new Date().toISOString(); // ISO format for consistency with other timestamps
+    setPageLoadTime(loadTime);
+  }, []);
 
   // Initialize Realeye.io SDK after React has mounted
   useEffect(() => {
@@ -119,6 +126,7 @@ function App() {
       wearsGlasses: studyData.consent?.wearsGlasses || "",
       wearsContactLenses: studyData.consent?.wearsContactLenses || "",
       responses: [],
+      pageLoadTime: pageLoadTime, // ISO timestamp when page was first loaded
       startTime: startTime,
       endTime: new Date().toISOString(),
       TaskOrder: randomizedOrder, // Add the randomized order to output
@@ -275,7 +283,7 @@ function App() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  }, [studyData, startTime, randomizedOrder]);
+  }, [studyData, startTime, randomizedOrder, pageLoadTime]);
 
   // Auto-download data when all tasks are completed
   useEffect(() => {

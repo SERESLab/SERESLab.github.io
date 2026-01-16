@@ -77,19 +77,19 @@
 }
 
 .video-task-video {
-  width: 90%;
-  height: 90%;
-  max-width: 1000px;
-  max-height: 80vh;
+  width: 112.5%;
+  height: 112.5%;
+  max-width: 1250px;
+  max-height: 100vh;
   background: #fff;
   object-fit: contain;
 }
 
 .video-task-plyr {
-  width: 90% !important;
-  height: 90% !important;
-  max-width: 1000px !important;
-  max-height: 80vh !important;
+  width: 112.5% !important;
+  height: 112.5% !important;
+  max-width: 1250px !important;
+  max-height: 100vh !important;
 }
 .plyr__video-wrapper {
   width: 100% !important;

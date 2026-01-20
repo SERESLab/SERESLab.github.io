@@ -55,10 +55,7 @@ const formatText = (text, ref) => {
     word.split('').forEach(char => {
       let charSpan = document.createElement("span");
       charSpan.textContent = isSpace ? '' : char;
-      // Create descriptive AOI names for characters
-      let charType = isSpace ? 'space' : (isWord ? 'letter' : 'punct');
-      const charId = character_id || 0;
-      charSpan.setAttribute("data-re-aoi-name", `s${sCount}-${charType}-c${charId}`);
+      // Letter-level AOIs removed - only word-level AOIs are kept
       character_id++;
       charSpan.classList.add(isSpace ? "space" : "letter");
       wordBlock.appendChild(charSpan);

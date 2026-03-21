@@ -764,7 +764,7 @@
 
         // CODE SUMMARY
         timeline.push(codeTrial({
-            codeSrc: './tasks/code/CircularFifoQueue.java',
+            codeSrc: './tasks/code/circularfifoqueue.java',
             question: 'In your own words, describe what the <code>add()</code> method does when the queue is already at full capacity. Be specific about what happens to existing elements and how the internal state changes.',
             data: { condition: 'code-circular-fifo' },
         }));
@@ -825,15 +825,7 @@
             data: { condition: 'code-compare-parens' },
         }));
 
-        // ── 3. Demographics ────────────────────────────────────────────
-        timeline.push({
-            type: jsPsychSurveyText,
-            questions: [
-                { prompt: 'Age', name: 'age', columns: 5 },
-                { prompt: 'Field of study / occupation', name: 'field', columns: 30 },
-            ],
-            data: { trial_type_custom: 'demographics' },
-        });
+        // ── 3. Other Information ────────────────────────────────────────────
 
         timeline.push({
             type: jsPsychSurveyLikert,

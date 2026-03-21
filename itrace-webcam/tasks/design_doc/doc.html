@@ -1,0 +1,328 @@
+<main>
+    <div class="breadcrumbs">
+        <a href="/developers">For Developers</a> &gt;
+        <a href="/developers/design-documents">Design Documents</a> &gt;
+    </div>
+    <h1 data-stim-id="doc-title">Profile Architecture</h1>
+    <p data-stim-id="doc-intro-1">Chromium has lots of features that hook into a <code>Profile</code>, a bundle of data
+        about the current user and the current chrome session that can span multiple
+        browser windows. When Chromium first started, the profile had only a few moving
+        parts: the cookie jar, the history database, the bookmark database, and things
+        to do with user preferences.</p>
+    <p data-stim-id="doc-intro-2">As more and more features were added, the <code>Profile</code> class grew bigger and
+        bigger. In the early stages of the Chromium Project, it owned all of the
+        profile's state, leading to things like <code>Profile::GetInstantPromoCounter()</code> or
+        <code>Profile::GetHostContentSettingsMap()</code>. At one point, there were 58 getters in
+        <code>Profile</code>.
+    </p>
+    <p data-stim-id="doc-intro-3">We also struggled with startup and teardown issues during this period. When
+        creating a new <code>Profile</code> object, we had to create all the services in the right
+        order. For instance, the Sync service has a dependency on the history,
+        bookmarks, and extensions modules. If we weren't careful, we could initialize
+        Sync too early or destroy it too late.</p>
+    <p data-stim-id="doc-intro-4">The design has evolved a lot since then. In 2012, we transitioned to the new
+        model described on this page. Rather than owning everything directly, <code>Profile</code>
+        is now a sort of handle object with minimal state. To prevent startup and
+        teardown issues, we use a <code>DependencyManager</code> and a two-phase shutdown model.</p>
+    <nav class="table-of-contents" data-stim-id="doc-toc">
+        <ol>
+            <li><a href="#design-goals">Design Goals</a></li>
+            <li><a href="#how-to-add-a-new-service">How to Add a New Service</a>
+                <ol>
+                    <li><a href="#keyedservice">KeyedService</a></li>
+                    <li><a href="#profilekeyedservicefactory">ProfileKeyedServiceFactory</a></li>
+                    <li><a href="#browsercontextkeyedservicefactory">BrowserContextKeyedServiceFactory</a></li>
+                    <li><a href="#java-keyed-services">Java keyed services</a></li>
+                    <li><a href="#use-the-service">Use the Service</a></li>
+                </ol>
+            </li>
+            <li><a href="#a-few-types-of-factories">A Few Types of Factories</a></li>
+            <li><a href="#two-phase-shutdown">Two-phase Shutdown</a></li>
+            <li><a href="#dependency-management-overview">Dependency Management Overview</a></li>
+            <li><a href="#debugging-tips">Debugging Tips</a>
+                <ol>
+                    <li><a href="#crashes-at-shutdown">Crashes at Shutdown</a></li>
+                </ol>
+            </li>
+        </ol>
+    </nav>
+    <h2 data-stim-id="doc-h-design-goals" id="design-goals" tabindex="-1"><a class="header-anchor"
+            href="#design-goals">Design Goals</a></h2>
+    <ul data-stim-id="doc-design-goals-list">
+        <li><strong>The <code>Profile</code> class must stay at a maintainable size.</strong> It is tempting to
+            put all of a profile's "state" in the same place, but is not sustainable in
+            a codebase this size.</li>
+        <li><strong>Profile startup and shutdown must be robust.</strong> When we started and only
+            had a few objects hanging off of Profile, manual ordering was acceptable for
+            destruction. Now, we have hundreds of services; we can not rely on manual
+            ordering when we have so many components.</li>
+        <li><strong>We must allow features to be compiled in and out.</strong> This is important for
+            any multi-platform project, but it's especially important for iOS, where we
+            use WebKit instead of Blink. <a
+                href="/developers/design-documents/layered-components-design/#layered-components">Layered
+                components</a>
+            offer guidelines for writing code that works on iOS and desktop at the same
+            time. This design also makes it easy for third-party vendors (e.g. Opera,
+            Edge, Brave...) to add/remove features as they see fit.</li>
+    </ul>
+    <h2 data-stim-id="doc-h-new-service" id="how-to-add-a-new-service" tabindex="-1"><a class="header-anchor"
+            href="#how-to-add-a-new-service">How to Add a New Service</a></h2>
+    <h3 data-stim-id="doc-h-keyedservice" id="keyedservice" tabindex="-1"><a class="header-anchor"
+            href="#keyedservice">KeyedService</a></h3>
+    <p data-stim-id="doc-keyedservice-intro">A <code>KeyedService</code> is basically a plain object, with the following
+        differences:</p>
+    <ul data-stim-id="doc-keyedservice-list">
+        <li>It has a virtual destructor.</li>
+        <li>Its lifetime is managed by a <code>ProfileKeyedServiceFactory</code> or a
+            <code>BrowserContextKeyedServiceFactory</code> singleton.
+        </li>
+        <li>It has an overridable <code>Shutdown()</code> method, which is always called before the
+            destructor. This allows two-phase shutdown; see below.</li>
+    </ul>
+    <p data-stim-id="doc-keyedservice-example-desc">Let's say we're working on a new feature called Foo, and we want to
+        store some
+        state in the profile. Typically, we'll implement this as a <code>FooService</code> class
+        that has a separate instance for each profile. It is generally a good idea to
+        disable copy and assignment for this class.</p>
+    <pre data-stim-id="doc-code-fooservice"><code><span class="hljs-keyword">class</span> <span class="hljs-title class_">FooService</span> : <span class="hljs-keyword">public</span> KeyedService {
+    <span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">FooService</span><span class="hljs-params">(PrefService* profile_prefs, BarService* bar_service)</span></span>;
+    <span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">FooService</span>() = <span class="hljs-keyword">default</span>;
+
+    <span class="hljs-built_in">FooService</span>(<span class="hljs-type">const</span> FooService&amp;) = <span class="hljs-keyword">delete</span>;
+    FooService&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> FooService&amp;) = <span class="hljs-keyword">delete</span>;
+
+    <span class="hljs-keyword">private</span>:
+    PrefService* profile_prefs_;
+    BarService* bar_service_;
+    };
+    </code></pre>
+    <h3 data-stim-id="doc-h-pksf" id="profilekeyedservicefactory" tabindex="-1"><a class="header-anchor"
+            href="#profilekeyedservicefactory">ProfileKeyedServiceFactory</a></h3>
+    <p data-stim-id="doc-pksf-intro-1">Now that we have implemented <code>FooService</code>, we need to derive from
+        <code>ProfileKeyedServiceFactory</code> (PKSF).
+    </p>
+    <p data-stim-id="doc-pksf-intro-2"><code>ProfileKeyedServiceFactory</code> derives from
+        <code>BrowserContextKeyedServiceFactory</code>
+        (BCKSF) where most of the following is implemented. PKSF adds the service
+        selection logic per profile type. In the rest of the document, we will refer to
+        PKSF as it is the main type of factory to be constructed. Differences will be
+        noted in the <code>BrowserContextKeyedServiceFactory</code> section below.</p>
+    <p data-stim-id="doc-pksf-intro-3">Instead of having the <code>Profile</code> own <code>FooService</code>, we have a
+        dedicated singleton
+        <code>FooServiceFactory</code>. This class takes care of creating and destroying
+        <code>FooService</code> per <code>Profile</code>. Here is a minimal example:
+    </p>
+    <pre data-stim-id="doc-code-foofactory"><code><span class="hljs-keyword">class</span> <span class="hljs-title class_">FooServiceFactory</span> : <span class="hljs-keyword">public</span> ProfileKeyedServiceFactory {
+    <span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">static</span> FooService* <span class="hljs-title">GetForProfile</span><span class="hljs-params">(Profile* profile)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">static</span> FooServiceFactory* <span class="hljs-title">GetInstance</span><span class="hljs-params">()</span></span>;
+
+    <span class="hljs-keyword">private</span>:
+    <span class="hljs-built_in">FooServiceFactory</span>();
+    ~<span class="hljs-built_in">FooServiceFactory</span>() <span class="hljs-keyword">override</span>;
+
+    <span class="hljs-comment">// BrowserContextKeyedServiceFactory:</span>
+    <span class="hljs-function">std::unique_ptr&lt;KeyedService&gt; <span class="hljs-title">BuildServiceInstanceForBrowserContext</span><span class="hljs-params">(
+        content::BrowserContext* context)</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span></span>;
+    };
+    </code></pre>
+    <p data-stim-id="doc-pksf-desc-1">We have a factory which performs most of the work of associating a profile with
+        an object provided by the <code>BuildServiceInstanceFor()</code> method. The
+        <code>BrowserContextKeyedServiceFactory</code> provides an interface to override
+        while managing the lifetime of your Service object in response to <code>Profile</code>
+        lifetime events and making sure your service is shut down before services it
+        depends on.
+    </p>
+    <p data-stim-id="doc-pksf-desc-2">An absolutely minimal factory will supply the following methods:</p>
+    <ul data-stim-id="doc-pksf-methods-list">
+        <li>A static <code>GetInstance()</code> method that refers to the factory as a
+            singleton.</li>
+        <li>A <code>GetForProfile()</code> method that wraps PKSF, casting the result back to
+            whatever type we need to return.</li>
+        <li>A <code>BuildServiceInstanceFor()</code> method which is called once by the framework
+            for each profile. It must initialize and return a proper instance of
+            our service.</li>
+    </ul>
+    <p data-stim-id="doc-pksf-knobs-intro">In addition, PKSF provides these other knobs for controlling behavior:</p>
+    <ul data-stim-id="doc-pksf-knobs-list">
+        <li>PKSF provides control over the creation of services for different profile
+            types via the constructor.
+            <ul>
+                <li>Using PKSF, you can construct the structure <code>ProfileSelections</code> to
+                    control which profile type the service will be created for.</li>
+                <li>By default, PKSF will return nullptr (no service constructed) for all
+                    non-Regular Profiles, e.g Incognito profile, Guest profile and
+                    System profile. Note: Ash internal profiles are of type Regular and
+                    will behave the same by default. You can change that behavior in the
+                    <code>ProfileSelections</code> constructor.
+                </li>
+                <li>PKSF allows you to control which Profile type the service will be
+                    constructed for via the structure <code>ProfileSelections</code> passed to the
+                    constructor, providing a value of <code>ProfileSelections</code> will change the
+                    default behavior.</li>
+                <li>More information on <code>ProfileSelections</code> can be found <a
+                        href="https://source.chromium.org/chromium/chromium/src/+/main:chrome/browser/profiles/profile_keyed_service_factory.md;l=72">here</a>
+                </li>
+            </ul>
+        </li>
+        <li><code>RegisterProfilePrefs()</code> is called once per profile during initialization
+            and is where you can place any user pref registration.</li>
+        <li>By default, PKSF will lazily create your service. If you override
+            <code>ServiceIsCreatedWithBrowserContext()</code> to return true, your service
+            will be created alongside the profile.
+        </li>
+        <li>PKSF gives you multiple ways to control behavior during unit tests.
+            See the header for more details.</li>
+        <li>PKSF gives you a way to augment and tweak the shutdown and deallocation
+            behavior.</li>
+    </ul>
+    <p data-stim-id="doc-pksf-examples-intro">Examples of PKSF factory initialization (constructor definition):</p>
+    <pre data-stim-id="doc-code-pksf-examples"><code>// Initialization of a PKSF factory with default Profile selection behavior.
+    ChromeDefaultKeyedServiceFactory()
+        : <span class="hljs-built_in">ProfileKeyedServiceFactory</span>(<span class="hljs-string">"DefaultKeyedService"</span>) {}
+
+    // Initialization of a PKSF factor with customized Profile selection behavior
+    // for different profile types with different behaviors per type.
+    ChromeCustomizedKeyedServiceFactory()
+        : <span class="hljs-built_in">ProfileKeyedServiceFactory</span>(<span class="hljs-string">"CustomizedKeyedService"</span>,
+            ProfileSelections::<span class="hljs-built_in">Builder</span>()
+            .<span class="hljs-built_in">WithRegular</span>(ProfileSelection::kOwnInstance))
+            .<span class="hljs-built_in">WithGuest</span>(ProfileSelection::kOffTheRecordOnly)
+            .<span class="hljs-built_in">WithAshInternals</span>(ProfileSelection::kNone)
+            .<span class="hljs-built_in">Build</span>()) {}
+    </code></pre>
+    <h3 data-stim-id="doc-h-bcksf" id="browsercontextkeyedservicefactory" tabindex="-1"><a class="header-anchor"
+            href="#browsercontextkeyedservicefactory">BrowserContextKeyedServiceFactory</a></h3>
+    <p data-stim-id="doc-bcksf-intro">In some cases, creating a PKSF is not possible, PKSF can only be created under
+        chrome/ directory. Other factories/services will have to derive from BCKSF,
+        e.g implementing a factory under components/ or extensions/
+        (extensions mainly use a templated version <code>BrowserContextKeyedAPIFactory&lt;T&gt;</code>).
+        There are some differences to note when using a BCKSF:</p>
+    <ul data-stim-id="doc-bcksf-differences-list">
+        <li>The derived constructor should associate the factory with the
+            <code>BrowserContextDependencyManager</code> singleton to make the
+            <code>DependsOn()</code> declarations, in PKSF this is directly done in the
+            PKSF parent constructor.
+        </li>
+        <li>By default, BCKSF return nullptr when given an Incognito profile.
+            <ul>
+                <li>You can change this behavior by overriding <code>GetBrowserContextToUse()</code>,
+                    based on the input <code>BrowserContext</code>.</li>
+                <li>In PKSF, this behavior is controlled by the <code>ProfileSelections</code> which
+                    provides a better API and default behavior.</li>
+            </ul>
+        </li>
+    </ul>
+    <p data-stim-id="doc-bcksf-warning">WARNING: handling all profile types correctly in BCKSF is very difficult as
+        there are a lot of edge cases (OTR and non-OTR system and guest profiles,
+        Ash-internal profiles, ...). It is recommended to use PKSF instead if possible
+        to handle this complexity.</p>
+    <pre data-stim-id="doc-code-bcksf-example"><code><span class="hljs-comment">// Initialization of a BKCSF factory.</span>
+    NonChromeDefaultKeyedServiceFactory::
+    <span class="hljs-title function_ invoke__">NonChromeDefaultKeyedServiceFactory</span>()
+        : <span class="hljs-title function_ invoke__">BrowserContextKeyedServiceFactory</span>(
+                <span class="hljs-string">"DefaultBrowserContextKeyedServiceFactory"</span>,
+                BrowserContextDependencyManager::<span class="hljs-title function_ invoke__">GetInstance</span>()) {}
+
+    <span class="hljs-comment">// Overriding which `context` the service will be constructed for.</span>
+    content::BrowserContext*
+        NonChromeDefaultKeyedServiceFactory::<span class="hljs-title function_ invoke__">GetBrowserContextToUse</span>(
+            content::BrowserContext* context) <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> {
+            <span class="hljs-comment">// Create the service for all profiles (contexts), including off the</span>
+            <span class="hljs-comment">// record profiles.</span>
+        <span class="hljs-keyword">return</span> context;
+    }
+    </code></pre>
+    <h3 data-stim-id="doc-h-java" id="java-keyed-services" tabindex="-1"><a class="header-anchor"
+            href="#java-keyed-services">Java keyed services</a></h3>
+    <p data-stim-id="doc-java-desc">On Android, C++ keyed services often have a corresponding Java object. In such
+        cases, the C++ part should own the Java one. You can find more details
+        <a
+            href="https://chromium.googlesource.com/chromium/src/+/HEAD/docs/android_jni_ownership_best_practices.md">here</a>.
+    </p>
+    <h3 data-stim-id="doc-h-use-service" id="use-the-service" tabindex="-1"><a class="header-anchor"
+            href="#use-the-service">Use the Service</a></h3>
+    <p data-stim-id="doc-use-service-desc">Instead of doing <code>profile.GetFooService()</code> (the old way), you
+        should access
+        <code>FooService</code> via <code>FooServiceFactory::GetForProfile(profile)</code>.
+    </p>
+    <h2 data-stim-id="doc-h-factory-types" id="a-few-types-of-factories" tabindex="-1"><a class="header-anchor"
+            href="#a-few-types-of-factories">A Few Types of Factories</a></h2>
+    <p data-stim-id="doc-factory-types-desc">Not all objects have the same lifecycle and memory management. The previous
+        paragraph was a major simplification; there is a base class
+        <code>KeyedServiceBaseFactory</code> that defines the most general dependency stuff
+        while <code>BrowserContextKeyedServiceFactory</code> is a specialization for the content
+        layer. <code>ProfileKeyedServiceFactory</code> is another specialization that takes care
+        of the Profile selection for the services. There is a second
+        <code>RefcountedProfileKeyedServiceFactory</code> that gives slightly different semantics
+        and storage for <code>RefCountedThreadSafe</code> objects. Equivalent
+        <code>RefcountedBrowserContextKeyedServiceFactory</code> exists.
+    </p>
+    <h2 data-stim-id="doc-h-two-phase" id="two-phase-shutdown" tabindex="-1"><a class="header-anchor"
+            href="#two-phase-shutdown">Two-phase Shutdown</a></h2>
+    <p data-stim-id="doc-two-phase-intro">Shutdown behavior is a bit subtle. For historical reasons, we have a two-phase
+        deletion process:</p>
+    <ol data-stim-id="doc-two-phase-steps">
+        <li>Every PKSF will first have its <code>Shutdown()</code> method called. Use this method
+            to drop weak references to the <code>Profile</code> or other service objects.</li>
+        <li>Every PKSF is deleted and its destructor is run. Minimal work should be
+            done here. Attempts to call any <code>*ServiceFactory::GetForProfile()</code> will
+            cause an assertion in debug mode.</li>
+    </ol>
+    <p data-stim-id="doc-two-phase-desc">The <code>Shutdown()</code> steps lets us drop weak references and observers
+        <em>before</em> any
+        <code>KeyedService</code> is destroyed. This is useful for "cycles" , e.g. <code>FooService</code>
+        observes <code>BarService</code> <strong>and</strong> <code>BarService</code> observes <code>FooService</code>.
+        Single-phase shutdown cannot accommodate these cases.
+    </p>
+    <h2 data-stim-id="doc-h-dependency" id="dependency-management-overview" tabindex="-1"><a class="header-anchor"
+            href="#dependency-management-overview">Dependency Management Overview</a></h2>
+    <p data-stim-id="doc-dependency-intro">With that in mind, let's look at how dependency management works. There is a
+        single <code>BrowserContextDependencyManager</code> singleton, which is what is alerted to
+        <code>Profile</code> creation and destruction. All constructors of PKSF register and
+        unregister themselves with the <code>BrowserContextDependencyManager</code> automatically.
+        The job of the <code>BrowserContextDependencyManager</code> is to make sure that individual
+        services are created and destroyed in a safe ordering.
+    </p>
+    <p data-stim-id="doc-dependency-example-intro">Consider the case of these three service factories:</p>
+    <pre data-stim-id="doc-code-dependency-example"><code>AlphaServiceFactory::<span class="hljs-built_in">AlphaServiceFactory</span>()
+        : <span class="hljs-built_in">ProfileKeyedServiceFactory</span>(<span class="hljs-string">"AlphaService"</span>) {}
+
+    BetaServiceFactory::<span class="hljs-built_in">BetaServiceFactory</span>()
+        : <span class="hljs-built_in">ProfileKeyedServiceFactory</span>(<span class="hljs-string">"BetaService"</span>) {
+    DependsOn(AlphaServiceFactory::<span class="hljs-built_in">GetInstance</span>());
+    }
+
+    GammaServiceFactory::<span class="hljs-built_in">GammaServiceFactory</span>()
+        : <span class="hljs-built_in">ProfileKeyedServiceFactory</span>(<span class="hljs-string">"GammaService"</span>) {
+    DependsOn(BetaServiceFactory::<span class="hljs-built_in">GetInstance</span>());
+    }
+    </code></pre>
+    <p data-stim-id="doc-dependency-desc-1">The explicitly stated dependencies in this simplified graph mean that the
+        only
+        valid creation order for services is [Alpha, Beta, Gamma] and the destruction
+        order is [Gamma, Beta, Alpha]. The above is all you, as a user of the
+        framework, have to do to specify dependencies.</p>
+    <p data-stim-id="doc-dependency-desc-2">Behind the scenes, <code>BrowserContextDependencyManager</code> takes the
+        stated dependency
+        edges, performs a Kahn topological sort, and uses that in
+        <code>CreateBrowserContextServices()</code> and <code>DestroyBrowserContextServices()</code>.
+    </p>
+    <h2 data-stim-id="doc-h-debugging" id="debugging-tips" tabindex="-1"><a class="header-anchor"
+            href="#debugging-tips">Debugging Tips</a></h2>
+    <h3 data-stim-id="doc-h-crashes" id="crashes-at-shutdown" tabindex="-1"><a class="header-anchor"
+            href="#crashes-at-shutdown">Crashes at Shutdown</a></h3>
+    <p data-stim-id="doc-crashes-intro">If you get a stack that looks like this:</p>
+    <pre data-stim-id="doc-code-crash-stack"><code>BrowserContextDependencyManager::<span class="hljs-built_in">AssertProfileWasntDestroyed</span>()
+    BrowserContextKeyedServiceFactory::<span class="hljs-built_in">GetServiceForProfile</span>()
+    MyServiceFactory::<span class="hljs-built_in">GetForProfile</span>()
+    ... [Probably a bunch of frames] ...
+    OtherService::~<span class="hljs-built_in">OtherService</span>()
+    BrowserContextKeyedServiceFactory::<span class="hljs-built_in">BrowserContextDestroyed</span>()
+    BrowserContextDependencyManager::<span class="hljs-built_in">DestroyProfileServices</span>()
+    ProfileImpl::~<span class="hljs-built_in">ProfileImpl</span>()
+    </code></pre>
+    <p data-stim-id="doc-crashes-desc">The problem is that OtherService is improperly depending on MyService. The
+        framework asserts if you try to use a <code>Shutdown()</code>ed component.</p>
+</main>

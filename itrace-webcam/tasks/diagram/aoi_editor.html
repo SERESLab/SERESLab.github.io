@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>AOI Region Editor</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, sans-serif;
+            background: #f0ede8;
+            color: #1a1917;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        #toolbar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            background: #fff;
+            border-bottom: 1px solid #ddd;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+
+        #toolbar h1 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        #toolbar label {
+            font-size: 13px;
+            color: #555;
+        }
+
+        #toolbar input[type=file] {
+            font-size: 13px;
+        }
+
+        #toolbar button {
+            padding: 5px 12px;
+            font-size: 13px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            background: #fff;
+            cursor: pointer;
+            transition: background .15s;
+        }
+
+        #toolbar button:hover {
+            background: #f0f0f0;
+        }
+
+        #toolbar button.danger {
+            border-color: #e57373;
+            color: #c0392b;
+        }
+
+        #toolbar button.danger:hover {
+            background: #fdecea;
+        }
+
+        #export-btn {
+            background: #2563eb;
+            color: #fff;
+            border-color: #2563eb;
+        }
+
+        #export-btn:hover {
+            background: #1d4ed8;
+        }
+
+        #main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        #canvas-wrap {
+            flex: 1;
+            overflow: auto;
+            position: relative;
+            background: #e8e5e0;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            padding: 24px;
+        }
+
+        #img-container {
+            position: relative;
+            display: inline-block;
+            user-select: none;
+            cursor: crosshair;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        #img-container img {
+            display: block;
+            max-width: none;
+        }
+
+        .aoi-overlay {
+            position: absolute;
+            border: 2px solid;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: opacity .15s;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+
+        .aoi-overlay:hover {
+            opacity: 0.85;
+        }
+
+        .aoi-overlay.selected {
+            outline: 2px solid #000;
+            outline-offset: 1px;
+        }
+
+        .aoi-label {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 1px 4px;
+            border-radius: 2px;
+            white-space: nowrap;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.4;
+        }
+
+        #draw-rect {
+            position: absolute;
+            border: 2px dashed #2563eb;
+            background: rgba(37, 99, 235, 0.1);
+            pointer-events: none;
+            display: none;
+        }
+
+        #sidebar {
+            width: 280px;
+            flex-shrink: 0;
+            background: #fff;
+            border-left: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #sidebar-header {
+            padding: 12px 14px;
+            border-bottom: 1px solid #eee;
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        #aoi-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px;
+        }
+
+        .aoi-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background .1s;
+            margin-bottom: 4px;
+            border: 1px solid transparent;
+        }
+
+        .aoi-item:hover {
+            background: #f5f5f5;
+        }
+
+        .aoi-item.selected {
+            background: #eff6ff;
+            border-color: #bfdbfe;
+        }
+
+        .aoi-swatch {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        .aoi-item-name {
+            flex: 1;
+            font-size: 13px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .aoi-item-del {
+            font-size: 16px;
+            color: #aaa;
+            line-height: 1;
+            padding: 0 2px;
+        }
+
+        .aoi-item-del:hover {
+            color: #e53e3e;
+        }
+
+        #detail-panel {
+            border-top: 1px solid #eee;
+            padding: 14px;
+            background: #fafafa;
+        }
+
+        #detail-panel h3 {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        #detail-panel label {
+            display: block;
+            font-size: 12px;
+            color: #777;
+            margin-bottom: 3px;
+        }
+
+        #detail-panel input[type=text] {
+            width: 100%;
+            padding: 5px 8px;
+            font-size: 13px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        #detail-panel .coords {
+            font-size: 11px;
+            color: #999;
+            font-family: monospace;
+            margin-top: 4px;
+        }
+
+        #output-panel {
+            border-top: 1px solid #ddd;
+            padding: 12px;
+            background: #1e1e1e;
+            flex-shrink: 0;
+        }
+
+        #output-panel p {
+            font-size: 11px;
+            color: #888;
+            margin-bottom: 6px;
+        }
+
+        #output-code {
+            font-family: monospace;
+            font-size: 11px;
+            color: #d4d4d4;
+            background: #1e1e1e;
+            border: none;
+            width: 100%;
+            height: 110px;
+            resize: none;
+            outline: none;
+            line-height: 1.5;
+        }
+
+        #hint {
+            font-size: 13px;
+            color: #777;
+        }
+
+        #no-image {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            gap: 12px;
+            color: #aaa;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="toolbar">
+        <h1>AOI Region Editor</h1>
+        <label>Load image: <input type="file" id="file-input" accept="image/*" /></label>
+        <span id="hint">Draw boxes by clicking and dragging on the image</span>
+        <button class="danger" id="clear-btn">Clear all</button>
+        <button id="export-btn">Copy JS config</button>
+    </div>
+
+    <div id="main">
+        <div id="canvas-wrap">
+            <div id="no-image">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="8.5" cy="8.5" r="1.5" />
+                    <path d="M21 15l-5-5L5 21" />
+                </svg>
+                Load your diagram image to begin
+            </div>
+            <div id="img-container" style="display:none">
+                <img id="diagram-img" draggable="false" />
+                <div id="draw-rect"></div>
+            </div>
+        </div>
+
+        <div id="sidebar">
+            <div id="sidebar-header">Regions (<span id="count">0</span>)</div>
+            <div id="aoi-list"></div>
+            <div id="detail-panel" style="display:none">
+                <h3>Selected region</h3>
+                <label>ID (data-stim-id)</label>
+                <input type="text" id="detail-id" placeholder="e.g. diag-class-UserAuth" />
+                <div class="coords" id="detail-coords"></div>
+            </div>
+            <div id="output-panel">
+                <p>JS config (paste into your study)</p>
+                <textarea id="output-code" readonly spellcheck="false"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const COLORS = [
+            { bg: 'rgba(37,99,235,0.15)', border: '#2563eb', text: '#1e40af' },
+            { bg: 'rgba(5,150,105,0.15)', border: '#059669', text: '#065f46' },
+            { bg: 'rgba(217,70,239,0.15)', border: '#d946ef', text: '#86198f' },
+            { bg: 'rgba(234,88,12,0.15)', border: '#ea580c', text: '#9a3412' },
+            { bg: 'rgba(220,38,38,0.15)', border: '#dc2626', text: '#991b1b' },
+            { bg: 'rgba(124,58,237,0.15)', border: '#7c3aed', text: '#4c1d95' },
+            { bg: 'rgba(20,184,166,0.15)', border: '#14b8a6', text: '#134e4a' },
+            { bg: 'rgba(245,158,11,0.15)', border: '#f59e0b', text: '#92400e' },
+        ];
+
+        let regions = [];
+        let selectedId = null;
+        let drawing = false;
+        let startX, startY;
+        let imgNaturalW, imgNaturalH;
+
+        const fileInput = document.getElementById('file-input');
+        const imgEl = document.getElementById('diagram-img');
+        const container = document.getElementById('img-container');
+        const drawRect = document.getElementById('draw-rect');
+        const noImage = document.getElementById('no-image');
+        const aoiList = document.getElementById('aoi-list');
+        const countEl = document.getElementById('count');
+        const detailPanel = document.getElementById('detail-panel');
+        const detailId = document.getElementById('detail-id');
+        const detailCoords = document.getElementById('detail-coords');
+        const outputCode = document.getElementById('output-code');
+
+        fileInput.addEventListener('change', e => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const url = URL.createObjectURL(file);
+            imgEl.onload = () => {
+                imgNaturalW = imgEl.naturalWidth;
+                imgNaturalH = imgEl.naturalHeight;
+                container.style.display = 'inline-block';
+                noImage.style.display = 'none';
+            };
+            imgEl.src = url;
+        });
+
+        // ── Drawing ───────────────────────────────────────────────────
+        function getPos(e) {
+            const rect = imgEl.getBoundingClientRect();
+            return {
+                x: e.clientX - rect.left,
+                y: e.clientY - rect.top,
+            };
+        }
+
+        container.addEventListener('mousedown', e => {
+            if (e.target.classList.contains('aoi-overlay') ||
+                e.target.classList.contains('aoi-label')) return;
+            drawing = true;
+            const p = getPos(e);
+            startX = p.x; startY = p.y;
+            drawRect.style.display = 'block';
+            drawRect.style.left = startX + 'px';
+            drawRect.style.top = startY + 'px';
+            drawRect.style.width = '0px';
+            drawRect.style.height = '0px';
+            e.preventDefault();
+        });
+
+        window.addEventListener('mousemove', e => {
+            if (!drawing) return;
+            const p = getPos(e);
+            const x = Math.min(p.x, startX);
+            const y = Math.min(p.y, startY);
+            const w = Math.abs(p.x - startX);
+            const h = Math.abs(p.y - startY);
+            drawRect.style.left = x + 'px';
+            drawRect.style.top = y + 'px';
+            drawRect.style.width = w + 'px';
+            drawRect.style.height = h + 'px';
+        });
+
+        window.addEventListener('mouseup', e => {
+            if (!drawing) return;
+            drawing = false;
+            drawRect.style.display = 'none';
+            const p = getPos(e);
+            const x = Math.min(p.x, startX);
+            const y = Math.min(p.y, startY);
+            const w = Math.abs(p.x - startX);
+            const h = Math.abs(p.y - startY);
+            if (w < 8 || h < 8) return;
+
+            const displayW = imgEl.getBoundingClientRect().width;
+            const displayH = imgEl.getBoundingClientRect().height;
+            const scaleX = imgNaturalW / displayW;
+            const scaleY = imgNaturalH / displayH;
+
+            const idx = regions.length;
+            const id = `diag-region-${idx + 1}`;
+            const color = COLORS[idx % COLORS.length];
+
+            regions.push({
+                id,
+                // Store as percentage of natural image size for portability
+                xPct: (x * scaleX / imgNaturalW) * 100,
+                yPct: (y * scaleY / imgNaturalH) * 100,
+                wPct: (w * scaleX / imgNaturalW) * 100,
+                hPct: (h * scaleY / imgNaturalH) * 100,
+                color,
+            });
+            renderAll();
+            selectRegion(id);
+            // Focus the ID field so user can immediately rename
+            detailId.focus();
+            detailId.select();
+        });
+
+        // ── Render ────────────────────────────────────────────────────
+        function renderAll() {
+            // Remove old overlays
+            container.querySelectorAll('.aoi-overlay').forEach(el => el.remove());
+
+            const displayW = imgEl.getBoundingClientRect().width;
+            const displayH = imgEl.getBoundingClientRect().height;
+
+            regions.forEach(r => {
+                const el = document.createElement('div');
+                el.className = 'aoi-overlay' + (r.id === selectedId ? ' selected' : '');
+                el.dataset.id = r.id;
+                el.style.cssText = `
+      left:   ${r.xPct}%;
+      top:    ${r.yPct}%;
+      width:  ${r.wPct}%;
+      height: ${r.hPct}%;
+      background: ${r.color.bg};
+      border-color: ${r.color.border};
+    `;
+                const label = document.createElement('span');
+                label.className = 'aoi-label';
+                label.style.cssText = `background:${r.color.border};color:#fff;`;
+                label.textContent = r.id;
+                el.appendChild(label);
+                el.addEventListener('click', ev => { ev.stopPropagation(); selectRegion(r.id); });
+                container.appendChild(el);
+            });
+
+            // Sidebar list
+            aoiList.innerHTML = '';
+            regions.forEach(r => {
+                const item = document.createElement('div');
+                item.className = 'aoi-item' + (r.id === selectedId ? ' selected' : '');
+                item.innerHTML = `
+      <div class="aoi-swatch" style="background:${r.color.border}"></div>
+      <div class="aoi-item-name">${r.id}</div>
+      <span class="aoi-item-del" title="Delete">×</span>
+    `;
+                item.querySelector('.aoi-item-del').addEventListener('click', ev => {
+                    ev.stopPropagation();
+                    regions = regions.filter(x => x.id !== r.id);
+                    if (selectedId === r.id) { selectedId = null; detailPanel.style.display = 'none'; }
+                    renderAll();
+                    updateOutput();
+                });
+                item.addEventListener('click', () => selectRegion(r.id));
+                aoiList.appendChild(item);
+            });
+
+            countEl.textContent = regions.length;
+            updateOutput();
+        }
+
+        function selectRegion(id) {
+            selectedId = id;
+            const r = regions.find(x => x.id === id);
+            if (!r) { detailPanel.style.display = 'none'; return; }
+            detailPanel.style.display = 'block';
+            detailId.value = r.id;
+            detailCoords.textContent =
+                `x:${r.xPct.toFixed(1)}%  y:${r.yPct.toFixed(1)}%  w:${r.wPct.toFixed(1)}%  h:${r.hPct.toFixed(1)}%`;
+            renderAll();
+        }
+
+        detailId.addEventListener('input', () => {
+            const r = regions.find(x => x.id === selectedId);
+            if (!r) return;
+            const newId = detailId.value.trim() || selectedId;
+            selectedId = newId;
+            r.id = newId;
+            renderAll();
+        });
+
+        // ── Output ────────────────────────────────────────────────────
+        function updateOutput() {
+            if (regions.length === 0) { outputCode.value = '// No regions defined yet.'; return; }
+            const lines = [
+                `// Paste into your jsPsych trial's stimulus HTML`,
+                `// Image: set data-img-w and data-img-h to your image's natural dimensions`,
+                `const DIAGRAM_AOIS = [`
+            ];
+            regions.forEach(r => {
+                lines.push(
+                    `  { id: "${r.id}", xPct: ${r.xPct.toFixed(2)}, yPct: ${r.yPct.toFixed(2)}, wPct: ${r.wPct.toFixed(2)}, hPct: ${r.hPct.toFixed(2)} },`
+                );
+            });
+            lines.push(`];`);
+            outputCode.value = lines.join('\n');
+        }
+
+        document.getElementById('export-btn').addEventListener('click', () => {
+            navigator.clipboard.writeText(outputCode.value).then(() => {
+                const btn = document.getElementById('export-btn');
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = 'Copy JS config', 1500);
+            });
+        });
+
+        document.getElementById('clear-btn').addEventListener('click', () => {
+            if (!confirm('Delete all regions?')) return;
+            regions = []; selectedId = null;
+            container.querySelectorAll('.aoi-overlay').forEach(el => el.remove());
+            aoiList.innerHTML = '';
+            countEl.textContent = 0;
+            detailPanel.style.display = 'none';
+            updateOutput();
+        });
+
+        // Deselect on click outside
+        container.addEventListener('click', e => {
+            if (e.target === imgEl || e.target === container) {
+                selectedId = null;
+                detailPanel.style.display = 'none';
+                renderAll();
+            }
+        });
+
+        updateOutput();
+    </script>
+</body>
+
+</html>

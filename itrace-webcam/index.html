@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Study</title>
+
+    <!-- jsPsych core + plugins via CDN -->
+    <script src="https://unpkg.com/jspsych@8.2.3"></script>
+    <link href="https://unpkg.com/jspsych@8.2.3/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.0.0/dist/index.browser.min.js"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-text@2.0.0/dist/index.browser.min.js"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-likert@2.0.0/dist/index.browser.min.js"></script>
+    <!-- Syntax highlighting for code stimuli (optional, remove if not needed) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <style>
+        /* ── Base ─────────────────────────────────────────────── */
+        :root {
+            --bg: #f8f7f4;
+            --surface: #ffffff;
+            --border: #e0ddd7;
+            --text: #1a1917;
+            --text-muted: #6b6860;
+            --accent: #2563eb;
+            --radius: 8px;
+            --shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            background: var(--bg);
+            font-family: 'Georgia', serif;
+            color: var(--text);
+        }
+
+        /* Override jsPsych centering so we control layout */
+        .jspsych-display-element {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+
+        .jspsych-content {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        /* ── Shared stimulus card ─────────────────────────────── */
+        .stim-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 2rem 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* ── Single stimulus layout ───────────────────────────── */
+        .stim-single {
+            /* stim-card styles are enough */
+        }
+
+        /* ── Side-by-side layout ──────────────────────────────── */
+        .stim-sidebyside {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stim-sidebyside .stim-card {
+            margin-bottom: 0;
+        }
+
+        /* ── Stimulus type: text ──────────────────────────────── */
+        .stim-text {
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        /* ── Stimulus type: image ─────────────────────────────── */
+        .stim-image img {
+            max-width: 100%;
+            border-radius: 4px;
+            display: block;
+        }
+
+        /* ── Stimulus type: code ──────────────────────────────── */
+        .stim-code pre {
+            margin: 0;
+            font-size: 0.9rem;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+
+        /* ── Stimulus type: diagram ───────────────────────────── */
+        .stim-diagram {
+            text-align: center;
+        }
+
+
+        .stim-diagram img {
+            max-width: 100%;
+        }
+
+        /* ── Clickable stimulus (selection mode) ──────────────── */
+        .stim-card.stim-clickable {
+            cursor: pointer;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .stim-card.stim-clickable:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        .stim-card.stim-clickable.selected {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+
+        /* ── Question label ───────────────────────────────────── */
+        .trial-question {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 1.25rem;
+            text-align: center;
+        }
+
+        /* ── jsPsych button overrides ─────────────────────────── */
+        .jspsych-btn {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius);
+            padding: 0.6rem 1.6rem;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: opacity 0.15s;
+            font-family: inherit;
+        }
+
+        .jspsych-btn:hover {
+            opacity: 0.88;
+        }
+
+        /* ── Instructions / consent ───────────────────────────── */
+        .instructions-body {
+            max-width: 640px;
+            line-height: 1.75;
+        }
+
+        .instructions-body h2 {
+            margin-top: 0;
+            font-size: 1.4rem;
+        }
+
+        /* ── End screen ───────────────────────────────────────── */
+        .end-screen {
+            text-align: center;
+        }
+
+        .end-screen h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .end-screen p {
+            color: var(--text-muted);
+        }
+
+        .download-btn {
+            margin-top: 1.5rem;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius);
+            padding: 0.7rem 2rem;
+            font-size: 1rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .download-btn:hover {
+            opacity: 0.88;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        // ═══════════════════════════════════════════════════════════════
+        //  UTILITIES
+        // ═══════════════════════════════════════════════════════════════
+
+        /**
+         * Snapshot bounding rects for all elements with data-stim-id
+         * and attach them to the current trial's data.
+         */
+        function snapshotStimRects(jsPsych) {
+            const rects = {};
+            document.querySelectorAll('[data-stim-id]').forEach(el => {
+                const id = el.getAttribute('data-stim-id');
+                const r = el.getBoundingClientRect();
+                rects[id] = { x: r.x, y: r.y, w: r.width, h: r.height };
+            });
+            jsPsych.data.addDataToLastTrial({ stim_rects: JSON.stringify(rects) });
+        }
+
+        /**
+         * Build an HTML string for a single stimulus card.
+         *
+         * @param {object} stim
+         *   stim.id      – unique label written to data-stim-id (required)
+         *   stim.type    – 'text' | 'image' | 'code' | 'diagram'
+         *   stim.content – text string, img src, code string, or img src
+         *   stim.label   – optional small label shown above content
+         *   stim.clickable – if true, adds click-selection behaviour
+         */
+        function stimCard(stim) {
+            const clickClass = stim.clickable ? ' stim-clickable' : '';
+            const clickAttr = stim.clickable ? `onclick="selectStim(this,'${stim.id}')"` : '';
+            const label = stim.label ? `<div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:0.05em">${stim.label}</div>` : '';
+
+            let inner = '';
+            if (stim.type === 'text') {
+                inner = `<div class="stim-text">${stim.content}</div>`;
+            } else if (stim.type === 'image') {
+                inner = `<div class="stim-image"><img src="${stim.content}" alt="${stim.id}" /></div>`;
+            } else if (stim.type === 'code') {
+                // hljs.highlightElement runs in on_load below
+                inner = `<div class="stim-code"><pre><code class="language-${stim.lang || 'plaintext'}" id="code-${stim.id}">${stim.content}</code></pre></div>`;
+            } else if (stim.type === 'diagram') {
+                inner = `<div class="stim-diagram"><img src="${stim.content}" alt="${stim.id}" /></div>`;
+            }
+
+            return `
+    <div class="stim-card stim-single${clickClass}"
+         data-stim-id="${stim.id}"
+         ${clickAttr}>
+      ${label}${inner}
+    </div>`;
+        }
+
+        /** Track which stim was clicked for selection trials */
+        let _selectedStimId = null;
+        function selectStim(el, id) {
+            document.querySelectorAll('.stim-clickable').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            _selectedStimId = id;
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        //  TRIAL BUILDERS
+        //  Use these helpers to define trials in your timeline.
+        // ═══════════════════════════════════════════════════════════════
+
+        /**
+         * Trial: single stimulus, button response.
+         *
+         * Example:
+         *   singleButtonTrial({
+         *     stim: { id: 't1', type: 'text', content: 'Hello world' },
+         *     question: 'What do you notice about this text?',
+         *     buttons: ['Nothing', 'Something', 'A lot'],
+         *   })
+         */
+        function singleButtonTrial({ stim, question = '', buttons = ['Continue'], data = {} }) {
+            return {
+                type: jsPsychHtmlButtonResponse,
+                stimulus: `
+      ${question ? `<p class="trial-question">${question}</p>` : ''}
+      ${stimCard(stim)}
+    `,
+                choices: buttons,
+                data: { trial_type_custom: 'single-button', stim_id: stim.id, ...data },
+                on_load: () => {
+                    if (stim.type === 'code') {
+                        const el = document.getElementById(`code-${stim.id}`);
+                        if (el) hljs.highlightElement(el);
+                    }
+                },
+                on_finish: () => snapshotStimRects(jsPsych),
+            };
+        }
+
+        /**
+         * Trial: side-by-side stimuli, button response.
+         *
+         * Example:
+         *   sideBysSideButtonTrial({
+         *     stims: [
+         *       { id: 'left',  type: 'code',  content: 'for i in range(10): ...' },
+         *       { id: 'right', type: 'diagram', content: 'imgs/flowchart.png' },
+         *     ],
+         *     question: 'Which is easier to understand?',
+         *     buttons: ['Left', 'Right', 'Both equal'],
+         *   })
+         */
+        function sideBySideButtonTrial({ stims, question = '', buttons = ['Continue'], data = {} }) {
+            return {
+                type: jsPsychHtmlButtonResponse,
+                stimulus: `
+      ${question ? `<p class="trial-question">${question}</p>` : ''}
+      <div class="stim-sidebyside">
+        ${stims.map(s => stimCard(s)).join('')}
+      </div>
+    `,
+                choices: buttons,
+                data: {
+                    trial_type_custom: 'sidebyside-button',
+                    stim_ids: stims.map(s => s.id).join(','),
+                    ...data
+                },
+                on_load: () => {
+                    stims.filter(s => s.type === 'code').forEach(s => {
+                        const el = document.getElementById(`code-${s.id}`);
+                        if (el) hljs.highlightElement(el);
+                    });
+                },
+                on_finish: () => snapshotStimRects(jsPsych),
+            };
+        }
+
+        /**
+         * Trial: click on a stimulus to select it (no button).
+         * Participant clicks a stimulus card, then clicks Continue.
+         *
+         * Example:
+         *   clickSelectTrial({
+         *     stims: [
+         *       { id: 'optA', type: 'image', content: 'imgs/a.png', label: 'Option A', clickable: true },
+         *       { id: 'optB', type: 'image', content: 'imgs/b.png', label: 'Option B', clickable: true },
+         *     ],
+         *     question: 'Click the image that best matches the description.',
+         *   })
+         */
+        function clickSelectTrial({ stims, question = '', data = {} }) {
+            _selectedStimId = null;
+            return {
+                type: jsPsychHtmlButtonResponse,
+                stimulus: `
+      ${question ? `<p class="trial-question">${question}</p>` : ''}
+      <div class="stim-sidebyside">
+        ${stims.map(s => stimCard({ ...s, clickable: true })).join('')}
+      </div>
+    `,
+                choices: ['Continue'],
+                data: { trial_type_custom: 'click-select', stim_ids: stims.map(s => s.id).join(','), ...data },
+                on_load: () => {
+                    stims.filter(s => s.type === 'code').forEach(s => {
+                        const el = document.getElementById(`code-${s.id}`);
+                        if (el) hljs.highlightElement(el);
+                    });
+                },
+                on_finish: (trialData) => {
+                    trialData.selected_stim = _selectedStimId;
+                    snapshotStimRects(jsPsych);
+                },
+            };
+        }
+
+        // ── Diagram AOI config ─────────────────────────────────────
+        // PASTE YOUR DIAGRAM_AOIS ARRAY HERE:
+        const DIAGRAM_AOIS = [
+            { id: "book_entity", xPct: 1.58, yPct: 5.29, wPct: 33.58, hPct: 21.29 },
+            { id: "book_item_entity", xPct: 1.46, yPct: 30.71, wPct: 33.82, hPct: 35.00 },
+            { id: "lang_enum", xPct: 72.63, yPct: 11.43, wPct: 12.65, hPct: 17.86 },
+            { id: "format_enum", xPct: 86.25, yPct: 26.43, wPct: 12.41, hPct: 19.43 },
+            { id: "account_enum", xPct: 86.13, yPct: 11.57, wPct: 12.29, hPct: 13.57 },
+            { id: "datatypes", xPct: 72.38, yPct: 2.29, wPct: 26.52, hPct: 8.14 },
+            { id: "author_entity", xPct: 49.27, yPct: 9.29, wPct: 19.83, hPct: 13.43 },
+            { id: "account_entity", xPct: 53.65, yPct: 38.57, wPct: 20.44, hPct: 16.14 },
+            { id: "library_entity", xPct: 56.45, yPct: 65.14, wPct: 15.09, hPct: 11.14 },
+            { id: "patron_entity", xPct: 82.73, yPct: 64.57, wPct: 16.30, hPct: 12.43 },
+            { id: "librarian_entity", xPct: 83.21, yPct: 83.00, wPct: 15.94, hPct: 13.14 },
+            { id: "interfaces", xPct: 44.40, yPct: 80.86, wPct: 28.47, hPct: 18.29 },
+            { id: "catalog_entity", xPct: 8.39, yPct: 84.29, wPct: 19.71, hPct: 10.57 },
+        ];
+
+        function diagramTrial({ src, aois, question, data = {} }) {
+            return {
+                type: jsPsychHtmlButtonResponse,
+                stimulus: `
+      <div style="position:relative; width:100%; margin-bottom:1.5rem;">
+        <img
+          id="diag-img"
+          src="${src}"
+          style="width:100%; display:block; border-radius:var(--radius); box-shadow:var(--shadow);"
+        />
+        ${aois.map(r => `
+          <div
+            data-stim-id="${r.id}"
+            style="
+              position:absolute;
+              left:${r.xPct}%; top:${r.yPct}%;
+              width:${r.wPct}%; height:${r.hPct}%;
+              pointer-events:none;
+            "
+          ></div>`).join('')}
+      </div>
+      <p class="trial-question">${question}</p>
+      <textarea
+        id="diag-response"
+        rows="5"
+        style="
+          width:100%; padding:.75rem 1rem; font-size:.95rem;
+          font-family:inherit; border:1px solid var(--border);
+          border-radius:var(--radius); resize:vertical; margin-bottom:1rem;
+        "
+        placeholder="Type your response here…"
+      ></textarea>
+    `,
+                choices: ['Submit'],
+                data: { trial_type_custom: 'diagram', ...data },
+                on_finish(trialData) {
+                    trialData.free_response = document.getElementById('diag-response')?.value ?? '';
+                    snapshotStimRects(jsPsych);
+                },
+            };
+        }
+
+
+        // ═══════════════════════════════════════════════════════════════
+        //  TIMELINE  ← Edit everything below here
+        // ═══════════════════════════════════════════════════════════════
+
+        const jsPsych = initJsPsych({
+            on_finish: function () {
+                // Auto-show end screen — download triggered by button
+            }
+        });
+
+        const timeline = [];
+
+        // ── 1. Consent / Instructions ──────────────────────────────────
+        timeline.push({
+            type: jsPsychHtmlButtonResponse,
+            stimulus: `
+    <div class="instructions-body stim-card">
+      <h2>Welcome</h2>
+      <p>Thank you for participating in this study. You will be shown a series of stimuli and asked to make judgments about them.</p>
+      <p>Your responses will be recorded and downloaded at the end of the session. The study takes approximately <strong>X minutes</strong>.</p>
+      <p>Click <strong>Begin</strong> when you are ready.</p>
+    </div>
+  `,
+            choices: ['Begin'],
+        });
+
+        // ── 2. Trials ──────────────────────────────────────────────────
+        // Example A: single text stimulus with button response
+        timeline.push(singleButtonTrial({
+            stim: {
+                id: 'trial1-text',
+                type: 'text',
+                content: 'This is an example text stimulus. Replace with your actual content.',
+                label: 'Passage',
+            },
+            question: 'How difficult was this text to understand?',
+            buttons: ['Very easy', 'Easy', 'Difficult', 'Very difficult'],
+            data: { condition: 'text-example' },
+        }));
+
+        // Example B: side-by-side code vs diagram, button response
+        timeline.push(diagramTrial({
+            src: './diagram/class-example-library-domain.png',
+            aois: DIAGRAM_AOIS,
+            question: 'Describe the entities, interfaces, and actions involved in a patron borrowing an Audiobook.',
+            data: { condition: 'diagram-library' },
+        }));
+
+        // Example C: click-to-select between two images
+        timeline.push(clickSelectTrial({
+            stims: [
+                { id: 'trial3-left', type: 'image', label: 'Option A', content: 'https://via.placeholder.com/380x240?text=Image+A' },
+                { id: 'trial3-right', type: 'image', label: 'Option B', content: 'https://via.placeholder.com/380x240?text=Image+B' },
+            ],
+            question: 'Click the image that best represents the concept.',
+            data: { condition: 'image-select' },
+        }));
+
+        // ── 3. Demographics ────────────────────────────────────────────
+        timeline.push({
+            type: jsPsychSurveyText,
+            questions: [
+                { prompt: 'Age', name: 'age', columns: 5 },
+                { prompt: 'Field of study / occupation', name: 'field', columns: 30 },
+            ],
+            data: { trial_type_custom: 'demographics' },
+        });
+
+        timeline.push({
+            type: jsPsychSurveyLikert,
+            questions: [
+                {
+                    prompt: 'I found the tasks straightforward.',
+                    name: 'task_ease',
+                    labels: ['Strongly disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly agree'],
+                },
+            ],
+            data: { trial_type_custom: 'exit-survey' },
+        });
+
+        // ── 4. End screen ──────────────────────────────────────────────
+        timeline.push({
+            type: jsPsychHtmlButtonResponse,
+            stimulus: `
+    <div class="end-screen stim-card">
+      <h2>You're done — thank you!</h2>
+      <p>Please download your results file and hand it to the experimenter.</p>
+      <button class="download-btn" onclick="
+        jsPsych.data.get().localSave('json', 'results.json');
+      ">Download results.json</button>
+    </div>
+  `,
+            choices: [],   // no jsPsych button; participant uses the download button above
+            trial_duration: null,
+        });
+
+        // ── Run ────────────────────────────────────────────────────────
+        jsPsych.run(timeline);
+    </script>
+</body>
+
+</html>

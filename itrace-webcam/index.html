@@ -105,6 +105,10 @@
             overflow-x: auto;
         }
 
+        .stim-code {
+            text-align: left;
+        }
+
         /* ── Stimulus type: diagram ───────────────────────────── */
         .stim-diagram {
             text-align: center;
@@ -766,14 +770,59 @@
         }));
 
 
-        // Example C: click-to-select between two images
+        // CODE COMPARISON
+        const PARENS_STACK = `public static boolean isBalanced(String s) {
+    Deque<Character> stack = new ArrayDeque<>();
+    for (int i = 0; i < s.length(); i++) {
+        char c = s.charAt(i);
+        if (c == '(' || c == '[' || c == '{') {
+            stack.push(c);
+        } else if (c == ')' || c == ']' || c == '}') {
+            if (stack.isEmpty()) return false;
+            char top = stack.pop();
+            if (c == ')' && top != '(') return false;
+            if (c == ']' && top != '[') return false;
+            if (c == '}' && top != '{') return false;
+        }
+    }
+    return stack.isEmpty();
+}`;
+
+        const PARENS_COUNTER = `public static boolean isBalanced(String s) {
+    int round = 0;
+    int square = 0;
+    int curly = 0;
+    for (int i = 0; i < s.length(); i++) {
+        char c = s.charAt(i);
+        if (c == '(') round++;
+        else if (c == ')') { round--; if (round < 0) return false; }
+        if (c == '[') square++;
+        else if (c == ']') { square--; if (square < 0) return false; }
+        if (c == '{') curly++;
+        else if (c == '}') { curly--; if (curly < 0) return false; }
+    }
+    return round == 0 && square == 0 && curly == 0;
+}`;
+
         timeline.push(clickSelectTrial({
             stims: [
-                { id: 'trial3-left', type: 'image', label: 'Option A', content: 'https://via.placeholder.com/380x240?text=Image+A' },
-                { id: 'trial3-right', type: 'image', label: 'Option B', content: 'https://via.placeholder.com/380x240?text=Image+B' },
+                {
+                    id: 'code-compare-stack',
+                    type: 'code',
+                    lang: 'java',
+                    label: 'Version A',
+                    content: PARENS_STACK,
+                },
+                {
+                    id: 'code-compare-counter',
+                    type: 'code',
+                    lang: 'java',
+                    label: 'Version B',
+                    content: PARENS_COUNTER,
+                },
             ],
-            question: 'Click the image that best represents the concept.',
-            data: { condition: 'image-select' },
+            question: 'Both methods check whether the brackets in a string are balanced. Which version do you find easier to understand?',
+            data: { condition: 'code-compare-parens' },
         }));
 
         // ── 3. Demographics ────────────────────────────────────────────

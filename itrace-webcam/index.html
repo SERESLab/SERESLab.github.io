@@ -234,6 +234,21 @@
         #doc-content li {
             margin-bottom: .4rem;
         }
+
+        #code-content pre {
+            margin: 0;
+            background: transparent;
+        }
+
+        #code-content [data-stim-id] {
+            border-left: 2px solid transparent;
+            padding-left: .5rem;
+            transition: border-color .15s;
+        }
+
+        #code-content [data-stim-id]:hover {
+            border-left-color: var(--border);
+        }
     </style>
 </head>
 
@@ -296,6 +311,8 @@
         let _selectedStimId = null;
         let _docResponse = '';
         let _diagramResponse = '';
+        let _codeResponse = '';
+
         function selectStim(el, id) {
             document.querySelectorAll('.stim-clickable').forEach(c => c.classList.remove('selected'));
             el.classList.add('selected');
@@ -434,7 +451,9 @@
             return {
                 type: jsPsychHtmlButtonResponse,
                 stimulus: `
-      <div style="padding-top:10rem;">
+      <div style="padding-top:3rem;">
+        <p style="font-size:1rem; color:var(--text-muted); margin-bottom:1rem;">Using the following diagram, answer the prompt below.</p>
+
         <div style="position:relative; width:100%; margin-bottom:1.5rem;">
         <img
             id="diag-img"
@@ -530,6 +549,171 @@
         }
 
 
+        function codeTrial({ codeSrc, question, data = {} }) {
+            let responseText = '';
+
+            return {
+                type: jsPsychHtmlButtonResponse,
+                stimulus: `
+            <div style="padding-top:3rem;">
+                <p style="font-size:1rem; color:var(--text-muted); margin-bottom:1rem;">
+                    Read the following source code, then answer the question below.
+                </p>
+                <div id="code-content" style="
+                    background:var(--surface);
+                    border:1px solid var(--border);
+                    border-radius:var(--radius);
+                    box-shadow:var(--shadow);
+                    padding:1.5rem 2rem;
+                    margin-bottom:1.5rem;
+                    font-size:.9rem;
+                    text-align:left;
+                "></div>
+                <p class="trial-question">${question}</p>
+                <textarea
+                    id="code-response"
+                    rows="5"
+                    style="
+                        width:100%; padding:.75rem 1rem; font-size:.95rem;
+                        font-family:inherit; border:1px solid var(--border);
+                        border-radius:var(--radius); resize:vertical; margin-bottom:1rem;
+                    "
+                    placeholder="Type your response here…"
+                ></textarea>
+            </div>
+        `,
+                choices: ['Submit'],
+                data: { trial_type_custom: 'code', ...data },
+                on_load() {
+                    fetch(codeSrc)
+                        .then(r => r.text())
+                        .then(src => {
+                            const blocks = parseJavaBlocks(src);
+                            const container = document.getElementById('code-content');
+                            container.innerHTML = blocks.map(b => `
+                        <div data-stim-id="${b.id}" style="margin-bottom:.25rem;">
+                            <pre style="margin:0;"><code class="language-java">${escapeHtml(b.code)}</code></pre>
+                        </div>
+                    `).join('');
+                            container.querySelectorAll('code').forEach(el => hljs.highlightElement(el));
+                        });
+                    const ta = document.getElementById('code-response');
+                    ta.addEventListener('input', () => { _codeResponse = ta.value; });
+                },
+                on_finish(trialData) {
+                    trialData.free_response = _codeResponse;
+                    snapshotStimRects(jsPsych);
+                },
+            };
+        }
+
+        function escapeHtml(str) {
+            return str
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        function parseJavaBlocks(src) {
+            const lines = src.split('\n');
+            const blocks = [];
+            let i = 0;
+
+            // ── Block 1: everything up to the first method/constructor ──────────
+            // Collect imports, class declaration, and field declarations
+            const headerLines = [];
+            while (i < lines.length) {
+                const trimmed = lines[i].trim();
+                // Stop when we hit a Javadoc comment or a method-looking line
+                if (trimmed.startsWith('/**') || isMethodOrConstructorStart(lines, i)) break;
+                headerLines.push(lines[i]);
+                i++;
+            }
+            if (headerLines.some(l => l.trim())) {
+                blocks.push({ id: 'code-header', code: headerLines.join('\n').trim() });
+            }
+
+            // ── Remaining blocks: Javadoc + method pairs ─────────────────────────
+            while (i < lines.length) {
+                const trimmed = lines[i].trim();
+
+                // Javadoc comment block
+                if (trimmed.startsWith('/**')) {
+                    const commentLines = [];
+                    while (i < lines.length) {
+                        commentLines.push(lines[i]);
+                        if (lines[i].trim().endsWith('*/')) { i++; break; }
+                        i++;
+                    }
+                    // Peek ahead to get method name for the ID
+                    const methodName = peekMethodName(lines, i);
+                    blocks.push({
+                        id: `code-comment-${methodName}`,
+                        code: commentLines.join('\n').trim(),
+                    });
+                    continue;
+                }
+
+                // Method or constructor body
+                if (isMethodOrConstructorStart(lines, i)) {
+                    const methodName = extractMethodName(lines[i]);
+                    const methodLines = [];
+                    let braceDepth = 0;
+                    let started = false;
+                    while (i < lines.length) {
+                        const line = lines[i];
+                        methodLines.push(line);
+                        for (const ch of line) {
+                            if (ch === '{') { braceDepth++; started = true; }
+                            if (ch === '}') braceDepth--;
+                        }
+                        i++;
+                        if (started && braceDepth === 0) break;
+                    }
+                    blocks.push({
+                        id: `code-method-${methodName}`,
+                        code: methodLines.join('\n').trim(),
+                    });
+                    continue;
+                }
+
+                // Skip blank lines between blocks
+                i++;
+            }
+
+            return blocks;
+        }
+
+        function isMethodOrConstructorStart(lines, i) {
+            const line = lines[i].trim();
+            if (!line) return false;
+            // Annotations like @Override don't count on their own
+            if (line.startsWith('@')) return false;
+            // Must contain ( and either end with { or have { somewhere
+            // Look ahead a few lines for the opening brace
+            const chunk = lines.slice(i, i + 4).join(' ');
+            return /[\w<>\[\]]+\s+\w+\s*\(/.test(chunk) && chunk.includes('{');
+        }
+
+        function extractMethodName(line) {
+            // Match: [modifiers] [returnType] methodName(
+            const match = line.match(/(?:public|private|protected|static|final|override|\s)*[\w<>\[\]]+\s+(\w+)\s*\(/);
+            if (match) return match[1];
+            // Constructor fallback
+            const ctorMatch = line.match(/(?:public|private|protected)?\s+(\w+)\s*\(/);
+            if (ctorMatch) return ctorMatch[1];
+            return 'unknown';
+        }
+
+        function peekMethodName(lines, i) {
+            for (let j = i; j < Math.min(i + 5, lines.length); j++) {
+                const name = extractMethodName(lines[j]);
+                if (name !== 'unknown') return name;
+            }
+            return 'unknown';
+        }
+
+
         // ═══════════════════════════════════════════════════════════════
         //  TIMELINE  ← Edit everything below here
         // ═══════════════════════════════════════════════════════════════
@@ -548,8 +732,8 @@
             stimulus: `
     <div class="instructions-body stim-card">
       <h2>Welcome</h2>
-      <p>Thank you for participating in this study. You will be shown a series of stimuli and asked to make judgments about them.</p>
-      <p>Your responses will be recorded and downloaded at the end of the session. The study takes approximately <strong>X minutes</strong>.</p>
+      <p>Thank you for participating in this study. You will be shown a series of software engineering related stimuli and asked questions about them.</p>
+      <p>Your responses will be recorded and downloaded at the end of the session. Your eyes will be tracked during this study.</p>
       <p>Click <strong>Begin</strong> when you are ready.</p>
     </div>
   `,
@@ -557,20 +741,8 @@
         });
 
         // ── 2. Trials ──────────────────────────────────────────────────
-        // Example A: single text stimulus with button response
-        timeline.push(singleButtonTrial({
-            stim: {
-                id: 'trial1-text',
-                type: 'text',
-                content: 'This is an example text stimulus. Replace with your actual content.',
-                label: 'Passage',
-            },
-            question: 'How difficult was this text to understand?',
-            buttons: ['Very easy', 'Easy', 'Difficult', 'Very difficult'],
-            data: { condition: 'text-example' },
-        }));
 
-        // DIAGRAM (Working)
+        // DIAGRAM
         timeline.push(diagramTrial({
             src: './tasks/diagram/class-example-library-domain.png',
             aois: DIAGRAM_AOIS,
@@ -584,6 +756,15 @@
             question: 'According to the "Profile Architecture" design document, why did the Chromium project move away from having the <code>Profile</code> class directly own all of its services, and what mechanism does the design use instead to manage those services?',
             data: { condition: 'doc-chromium-profile' },
         }));
+
+
+        // CODE SUMMARY
+        timeline.push(codeTrial({
+            codeSrc: './tasks/code/CircularFifoQueue.java',
+            question: 'In your own words, describe what the <code>add()</code> method does when the queue is already at full capacity. Be specific about what happens to existing elements and how the internal state changes.',
+            data: { condition: 'code-circular-fifo' },
+        }));
+
 
         // Example C: click-to-select between two images
         timeline.push(clickSelectTrial({

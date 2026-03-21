@@ -1,9 +1,9 @@
 <main>
+    <i>From The Chromium Projects Design Documents.</i>
     <div class="breadcrumbs">
-        <a href="/developers">For Developers</a> &gt;
-        <a href="/developers/design-documents">Design Documents</a> &gt;
+        <h2>For Developers > Design Documents > </h2>
     </div>
-    <h1 data-stim-id="doc-title">Profile Architecture</h1>
+    <h2 data-stim-id="doc-title">Profile Architecture</h2>
     <p data-stim-id="doc-intro-1">Chromium has lots of features that hook into a <code>Profile</code>, a bundle of data
         about the current user and the current chrome session that can span multiple
         browser windows. When Chromium first started, the profile had only a few moving
@@ -107,7 +107,8 @@
         (BCKSF) where most of the following is implemented. PKSF adds the service
         selection logic per profile type. In the rest of the document, we will refer to
         PKSF as it is the main type of factory to be constructed. Differences will be
-        noted in the <code>BrowserContextKeyedServiceFactory</code> section below.</p>
+        noted in the <code>BrowserContextKeyedServiceFactory</code> section below.
+    </p>
     <p data-stim-id="doc-pksf-intro-3">Instead of having the <code>Profile</code> own <code>FooService</code>, we have a
         dedicated singleton
         <code>FooServiceFactory</code>. This class takes care of creating and destroying

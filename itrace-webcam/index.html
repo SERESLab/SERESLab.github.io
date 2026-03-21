@@ -40,7 +40,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
+            /* ← was: center */
             min-height: 100vh;
             padding: 2rem;
             box-sizing: border-box;
@@ -49,6 +50,11 @@
         .jspsych-content {
             max-width: 900px;
             width: 100%;
+        }
+
+        .jspsych-content:has(#doc-content) {
+            max-width: 860px;
+            width: 95vw;
         }
 
         /* ── Shared stimulus card ─────────────────────────────── */
@@ -190,6 +196,44 @@
         .download-btn:hover {
             opacity: 0.88;
         }
+
+        #doc-content {
+            text-align: left;
+        }
+
+        #doc-content pre {
+            background: #f4f3f0;
+            border-radius: 4px;
+            padding: 1rem 1.25rem;
+            overflow-x: auto;
+            font-size: .85rem;
+            margin: 1rem 0;
+        }
+
+        #doc-content code {
+            font-family: var(--font-mono, monospace);
+            font-size: .9em;
+        }
+
+        #doc-content h2 {
+            margin-top: 2rem;
+            font-size: 1.2rem;
+        }
+
+        #doc-content h3 {
+            margin-top: 1.5rem;
+            font-size: 1rem;
+        }
+
+        #doc-content ul,
+        #doc-content ol {
+            padding-left: 1.5rem;
+            margin: .75rem 0;
+        }
+
+        #doc-content li {
+            margin-bottom: .4rem;
+        }
     </style>
 </head>
 
@@ -250,6 +294,8 @@
 
         /** Track which stim was clicked for selection trials */
         let _selectedStimId = null;
+        let _docResponse = '';
+        let _diagramResponse = '';
         function selectStim(el, id) {
             document.querySelectorAll('.stim-clickable').forEach(c => c.classList.remove('selected'));
             el.classList.add('selected');
@@ -388,39 +434,96 @@
             return {
                 type: jsPsychHtmlButtonResponse,
                 stimulus: `
-      <div style="position:relative; width:100%; margin-bottom:1.5rem;">
+      <div style="padding-top:10rem;">
+        <div style="position:relative; width:100%; margin-bottom:1.5rem;">
         <img
-          id="diag-img"
-          src="${src}"
-          style="width:100%; display:block; border-radius:var(--radius); box-shadow:var(--shadow);"
+            id="diag-img"
+            src="${src}"
+            style="width:100%; display:block; border-radius:var(--radius); box-shadow:var(--shadow);"
         />
         ${aois.map(r => `
-          <div
-            data-stim-id="${r.id}"
-            style="
-              position:absolute;
-              left:${r.xPct}%; top:${r.yPct}%;
-              width:${r.wPct}%; height:${r.hPct}%;
-              pointer-events:none;
-            "
-          ></div>`).join('')}
-      </div>
-      <p class="trial-question">${question}</p>
-      <textarea
-        id="diag-response"
-        rows="5"
-        style="
-          width:100%; padding:.75rem 1rem; font-size:.95rem;
-          font-family:inherit; border:1px solid var(--border);
-          border-radius:var(--radius); resize:vertical; margin-bottom:1rem;
-        "
-        placeholder="Type your response here…"
-      ></textarea>
-    `,
+            <div
+                data-stim-id="${r.id}"
+                style="
+                    position:absolute;
+                    left:${r.xPct}%; top:${r.yPct}%;
+                    width:${r.wPct}%; height:${r.hPct}%;
+                    pointer-events:none;
+                "
+                ></div>`).join('')}
+                </div>
+            </div>
+            <p class="trial-question">${question}</p>
+            <textarea
+                id="diag-response"
+                rows="5"
+                style="
+                width:100%; padding:.75rem 1rem; font-size:.95rem;
+                font-family:inherit; border:1px solid var(--border);
+                border-radius:var(--radius); resize:vertical; margin-bottom:1rem;
+                "
+                placeholder="Type your response here…"
+            ></textarea>
+            `,
                 choices: ['Submit'],
                 data: { trial_type_custom: 'diagram', ...data },
+                on_load() {
+                    const ta = document.getElementById('diag-response');
+                    ta.addEventListener('input', () => { _diagramResponse = ta.value; });
+                },
                 on_finish(trialData) {
-                    trialData.free_response = document.getElementById('diag-response')?.value ?? '';
+                    trialData.free_response = _diagramResponse;
+                    snapshotStimRects(jsPsych);
+                },
+            };
+        }
+
+
+        function docTrial({ docSrc, question, data = {} }) {
+            let responseText = '';
+
+            return {
+                type: jsPsychHtmlButtonResponse,
+                stimulus: `
+                <div style="padding-top:3rem;">
+                    <p style="font-size:1rem; color:var(--text-muted); margin-bottom:1rem;">Read the following design document, then answer the question below.</p>
+                    <div id="doc-content" style="
+                    background:var(--surface);
+                    border:1px solid var(--border);
+                    border-radius:var(--radius);
+                    box-shadow:var(--shadow);
+                    padding:2rem 2.5rem;
+                    margin-bottom:1.5rem;
+                    font-size:1rem;
+                    line-height:1.75;
+                    "></div>
+                    <p class="trial-question">${question}</p>
+                    <textarea
+                    id="doc-response"
+                    rows="5"
+                    style="
+                        width:100%; padding:.75rem 1rem; font-size:.95rem;
+                        font-family:inherit; border:1px solid var(--border);
+                        border-radius:var(--radius); resize:vertical; margin-bottom:1rem;
+                    "
+                    placeholder="Type your response here…"
+                    ></textarea>
+                </div>
+                `,
+                choices: ['Submit'],
+                data: { trial_type_custom: 'design-doc', ...data },
+                on_load() {
+                    fetch(docSrc)
+                        .then(r => r.text())
+                        .then(html => {
+                            document.getElementById('doc-content').innerHTML = html;
+                        });
+                    const ta = document.getElementById('doc-response');
+                    ta.addEventListener('input', () => { responseText = ta.value; });
+                },
+                on_finish(trialData) {
+                    const saved = responseText;
+                    trialData.free_response = saved;
                     snapshotStimRects(jsPsych);
                 },
             };
@@ -467,12 +570,19 @@
             data: { condition: 'text-example' },
         }));
 
-        // Example B: side-by-side code vs diagram, button response
+        // DIAGRAM (Working)
         timeline.push(diagramTrial({
-            src: './diagram/class-example-library-domain.png',
+            src: './tasks/diagram/class-example-library-domain.png',
             aois: DIAGRAM_AOIS,
             question: 'Describe the entities, interfaces, and actions involved in a patron borrowing an Audiobook.',
             data: { condition: 'diagram-library' },
+        }));
+
+        // DESIGN DOC
+        timeline.push(docTrial({
+            docSrc: './tasks/design_doc/doc.html',
+            question: 'According to the "Profile Architecture" design document, why did the Chromium project move away from having the <code>Profile</code> class directly own all of its services, and what mechanism does the design use instead to manage those services?',
+            data: { condition: 'doc-chromium-profile' },
         }));
 
         // Example C: click-to-select between two images

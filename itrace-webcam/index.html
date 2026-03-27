@@ -278,6 +278,11 @@
                 const r = el.getBoundingClientRect();
                 rects[id] = { x: r.x, y: r.y, w: r.width, h: r.height };
             });
+            document.querySelectorAll('[data-code-line]').forEach(el => {
+                const id = 'line-' + el.getAttribute('data-code-line');
+                const r = el.getBoundingClientRect();
+                rects[id] = { x: r.x, y: r.y, w: r.width, h: r.height };
+            });
             jsPsych.data.addDataToLastTrial({ stim_rects: JSON.stringify(rects) });
         }
 
@@ -461,9 +466,10 @@
                 type: jsPsychHtmlButtonResponse,
                 stimulus: `
       <div style="padding-top:3rem;">
-        <p style="font-size:1rem; color:var(--text-muted); margin-bottom:1rem;">Using the following diagram, answer the prompt below.</p>
+        <p style="font-size:1rem; color:var(--text-muted); margin-bottom:1rem;">Using the following diagram, answer the prompt:</p>
 
         <div style="position:relative; width:100%; margin-bottom:1.5rem;">
+            <p class="trial-question">${question}</p>
         <img
             id="diag-img"
             src="${src}"
@@ -481,7 +487,7 @@
                 ></div>`).join('')}
                 </div>
             </div>
-            <p class="trial-question">${question}</p>
+            
             <textarea
                 id="diag-response"
                 rows="5"
@@ -514,7 +520,8 @@
                 type: jsPsychHtmlButtonResponse,
                 stimulus: `
                 <div style="padding-top:3rem;">
-                    <p style="font-size:1rem; color:var(--text-muted); margin-bottom:1rem;">Read the following design document, then answer the question below.</p>
+                    <p style="font-size:1rem; color:var(--text-muted); margin-bottom:1rem;">Read the following design document, then answer the question below:</p>
+                    <p class="trial-question">${question}</p>
                     <div id="doc-content" style="
                     background:var(--surface);
                     border:1px solid var(--border);
@@ -536,6 +543,7 @@
                     "
                     placeholder="Type your response here…"
                     ></textarea>
+                    
                 </div>
                 `,
                 choices: ['Submit'],
@@ -568,16 +576,6 @@
                 <p style="font-size:1rem; color:var(--text-muted); margin-bottom:1rem;">
                     Read the following source code, then answer the question below.
                 </p>
-                <div id="code-content" style="
-                    background:var(--surface);
-                    border:1px solid var(--border);
-                    border-radius:var(--radius);
-                    box-shadow:var(--shadow);
-                    padding:1.5rem 2rem;
-                    margin-bottom:1.5rem;
-                    font-size:.9rem;
-                    text-align:left;
-                "></div>
                 <p class="trial-question">${question}</p>
                 <textarea
                     id="code-response"
@@ -589,6 +587,17 @@
                     "
                     placeholder="Type your response here…"
                 ></textarea>
+                <div id="code-content" style="
+                    background:var(--surface);
+                    border:1px solid var(--border);
+                    border-radius:var(--radius);
+                    box-shadow:var(--shadow);
+                    padding:1.5rem 2rem;
+                    margin-bottom:1.5rem;
+                    font-size:.9rem;
+                    text-align:left;
+                "></div>
+                
             </div>
         `,
                 choices: ['Submit'],
@@ -599,13 +608,22 @@
                         .then(src => {
                             const blocks = parseJavaBlocks(src);
                             const container = document.getElementById('code-content');
-                            container.innerHTML = blocks.map(b => `
-                        <div data-stim-id="${b.id}" style="margin-bottom:.25rem;">
-                            <pre style="margin:0;"><code class="language-java">${escapeHtml(b.code)}</code></pre>
-                        </div>
-                    `).join('');
-                            container.querySelectorAll('code').forEach(el => hljs.highlightElement(el));
-                        });
+                            let globalLine = 1;
+
+                            container.innerHTML = blocks.map(b => {
+                                const lines = b.code.split('\n');
+                                const linesHtml = lines.map(line => {
+                                    const lineNum = globalLine++;
+                                    return `<div data-code-line="${lineNum}" style="display:block;"><code class="language-java">${escapeHtml(line) || '\u00a0'}</code></div>`;
+                                }).join('');
+
+                                return `<div data-stim-id="${b.id}" style="margin-bottom:.25rem;">
+            <pre style="margin:0;">${linesHtml}</pre>
+        </div>`;
+                            }).join('');
+
+                            container.querySelectorAll('[data-code-line] code').forEach(el => hljs.highlightElement(el));
+                        })
                     const ta = document.getElementById('code-response');
                     ta.addEventListener('input', () => { _codeResponse = ta.value; });
                 },

@@ -163,14 +163,6 @@ public class CircularFifoQueue<E> extends AbstractCollection<E>
         return index;
     }
 
-    /**
-     * Returns {@code true} if the capacity limit of this queue has been reached,
-     * i.e. the number of elements stored in the queue equals its maximum size.
-     *
-     * @return {@code true} if the capacity limit has been reached, {@code false}
-     *         otherwise
-     * @since 4.1
-     */
     public boolean isAtFullCapacity() {
         return size() == maxElements;
     }

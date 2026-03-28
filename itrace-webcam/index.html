@@ -326,11 +326,15 @@
         let _docResponse = '';
         let _diagramResponse = '';
         let _codeResponse = '';
+        let _selectionWhyResponse = '';
 
         function selectStim(el, id) {
             document.querySelectorAll('.stim-clickable').forEach(c => c.classList.remove('selected'));
             el.classList.add('selected');
             _selectedStimId = id;
+            if (typeof window.__updateSelectTrialState === 'function') {
+                window.__updateSelectTrialState();
+            }
         }
 
         // ═══════════════════════════════════════════════════════════════
@@ -418,8 +422,17 @@
          *     question: 'Click the image that best matches the description.',
          *   })
          */
-        function clickSelectTrial({ stims, question = '', data = {} }) {
+        function clickSelectTrial({
+            stims,
+            question = '',
+            requireSelection = false,
+            requireText = false,
+            textPrompt = 'Briefly explain your choice.',
+            textPlaceholder = 'Type your response here...',
+            data = {}
+        }) {
             _selectedStimId = null;
+            _selectionWhyResponse = '';
             return {
                 type: jsPsychHtmlButtonResponse,
                 stimulus: `
@@ -427,17 +440,56 @@
       <div class="stim-sidebyside">
         ${stims.map(s => stimCard({ ...s, clickable: true })).join('')}
       </div>
+      ${requireText ? `
+      <p class="trial-question" style="text-align:left; margin:0 0 0.5rem 0;">${textPrompt}</p>
+      <textarea
+        id="select-response"
+        rows="5"
+        style="
+            width:100%; padding:.75rem 1rem; font-size:.95rem;
+            font-family:inherit; border:1px solid var(--border);
+            border-radius:var(--radius); resize:vertical; margin-bottom:1rem;
+        "
+        placeholder="${textPlaceholder}"
+      ></textarea>
+      ` : ''}
     `,
                 choices: ['Continue'],
                 data: { trial_type_custom: 'click-select', stim_ids: stims.map(s => s.id).join(','), ...data },
                 on_load: () => {
+                    const continueBtn = document.querySelector('#jspsych-html-button-response-btngroup button');
+                    const updateContinueState = () => {
+                        const hasSelection = _selectedStimId !== null;
+                        const hasText = !requireText || _selectionWhyResponse.trim().length > 0;
+                        const selectionOk = !requireSelection || hasSelection;
+                        if (continueBtn) continueBtn.disabled = !(selectionOk && hasText);
+                    };
+
+                    window.__updateSelectTrialState = updateContinueState;
+
                     stims.filter(s => s.type === 'code').forEach(s => {
                         const el = document.getElementById(`code-${s.id}`);
                         if (el) hljs.highlightElement(el);
                     });
+
+                    if (requireText) {
+                        const ta = document.getElementById('select-response');
+                        if (ta) {
+                            ta.addEventListener('input', () => {
+                                _selectionWhyResponse = ta.value;
+                                updateContinueState();
+                            });
+                        }
+                    }
+
+                    updateContinueState();
                 },
                 on_finish: (trialData) => {
                     trialData.selected_stim = _selectedStimId;
+                    if (requireText) {
+                        trialData.free_response = _selectionWhyResponse;
+                    }
+                    window.__updateSelectTrialState = null;
                     snapshotStimRects(jsPsych);
                 },
             };
@@ -446,19 +498,27 @@
         // ── Diagram AOI config ─────────────────────────────────────
         // PASTE YOUR DIAGRAM_AOIS ARRAY HERE:
         const DIAGRAM_AOIS = [
-            { id: "book_entity", xPct: 1.58, yPct: 5.29, wPct: 33.58, hPct: 21.29 },
-            { id: "book_item_entity", xPct: 1.46, yPct: 30.71, wPct: 33.82, hPct: 35.00 },
-            { id: "lang_enum", xPct: 72.63, yPct: 11.43, wPct: 12.65, hPct: 17.86 },
-            { id: "format_enum", xPct: 86.25, yPct: 26.43, wPct: 12.41, hPct: 19.43 },
-            { id: "account_enum", xPct: 86.13, yPct: 11.57, wPct: 12.29, hPct: 13.57 },
-            { id: "datatypes", xPct: 72.38, yPct: 2.29, wPct: 26.52, hPct: 8.14 },
-            { id: "author_entity", xPct: 49.27, yPct: 9.29, wPct: 19.83, hPct: 13.43 },
-            { id: "account_entity", xPct: 53.65, yPct: 38.57, wPct: 20.44, hPct: 16.14 },
-            { id: "library_entity", xPct: 56.45, yPct: 65.14, wPct: 15.09, hPct: 11.14 },
-            { id: "patron_entity", xPct: 82.73, yPct: 64.57, wPct: 16.30, hPct: 12.43 },
-            { id: "librarian_entity", xPct: 83.21, yPct: 83.00, wPct: 15.94, hPct: 13.14 },
-            { id: "interfaces", xPct: 44.40, yPct: 80.86, wPct: 28.47, hPct: 18.29 },
-            { id: "catalog_entity", xPct: 8.39, yPct: 84.29, wPct: 19.71, hPct: 10.57 },
+            { id: "QGraphicsView", xPct: 2.28, yPct: 31.08, wPct: 15.94, hPct: 19.97 },
+            { id: "QBrush", xPct: 1.97, yPct: 7.95, wPct: 19.57, hPct: 22.60 },
+            { id: "QPainter", xPct: 24.02, yPct: 36.33, wPct: 25.78, hPct: 11.56 },
+            { id: "QPaintDevice", xPct: 64.80, yPct: -0.46, wPct: 23.60, hPct: 18.40 },
+            { id: "QPainter-To-QPaintDevice", xPct: 33.64, yPct: 10.45, wPct: 30.75, hPct: 6.18 },
+            { id: "QPainter-To-QPaintDevice", xPct: 33.85, yPct: 10.18, wPct: 5.07, hPct: 25.89 },
+            { id: "QPolygon", xPct: 39.23, yPct: 26.74, wPct: 7.87, hPct: 5.26 },
+            { id: "QImage", xPct: 49.07, yPct: 21.35, wPct: 9.32, hPct: 6.04 },
+            { id: "QPixmap", xPct: 60.25, yPct: 21.48, wPct: 22.77, hPct: 23.00 },
+            { id: "QPrinter", xPct: 85.61, yPct: 21.62, wPct: 14.49, hPct: 20.37 },
+            { id: "QSvgGenerator", xPct: 60.77, yPct: 55.78, wPct: 34.27, hPct: 20.50 },
+            { id: "QPen", xPct: 40.48, yPct: 59.86, wPct: 14.39, hPct: 15.77 },
+            { id: "QStylePainter", xPct: 19.25, yPct: 54.34, wPct: 11.39, hPct: 5.65 },
+            { id: "QSvgWidget", xPct: 39.65, yPct: 85.09, wPct: 21.33, hPct: 13.53 },
+            { id: "QSvgRenderer", xPct: 65.11, yPct: 84.30, wPct: 18.22, hPct: 15.37 },
+            { id: "QGraphicsSvgItem", xPct: 85.40, yPct: 88.37, wPct: 14.80, hPct: 5.65 },
+            { id: "QGLWidget", xPct: -0.31, yPct: 78.78, wPct: 23.19, hPct: 20.76 },
+            { id: "QStyle", xPct: 4.14, yPct: 59.33, wPct: 7.76, hPct: 5.91 },
+            { id: "QWidget", xPct: 9.73, yPct: 69.05, wPct: 14.70, hPct: 6.31 },
+            { id: "QAbstractGraphicsShapeItem", xPct: 77.23, yPct: 76.94, wPct: 22.88, hPct: 5.78 },
+            { id: "QMatrix", xPct: 53.31, yPct: 48.03, wPct: 8.18, hPct: 5.78 },
         ];
 
         function diagramTrial({ src, aois, question, data = {} }) {
@@ -467,9 +527,9 @@
                 stimulus: `
       <div style="padding-top:3rem;">
         <p style="font-size:1rem; color:var(--text-muted); margin-bottom:1rem;">Using the following diagram, answer the prompt:</p>
+        <p class="trial-question">${question}</p>
 
         <div style="position:relative; width:100%; margin-bottom:1.5rem;">
-            <p class="trial-question">${question}</p>
         <img
             id="diag-img"
             src="${src}"
@@ -577,16 +637,6 @@
                     Read the following source code, then answer the question below.
                 </p>
                 <p class="trial-question">${question}</p>
-                <textarea
-                    id="code-response"
-                    rows="5"
-                    style="
-                        width:100%; padding:.75rem 1rem; font-size:.95rem;
-                        font-family:inherit; border:1px solid var(--border);
-                        border-radius:var(--radius); resize:vertical; margin-bottom:1rem;
-                    "
-                    placeholder="Type your response here…"
-                ></textarea>
                 <div id="code-content" style="
                     background:var(--surface);
                     border:1px solid var(--border);
@@ -597,6 +647,18 @@
                     font-size:.9rem;
                     text-align:left;
                 "></div>
+
+                <p class="trial-question">${question}</p>
+                <textarea
+                    id="code-response"
+                    rows="5"
+                    style="
+                        width:100%; padding:.75rem 1rem; font-size:.95rem;
+                        font-family:inherit; border:1px solid var(--border);
+                        border-radius:var(--radius); resize:vertical; margin-bottom:1rem;
+                    "
+                    placeholder="Type your response here…"
+                ></textarea>
                 
             </div>
         `,
@@ -771,9 +833,9 @@
 
         // DIAGRAM
         timeline.push(diagramTrial({
-            src: './tasks/diagram/class-example-library-domain.png',
+            src: './tasks/diagram/QT.jpg',
             aois: DIAGRAM_AOIS,
-            question: 'Describe the entities, interfaces, and actions involved in a patron borrowing an Audiobook.',
+            question: 'What is the relationship between QPainter and QPaintDevice?',
             data: { condition: 'diagram-library' },
         }));
 
@@ -844,7 +906,11 @@
                     content: PARENS_COUNTER,
                 },
             ],
-            question: 'Both methods check whether the brackets in a string are balanced. Which version do you find easier to understand?',
+            question: 'Both methods check whether the brackets in a string are balanced. Which version do you find easier to understand and why?',
+            requireSelection: true,
+            requireText: true,
+            textPrompt: 'Please explain why you chose that version.',
+            textPlaceholder: 'Write a short explanation of your choice...',
             data: { condition: 'code-compare-parens' },
         }));
 
